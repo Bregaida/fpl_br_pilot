@@ -30,3 +30,4 @@ public interface ClienteRedemetApi {
     @ClientQueryParam(name = "token", value = "${redemet.token}")
     String obterSigmet(@PathParam("icao") String icao);
 }
+

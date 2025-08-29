@@ -75,3 +75,4 @@ public class ValidadorPlanoDeVooTest {
         assertTrue(joined.contains("ITEM15") || joined.contains("ITEM 15"));
     }
 }
+

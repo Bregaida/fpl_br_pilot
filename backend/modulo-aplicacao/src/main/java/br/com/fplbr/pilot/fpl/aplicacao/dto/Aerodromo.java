@@ -1,4 +1,4 @@
-﻿package br.com.fplbr.pilot.fpl.aplicacao.dto;
+package br.com.fplbr.pilot.fpl.aplicacao.dto;
 
 public record Aerodromo(
         String icao,
@@ -8,6 +8,7 @@ public record Aerodromo(
         Double latitude,
         Double longitude
 ) {}
+
 
 
 

@@ -18,3 +18,4 @@ public class EspecificacaoItem18OutrosDados implements Especificacao<PlanoDeVoo>
         return erros;
     }
 }
+

@@ -29,3 +29,4 @@ public interface ClienteAiswebApi {
     @ClientQueryParam(name = "token", value = "${aisweb.token}")
     String obterAerodromo(@PathParam("icao") String icao);
 }
+

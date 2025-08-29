@@ -1,4 +1,4 @@
-﻿package br.com.fplbr.pilot.fpl.aplicacao.validacao;
+package br.com.fplbr.pilot.fpl.aplicacao.validacao;
 
 import static java.lang.annotation.ElementType.ANNOTATION_TYPE;
 import static java.lang.annotation.ElementType.TYPE;
@@ -17,5 +17,6 @@ public @interface ValidFpl {
   Class<?>[] groups() default {};
   Class<? extends Payload>[] payload() default {};
 }
+
 
 

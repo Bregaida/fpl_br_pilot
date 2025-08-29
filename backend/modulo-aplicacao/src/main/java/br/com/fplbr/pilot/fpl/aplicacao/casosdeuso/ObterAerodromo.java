@@ -1,4 +1,4 @@
-﻿package br.com.fplbr.pilot.fpl.aplicacao.casosdeuso;
+package br.com.fplbr.pilot.fpl.aplicacao.casosdeuso;
 
 import br.com.fplbr.pilot.fpl.aplicacao.dto.Aerodromo;
 import br.com.fplbr.pilot.fpl.aplicacao.portas.PortaAisweb;
@@ -10,6 +10,7 @@ public class ObterAerodromo {
 
     public Aerodromo executar(String icao) { return porta.obterAerodromo(icao); }
 }
+
 
 
 

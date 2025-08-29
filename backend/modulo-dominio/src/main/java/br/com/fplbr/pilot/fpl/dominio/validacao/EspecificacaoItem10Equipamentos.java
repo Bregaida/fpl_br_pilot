@@ -17,3 +17,4 @@ public class EspecificacaoItem10Equipamentos implements Especificacao<PlanoDeVoo
         return erros;
     }
 }
+

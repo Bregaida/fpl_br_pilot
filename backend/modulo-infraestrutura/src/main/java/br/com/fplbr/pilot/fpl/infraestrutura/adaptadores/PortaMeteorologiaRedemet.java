@@ -31,3 +31,4 @@ public class PortaMeteorologiaRedemet implements PortaMeteorologia {
         return new BriefingMeteorologico(metar, taf, sigmet);
     }
 }
+

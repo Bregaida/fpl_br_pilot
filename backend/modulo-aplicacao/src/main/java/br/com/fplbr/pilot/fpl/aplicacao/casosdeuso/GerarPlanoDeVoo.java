@@ -1,18 +1,124 @@
-﻿package br.com.fplbr.pilot.fpl.aplicacao.casosdeuso;
+package br.com.fplbr.pilot.fpl.aplicacao.casosdeuso;
 
-import br.com.fplbr.pilot.fpl.aplicacao.dto.RequisicaoPlanoDeVoo;
-import br.com.fplbr.pilot.fpl.aplicacao.dto.RespostaPlanoDeVoo;
-import br.com.fplbr.pilot.fpl.aplicacao.dto.ErroValidacaoDTO;
-import br.com.fplbr.pilot.fpl.aplicacao.servicos.MontadorFplIcao;
+import br.com.fplbr.pilot.fpl.aplicacao.dto.*;
+import br.com.fplbr.pilot.fpl.aplicacao.servicos.FplMessageBuilder;
 import br.com.fplbr.pilot.fpl.dominio.modelo.*;
 import br.com.fplbr.pilot.fpl.dominio.validacao.ValidadorPlanoDeVoo;
-
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
+@ApplicationScoped
 public class GerarPlanoDeVoo {
+    
+    @Inject
+    FplMessageBuilder fplBuilder;
+    
     /**
-     * ConveniÃªncia: mÃ©todo Ãºnico com parÃ¢metros diretos para validar e montar o FPL.
+     * Executa o caso de uso de geração de plano de voo
+     * @param req Requisição com os dados do plano de voo
+     * @return Resposta com a mensagem FPL ou erros de validação
+     */
+    public RespostaPlanoDeVoo executar(RequisicaoPlanoDeVoo req) {
+        try {
+            // 1) Mapear para o DTO do builder
+            FplDTO fplDto = mapearParaFplDto(req);
+            
+            // 2) Montar mensagem FPL
+            String mensagemFpl = fplBuilder.montar(fplDto);
+            
+            // 3) Retornar sucesso
+            return new RespostaPlanoDeVoo(mensagemFpl, List.of(), List.of(), List.of());
+            
+        } catch (IllegalArgumentException e) {
+            // Erros de validação do builder
+            return new RespostaPlanoDeVoo(
+                null, 
+                List.of("Erro ao gerar mensagem FPL: " + e.getMessage()),
+                List.of("ERRO_GERACAO: " + e.getMessage()),
+                List.of(new ErroValidacaoDTO("ERRO_GERACAO", e.getMessage()))
+            );
+        } catch (Exception e) {
+            // Erro inesperado
+            return new RespostaPlanoDeVoo(
+                null,
+                List.of("Erro inesperado: " + e.getMessage()),
+                List.of("ERRO_INTERNO: " + e.getMessage()),
+                List.of(new ErroValidacaoDTO("ERRO_INTERNO", e.getMessage()))
+            );
+        }
+    }
+
+    /**
+     * Mapeia de RequisicaoPlanoDeVoo para FplDTO, aplicando valores padrão quando necessário
+     */
+    private FplDTO mapearParaFplDto(RequisicaoPlanoDeVoo req) {
+        FplDTO dto = new FplDTO();
+        
+        // Item 7-8
+        dto.identificacaoAeronave = FplDTO.nz(req.identificacaoAeronave, "TESTE").toUpperCase();
+        dto.regrasDeVoo = FplDTO.nz(req.regrasDeVoo, "V"); // VFR por padrão
+        dto.tipoDeVoo = FplDTO.nz(req.tipoDeVoo, "G"); // Geral por padrão
+        
+        // Item 9
+        dto.tipoAeronave = FplDTO.nz(req.tipoAeronaveIcao, "ZZZZ").toUpperCase();
+        dto.esteiraDeTurbulencia = FplDTO.nz(req.esteira, "M"); // Média por padrão
+        
+        // Item 10 - Equipamentos (simplificado)
+        dto.equipamentoA = "S"; // Equipamento padrão
+        dto.equipamentoB = "S"; // Equipamento padrão
+        
+        // Item 13
+        dto.aerodromoPartida = FplDTO.nz(req.aerodromoPartida, "ZZZZ").toUpperCase();
+        dto.horaPartidaUTC = FplDTO.nz(req.horaPartidaZulu, "1200");
+        
+        // Item 15
+        dto.velocidadeCruzeiro = FplDTO.nz(req.velocidadeCruzeiro, "N0120").toUpperCase();
+        dto.nivelCruzeiro = FplDTO.nz(req.nivelCruzeiro, "F090").toUpperCase();
+        dto.rota = FplDTO.nz(req.rota, "DCT");
+        
+        // Item 16
+        dto.aerodromoDestino = FplDTO.nz(req.aerodromoDestino, "ZZZZ").toUpperCase();
+        dto.tempoTotalVoo = FplDTO.nz(req.eetTotal, "0100");
+        
+        // Adiciona aeródromos alternativos se existirem
+        if (req.alternativo1 != null && !req.alternativo1.isBlank()) {
+            dto.alternativos.add(req.alternativo1.trim().toUpperCase());
+        }
+        if (req.alternativo2 != null && !req.alternativo2.isBlank()) {
+            dto.alternativos.add(req.alternativo2.trim().toUpperCase());
+        }
+        
+        // Item 18 - Outras informações
+        dto.dataDOF = java.time.LocalDate.now().format(java.time.format.DateTimeFormatter.ofPattern("yyMMdd"));
+        dto.operadorOPR = FplDTO.nz(req.piloto, "OPERADOR");
+        dto.pbn = ""; // PBN a ser preenchido conforme equipamento
+        dto.nav = ""; // NAV a ser preenchido conforme equipamento
+        dto.com = ""; // COM a ser preenchido conforme equipamento
+        dto.dat = ""; // DAT a ser preenchido conforme equipamento
+        dto.sur = ""; // SUR a ser preenchido conforme equipamento
+        dto.rmk = FplDTO.nz(req.outrosDados, "");
+        
+        // Item 19 - Informações suplementares
+        dto.autonomiaE = FplDTO.nz(req.autonomia, "0300");
+        dto.pessoasP = req.pessoasABordo != null ? String.valueOf(req.pessoasABordo) : "1";
+        dto.equipamentosEmergenciaR = ""; // Preencher conforme equipamentos de emergência
+        dto.equipamentosSalvamentoS = ""; // Preencher conforme equipamentos de salvamento
+        dto.coletesA = ""; // Preencher conforme coletes salva-vidas
+        dto.jangadasD = ""; // Preencher conforme jangadas
+        dto.corEMarcacoesC = ""; // Preencher conforme cores e marcações
+        dto.contatoTelefoneN = FplDTO.nz(req.piloto, "").replaceAll("[^0-9]", "");
+        if (dto.contatoTelefoneN.length() < 8) {
+            dto.contatoTelefoneN = "00000000"; // Telefone padrão se inválido
+        }
+        
+        return dto;
+    }
+
+    /**
+     * Método de conveniência para compatibilidade com chamadas existentes
      */
     public RespostaPlanoDeVoo executar(
             String identificacaoAeronave,
@@ -36,129 +142,32 @@ public class GerarPlanoDeVoo {
             Integer pessoasABordo,
             String piloto
     ) {
-        RequisicaoPlanoDeVoo r = new RequisicaoPlanoDeVoo();
-        r.identificacaoAeronave = identificacaoAeronave;
-        r.regrasDeVoo = regrasDeVoo;
-        r.tipoDeVoo = tipoDeVoo;
-        r.quantidadeAeronaves = quantidadeAeronaves;
-        r.tipoAeronaveIcao = tipoAeronaveIcao;
-        r.esteira = esteira;
-        r.equipamentos = equipamentos;
-        r.aerodromoPartida = aerodromoPartida;
-        r.horaPartidaZulu = horaPartidaZulu;
-        r.velocidadeCruzeiro = velocidadeCruzeiro;
-        r.nivelCruzeiro = nivelCruzeiro;
-        r.rota = rota;
-        r.aerodromoDestino = aerodromoDestino;
-        r.eetTotal = eetTotal;
-        r.alternativo1 = alternativo1;
-        r.alternativo2 = alternativo2;
-        r.outrosDados = outrosDados;
-        r.autonomia = autonomia;
-        r.pessoasABordo = pessoasABordo;
-        r.piloto = piloto;
-        return executar(r);
-    }
-    public RespostaPlanoDeVoo executar(RequisicaoPlanoDeVoo req) {
-        // 1) Mapear DTO -> DomÃ­nio (com normalizaÃ§Ã£o simples)
-        PlanoDeVoo plano = mapear(req);
-
-        // 2) Validar
-        var validador = new ValidadorPlanoDeVoo();
-        var erros = validador.validar(plano);
-        if (!erros.isEmpty()) {
-            List<String> lista = erros.stream().map(e -> e.codigo() + ": " + e.mensagem()).toList();
-            List<ErroValidacaoDTO> detalhados = erros.stream()
-                    .map(e -> new ErroValidacaoDTO(e.codigo(), e.mensagem()))
-                    .toList();
-            return new RespostaPlanoDeVoo(null, List.of(), lista, detalhados);
-        }
-
-        // 3) Montar FPL ICAO
-        var montador = new MontadorFplIcao();
-        String mensagem = montador.montar(plano);
-        return new RespostaPlanoDeVoo(mensagem, List.of(), List.of(), List.of());
-    }
-
-    private PlanoDeVoo mapear(RequisicaoPlanoDeVoo r) {
-        String id = (r.identificacaoAeronave == null || r.identificacaoAeronave.isBlank())
-                ? "TESTE" : r.identificacaoAeronave.trim().toUpperCase();
-
-        RegrasDeVoo regras = parseRegras(r.regrasDeVoo);
-        TipoDeVoo tipo = parseTipo(r.tipoDeVoo);
-        EsteiraDeTurbulencia esteira = parseEsteira(r.esteira);
-
-        Integer qtd = (r.quantidadeAeronaves == null || r.quantidadeAeronaves < 1) ? 1 : r.quantidadeAeronaves;
-        String tipoIcao = r.tipoAeronaveIcao != null ? r.tipoAeronaveIcao.trim().toUpperCase() : "ZZZZ";
-
-        String eqp = (r.equipamentos == null || r.equipamentos.isBlank()) ? "S" : r.equipamentos.trim().toUpperCase();
-
-        String dep = r.aerodromoPartida != null ? r.aerodromoPartida.trim().toUpperCase() : "ZZZZ";
-        String off = r.horaPartidaZulu != null ? r.horaPartidaZulu.trim() : "0000";
-
-        String spd = r.velocidadeCruzeiro != null ? r.velocidadeCruzeiro.trim().toUpperCase() : "N0120";
-        String lvl = r.nivelCruzeiro != null ? r.nivelCruzeiro.trim().toUpperCase() : "F090";
-        String rota = r.rota != null ? r.rota.trim().toUpperCase() : "DCT";
-
-        String dest = r.aerodromoDestino != null ? r.aerodromoDestino.trim().toUpperCase() : "ZZZZ";
-        String eet = r.eetTotal != null ? r.eetTotal.trim() : "0001";
-        String alt1 = r.alternativo1 != null ? r.alternativo1.trim().toUpperCase() : null;
-        String alt2 = r.alternativo2 != null ? r.alternativo2.trim().toUpperCase() : null;
-
-        String outros = r.outrosDados != null ? r.outrosDados.trim() : null;
-
-        String e = r.autonomia != null ? r.autonomia.trim() : null;
-        Integer pob = r.pessoasABordo;
-        String piloto = r.piloto;
-
-        return new PlanoDeVoo(
-                new IdentificacaoAeronave(id),
-                regras, tipo,
-                qtd, tipoIcao, esteira,
-                eqp,
-                dep, off,
-                spd, lvl, rota,
-                dest, eet, alt1, alt2,
-                outros,
-                e, pob, piloto
-        );
-    }
-
-    private RegrasDeVoo parseRegras(String v) {
-        if (v == null) return null;
-        String s = v.trim().toUpperCase();
-        return switch (s) {
-            case "I", "IFR" -> RegrasDeVoo.IFR;
-            case "V", "VFR" -> RegrasDeVoo.VFR;
-            case "Y", "IFR_PARA_VFR" -> RegrasDeVoo.IFR_PARA_VFR;
-            case "Z", "VFR_PARA_IFR" -> RegrasDeVoo.VFR_PARA_IFR;
-            default -> null;
-        };
-    }
-    private TipoDeVoo parseTipo(String v) {
-        if (v == null) return null;
-        String s = v.trim().toUpperCase();
-        return switch (s) {
-            case "S", "REGULAR" -> TipoDeVoo.REGULAR;
-            case "N", "NAO_REGULAR" -> TipoDeVoo.NAO_REGULAR;
-            case "G", "GERAL" -> TipoDeVoo.GERAL;
-            case "M", "MILITAR" -> TipoDeVoo.MILITAR;
-            case "X", "OUTROS" -> TipoDeVoo.OUTROS;
-            default -> null;
-        };
-    }
-    private EsteiraDeTurbulencia parseEsteira(String v) {
-        if (v == null) return EsteiraDeTurbulencia.MEDIA;
-        String s = v.trim().toUpperCase();
-        return switch (s) {
-            case "J", "SUPER" -> EsteiraDeTurbulencia.SUPER;
-            case "H", "PESADA" -> EsteiraDeTurbulencia.PESADA;
-            case "M", "MEDIA" -> EsteiraDeTurbulencia.MEDIA;
-            case "L", "LEVE" -> EsteiraDeTurbulencia.LEVE;
-            default -> EsteiraDeTurbulencia.MEDIA;
-        };
+        RequisicaoPlanoDeVoo req = new RequisicaoPlanoDeVoo();
+        req.identificacaoAeronave = identificacaoAeronave;
+        req.regrasDeVoo = regrasDeVoo;
+        req.tipoDeVoo = tipoDeVoo;
+        req.quantidadeAeronaves = quantidadeAeronaves;
+        req.tipoAeronaveIcao = tipoAeronaveIcao;
+        req.esteira = esteira;
+        req.equipamentos = equipamentos;
+        req.aerodromoPartida = aerodromoPartida;
+        req.horaPartidaZulu = horaPartidaZulu;
+        req.velocidadeCruzeiro = velocidadeCruzeiro;
+        req.nivelCruzeiro = nivelCruzeiro;
+        req.rota = rota;
+        req.aerodromoDestino = aerodromoDestino;
+        req.eetTotal = eetTotal;
+        req.alternativo1 = alternativo1;
+        req.alternativo2 = alternativo2;
+        req.outrosDados = outrosDados;
+        req.autonomia = autonomia;
+        req.pessoasABordo = pessoasABordo;
+        req.piloto = piloto;
+        
+        return executar(req);
     }
 }
+
 
 
 

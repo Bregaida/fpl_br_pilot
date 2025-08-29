@@ -1,4 +1,4 @@
-﻿package br.com.fplbr.pilot.fpl.aplicacao.casosdeuso;
+package br.com.fplbr.pilot.fpl.aplicacao.casosdeuso;
 
 import br.com.fplbr.pilot.fpl.aplicacao.dto.CartaAerodromo;
 import br.com.fplbr.pilot.fpl.aplicacao.portas.PortaAisweb;
@@ -12,6 +12,7 @@ public class ListarCartasDoAerodromo {
 
     public List<CartaAerodromo> executar(String icao) { return porta.listarCartas(icao); }
 }
+
 
 
 

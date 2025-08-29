@@ -17,3 +17,4 @@ public class EspecificacaoItem8RegrasETipoDeVoo implements Especificacao<PlanoDe
         return erros;
     }
 }
+
