@@ -1,4 +1,4 @@
-package br.com.fplbr.pilot.fpl.aplicacao.dto;
+﻿package br.com.fplbr.pilot.fpl.aplicacao.dto;
 
 import java.util.List;
 
@@ -12,7 +12,7 @@ public class RespostaPlanoDeVoo {
     public List<String> erros;
 
     /**
-     * Lista padronizada de erros com código e mensagem.
+     * Lista padronizada de erros com cÃ³digo e mensagem.
      */
     public List<ErroValidacaoDTO> errosDetalhados;
     public RespostaPlanoDeVoo() {}
@@ -29,3 +29,6 @@ public class RespostaPlanoDeVoo {
         this.errosDetalhados = errosDetalhados;
     }
 }
+
+
+

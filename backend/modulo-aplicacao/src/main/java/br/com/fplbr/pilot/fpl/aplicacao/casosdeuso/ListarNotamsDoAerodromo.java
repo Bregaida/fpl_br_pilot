@@ -1,4 +1,4 @@
-package br.com.fplbr.pilot.fpl.aplicacao.casosdeuso;
+﻿package br.com.fplbr.pilot.fpl.aplicacao.casosdeuso;
 
 import br.com.fplbr.pilot.fpl.aplicacao.dto.Notam;
 import br.com.fplbr.pilot.fpl.aplicacao.portas.PortaAisweb;
@@ -12,3 +12,6 @@ public class ListarNotamsDoAerodromo {
 
     public List<Notam> executar(String icao) { return porta.listarNotams(icao); }
 }
+
+
+

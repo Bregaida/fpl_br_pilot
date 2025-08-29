@@ -28,6 +28,12 @@
       <artifactId>quarkus-rest-jackson</artifactId>
     </dependency>
 
+    <!-- Bean Validation for Quarkus (@Valid, jakarta.validation) -->
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-hibernate-validator</artifactId>
+    </dependency>
+
     <!-- OpenAPI / Swagger UI -->
     <dependency>
       <groupId>io.quarkus</groupId>

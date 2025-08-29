@@ -1,4 +1,4 @@
-package br.com.fplbr.pilot.fpl.infraestrutura.api;
+﻿package br.com.fplbr.pilot.fpl.infraestrutura.api;
 
 import br.com.fplbr.pilot.fpl.aplicacao.dto.BriefingMeteorologico;
 import br.com.fplbr.pilot.fpl.aplicacao.portas.PortaMeteorologia;
@@ -21,7 +21,7 @@ public class ControladorMeteorologiaTest {
     @Test
     void deveRetornarBriefing() {
         Mockito.when(porta.obterBriefing("SBSP"))
-                .thenReturn(new BriefingMeteorologico("METAR SBSP...", "TAF SBSP...", List.of("SIGMET")));
+                .thenReturn(new BriefingMeteorologico("METAR SBSP..", "TAF SBSP..", List.of("SIGMET")));
 
         given()
             .when().get("/api/v1/meteorologia/SBSP/briefing")

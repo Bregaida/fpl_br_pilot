@@ -1,10 +1,10 @@
-package br.com.fplbr.pilot.fpl.aplicacao.casosdeuso;
+﻿package br.com.fplbr.pilot.fpl.aplicacao.casosdeuso;
 
 import br.com.fplbr.pilot.fpl.aplicacao.dto.Aerodromo;
 
 /**
- * Caso de uso stub: retorna dados fictícios do aeródromo.
- * Integração real (AIS/BD interna) será adicionada depois via portas/adaptadores.
+ * Caso de uso stub: retorna dados fictÃ­cios do aerÃ³dromo.
+ * IntegraÃ§Ã£o real (AIS/BD interna) serÃ¡ adicionada depois via portas/adaptadores.
  */
 public class ObterDetalhesDoAerodromo {
 
@@ -14,11 +14,14 @@ public class ObterDetalhesDoAerodromo {
         }
         return new Aerodromo(
                 icao.toUpperCase(),
-                "AERÓDROMO " + icao.toUpperCase(),
-                "Município",
+                "AERÃ“DROMO " + icao.toUpperCase(),
+                "MunicÃ­pio",
                 "UF",
                 null,
                 null
         );
     }
 }
+
+
+

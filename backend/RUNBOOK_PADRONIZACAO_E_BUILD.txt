@@ -1,0 +1,39 @@
+Objetivo
+Colapsar pacotes duplicados (br.com.br.com), reposicionar .java pelo package e padronizar o modulo-aplicacao e modulo-infraestrutura.
+Buildar, testar e fazer git push.
+
+Pré-check rápido (Java 21 somente na sessão atual, sem mexer no Registro)
+# rode na pasta backend\
+$ErrorActionPreference = 'Stop'
+if (-not (Get-Command java -ErrorAction SilentlyContinue)) {
+  Write-Host "Java não encontrado no PATH. Abra um terminal com Java 21 ou instale o Temurin 21."
+}
+java -version
+
+Passo 1 — Feche o IntelliJ/abas com arquivos do projeto
+Evita file locks em *.java.
+
+Passo 2 — Atualize sua branch local (evita o erro de push rejeitado)
+git status
+git pull --rebase origin main
+
+Passo 3 — Colapsar pacotes e padronizar
+# a partir de backend\
+powershell -ExecutionPolicy Bypass -File .\scripts\collapse-packages.ps1
+# opcional: só se ainda houver sujeira na infra depois do collapse
+powershell -ExecutionPolicy Bypass -File .\scripts\padronizar-infra.ps1
+
+Passo 4 — Build e testes
+.\mvnw -q -DskipTests package
+.\mvnw -q -am -pl modulo-aplicacao -DskipTests=false test
+.\mvnw -q -am -pl modulo-infraestrutura -DskipTests=false test
+
+Passo 5 — Commit e push
+git add -A
+git commit -m "Padroniza pacotes/paths (colapso br.com.*), reposiciona fontes por package, normaliza imports e passa nos testes"
+git push
+
+Notas rápidas
+Se ainda vir imports quebrados após os movimentos: organize imports no IntelliJ e rode o collapse-packages.ps1 novamente.
+Se aparecer file lock: feche o arquivo no editor e repita o Passo 3.
+O script collapse-packages.ps1 é idempotente e cobre modulo-aplicacao e modulo-infraestrutura.

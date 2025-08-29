@@ -1,4 +1,4 @@
-package br.com.fplbr.pilot.fpl.aplicacao.servicos;
+﻿package br.com.fplbr.pilot.fpl.aplicacao.servicos;
 
 import br.com.fplbr.pilot.fpl.dominio.modelo.*;
 
@@ -8,11 +8,11 @@ public class MontadorFplIcao {
         StringBuilder sb = new StringBuilder();
         sb.append("(FPL-").append(p.getIdentificacaoAeronave().valor()).append("\n");
 
-        // Item 8: Regras/Tipo → ex: -IFR/G
+        // Item 8: Regras/Tipo â†’ ex: -IFR/G
         sb.append("-").append(mapRegras(p.getRegrasDeVoo()))
           .append("/").append(mapTipo(p.getTipoDeVoo())).append("\n");
 
-        // Item 9: número/tipo/esteira → ex: -C172/L  (ou -2C172/L)
+        // Item 9: nÃºmero/tipo/esteira â†’ ex: -C172/L  (ou -2C172/L)
         String numero = p.getQuantidadeAeronaves() != null && p.getQuantidadeAeronaves() > 1
                 ? String.valueOf(p.getQuantidadeAeronaves()) : "";
         sb.append("-").append(numero).append(p.getTipoAeronaveIcao()).append("/")
@@ -24,7 +24,7 @@ public class MontadorFplIcao {
         // Item 13: Partida/Hora
         sb.append("-").append(p.getAerodromoPartida()).append(p.getHoraPartidaZulu()).append("\n");
 
-        // Item 15: Velocidade/Nível + rota
+        // Item 15: Velocidade/NÃ­vel + rota
         sb.append("-").append(p.getVelocidadeCruzeiro()).append(p.getNivelCruzeiro())
           .append(" ").append(p.getRota()).append("\n");
 
@@ -39,7 +39,7 @@ public class MontadorFplIcao {
             sb.append("-").append(p.getOutrosDados()).append("\n");
         }
 
-        // Item 19 (mínimo: E/ e P/)
+        // Item 19 (mÃ­nimo: E/ e P/)
         boolean tem19 = false;
         StringBuilder l19 = new StringBuilder();
         if (notBlank(p.getAutonomia())) { l19.append("E/").append(p.getAutonomia()); tem19 = true; }
@@ -84,3 +84,5 @@ public class MontadorFplIcao {
         };
     }
 }
+
+
