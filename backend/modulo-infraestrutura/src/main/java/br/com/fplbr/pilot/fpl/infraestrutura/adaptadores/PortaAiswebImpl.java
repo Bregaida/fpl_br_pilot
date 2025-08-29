@@ -27,7 +27,7 @@ public class PortaAiswebImpl implements PortaAisweb {
         List<Notam> saida = new ArrayList<>();
         try {
             JsonNode root = mapper.readTree(json);
-            // aceita array ou objeto {items:[..]}
+            // aceita array ou objeto {items:[.]}
             JsonNode itens = root.isArray() ? root : root.path("items");
             if (itens != null && itens.isArray()) {
                 for (JsonNode n : itens) {
@@ -78,7 +78,7 @@ public class PortaAiswebImpl implements PortaAisweb {
         String json = api.obterAerodromo(icao);
         try {
             JsonNode a = mapper.readTree(json);
-            // aceita objeto direto ou raiz {data:{..}}
+            // aceita objeto direto ou raiz {data:{.}}
             JsonNode n = a.has("data") ? a.get("data") : a;
             String nome = pick(n, "nome", "aeroporto", "aerodromo", "designacao");
             String municipio = pick(n, "municipio", "cidade", "localidade");
@@ -97,7 +97,7 @@ public class PortaAiswebImpl implements PortaAisweb {
         }
     }
 
-    private static String pick(JsonNode n, String.. keys) {
+    private static String pick(JsonNode n, String. keys) {
         for (String k : keys) {
             if (n.has(k) && !n.get(k).isNull()) {
                 String v = n.get(k).asText();
@@ -107,7 +107,7 @@ public class PortaAiswebImpl implements PortaAisweb {
         return null;
     }
 
-    private static Double pickDouble(JsonNode n, String.. keys) {
+    private static Double pickDouble(JsonNode n, String. keys) {
         for (String k : keys) {
             if (n.has(k) && n.get(k).isNumber()) return n.get(k).asDouble();
             if (n.has(k) && n.get(k).isTextual()) {

@@ -1,5 +1,14 @@
 $ErrorActionPreference = 'Stop'
 
+# Setup Java for this session (user-provided JDK 21 path)
+$javaHome = 'C:\\Program Files\\Java\\jdk-21'
+if (Test-Path $javaHome) {
+  $env:JAVA_HOME = $javaHome
+  if (-not ($env:Path -like "*$javaHome\\bin*")) {
+    $env:Path = "$javaHome\bin;" + $env:Path
+  }
+}
+
 Write-Host "==> Verificando Java no PATH..."
 if (-not (Get-Command java -ErrorAction SilentlyContinue)) {
   Write-Warning "Java não encontrado no PATH. Abra um terminal com JDK 21 no PATH. Prosseguindo assim mesmo..."
