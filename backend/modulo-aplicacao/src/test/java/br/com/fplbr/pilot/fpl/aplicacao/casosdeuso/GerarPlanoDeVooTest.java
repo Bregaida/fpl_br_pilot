@@ -1,4 +1,4 @@
-package br.com.fplbr.pilot.fpl.aplicacao.casosdeuso;
+﻿package br.com.fplbr.pilot.fpl.aplicacao.casosdeuso;
 
 import br.com.fplbr.pilot.fpl.aplicacao.dto.RespostaPlanoDeVoo;
 import org.junit.jupiter.api.Test;
@@ -50,7 +50,7 @@ public class GerarPlanoDeVooTest {
                 "C172",
                 "L",
                 "S",
-                "XXX",    // inválido (não ICAO)
+                "XXX",    // invÃ¡lido (nÃ£o ICAO)
                 "1300",
                 "",        // velocidadeCruzeiro em branco (Item 15)
                 "F090",
@@ -68,9 +68,10 @@ public class GerarPlanoDeVooTest {
         assertNull(resp.mensagemFpl);
         assertNotNull(resp.erros);
         assertFalse(resp.erros.isEmpty());
-        // Deve conter referência aos itens 13 e 15
+        // Deve conter referÃªncia aos itens 13 e 15
         String erros = String.join(";", resp.erros);
         assertTrue(erros.contains("ITEM13") || erros.contains("ITEM 13"));
         assertTrue(erros.contains("ITEM15") || erros.contains("ITEM 15"));
     }
 }
+

@@ -1,0 +1,13 @@
+{ "aircraftId":"PTOSP","flightRules":"V","flightType":"G","numberOfAircraft":1,"aircraftType":"BL8","wakeTurbulence":"L",
+  "equipA":["S","R","Z"],"equipB":["S","C"],"departureAerodrome":"SBMT","departureTimeUTC":"1840",
+  "cruisingSpeed":"N0100","level":"VFR",
+  "route":"2239S04620W/N0100A060 DCT 2235S04718W/N0100A060 REA 2243S04734W/N0100A060 DCT 2255S04748W/N0100A060",
+  "destinationAerodrome":"SBMT","totalEet":"0130","alternate1":"SBJD","alternate2":null,
+  "other":{"dof":"230505","operator":"AEROCLUBE DE SAO PAULO","performance":"A","pbn":"B2 C2 D2 S1",
+           "extra":{"RMK":"REA INDIA ALT MAX REA","FROM":"SBMT"}},
+  "supp":{"endurance":"0230","personsOnBoard":"2","radioUHF":false,"radioVHF":true,"elt":true,
+          "surPolar":false,"surDesert":false,"surMaritime":false,"surJungle":false,"survivalNone":false,
+          "jackets":false,"jacketLight":false,"jacketFluorescent":false,"jacketUHF":false,"jacketVHF":false,
+          "dinghies":{"number":0,"capacity":0,"covered":false,"colour":null},
+          "aircraftColorAndMarkings":"BRANCO E VERMELHO","pilotInCommand":"BREGAIDA",
+          "anacPilot1":"177784","anacPilot2":"120979","telephone":"1122216668"} }

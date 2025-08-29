@@ -1,4 +1,4 @@
-package br.com.fplbr.pilot.fpl.aplicacao.casosdeuso;
+﻿package br.com.fplbr.pilot.fpl.aplicacao.casosdeuso;
 
 import br.com.fplbr.pilot.fpl.aplicacao.dto.RequisicaoPlanoDeVoo;
 import br.com.fplbr.pilot.fpl.aplicacao.dto.RespostaPlanoDeVoo;
@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
 public class GerarPlanoDeVoo {
     /**
-     * Conveniência: método único com parâmetros diretos para validar e montar o FPL.
+     * ConveniÃªncia: mÃ©todo Ãºnico com parÃ¢metros diretos para validar e montar o FPL.
      */
     public RespostaPlanoDeVoo executar(
             String identificacaoAeronave,
@@ -60,7 +60,7 @@ public class GerarPlanoDeVoo {
         return executar(r);
     }
     public RespostaPlanoDeVoo executar(RequisicaoPlanoDeVoo req) {
-        // 1) Mapear DTO -> Domínio (com normalização simples)
+        // 1) Mapear DTO -> DomÃ­nio (com normalizaÃ§Ã£o simples)
         PlanoDeVoo plano = mapear(req);
 
         // 2) Validar
@@ -159,3 +159,6 @@ public class GerarPlanoDeVoo {
         };
     }
 }
+
+
+

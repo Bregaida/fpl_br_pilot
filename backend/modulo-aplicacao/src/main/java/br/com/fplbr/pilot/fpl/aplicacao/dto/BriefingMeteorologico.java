@@ -1,4 +1,4 @@
-package br.com.fplbr.pilot.fpl.aplicacao.dto;
+﻿package br.com.fplbr.pilot.fpl.aplicacao.dto;
 
 import java.util.List;
 
@@ -7,3 +7,6 @@ public record BriefingMeteorologico(
         String taf,
         List<String> sigmet
 ) {}
+
+
+

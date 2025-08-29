@@ -1,4 +1,4 @@
-package br.com.fplbr.pilot.fpl.aplicacao.dto;
+﻿package br.com.fplbr.pilot.fpl.aplicacao.dto;
 
 public class ErroValidacaoDTO {
     public String codigo;
@@ -11,3 +11,6 @@ public class ErroValidacaoDTO {
         this.mensagem = mensagem;
     }
 }
+
+
+

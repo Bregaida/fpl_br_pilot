@@ -1,4 +1,4 @@
-package br.com.fplbr.pilot.fpl.aplicacao.casosdeuso;
+﻿package br.com.fplbr.pilot.fpl.aplicacao.casosdeuso;
 
 import br.com.fplbr.pilot.fpl.aplicacao.dto.Aerodromo;
 import org.junit.jupiter.api.Test;
@@ -22,3 +22,4 @@ public class ObterDetalhesDoAerodromoTest {
         assertEquals("XXXX", a.icao());
     }
 }
+
