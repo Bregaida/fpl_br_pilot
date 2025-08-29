@@ -24,13 +24,13 @@ powershell -ExecutionPolicy Bypass -File .\scripts\collapse-packages.ps1
 # powershell -ExecutionPolicy Bypass -File .\scripts\padronizar-infra.ps1
 
 Write-Host "==> Build (sem testes) para aquecer o cache..."
-.\mvnw -q -DskipTests package
+.\mvnw.cmd -q -DskipTests package
 
 Write-Host "==> Rodando testes de modulo-aplicacao..."
-.\mvnw -q -am -pl modulo-aplicacao -DskipTests=false test
+.\mvnw.cmd -q -am -pl modulo-aplicacao -DskipTests=false test
 
 Write-Host "==> Rodando testes de modulo-infraestrutura..."
-.\mvnw -q -am -pl modulo-infraestrutura -DskipTests=false test
+.\mvnw.cmd -q -am -pl modulo-infraestrutura -DskipTests=false test
 
 Write-Host "==> Commit & push..."
 git add -A
@@ -38,7 +38,7 @@ git commit -m "Padroniza pacotes/paths (colapso br.com.*), reposiciona fontes po
 git push
 
 Write-Host "==> (Opcional) Subir Quarkus em dev para validar endpoints..."
-Write-Host "Comando: .\mvnw -f modulo-infraestrutura quarkus:dev"
+Write-Host "Comando: .\mvnw.cmd -f modulo-infraestrutura quarkus:dev"
 Write-Host "Health:   GET http://localhost:8080/api/v1/saude/ping"
 Write-Host "Swagger:  http://localhost:8080/q/swagger-ui"
 
