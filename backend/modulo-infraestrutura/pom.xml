@@ -6,21 +6,19 @@
     <groupId>br.com.fplbr.pilot</groupId>
     <artifactId>fpl-br-pilot-backend</artifactId>
     <version>0.1.0</version>
-    <relativePath>../pom.xml</relativePath>
   </parent>
 
   <artifactId>modulo-infraestrutura</artifactId>
-  <packaging>jar</packaging>
 
   <dependencies>
-    <!-- Camadas -->
+    <!-- Camada de aplicação -->
     <dependency>
       <groupId>br.com.fplbr.pilot</groupId>
       <artifactId>modulo-aplicacao</artifactId>
       <version>${project.version}</version>
     </dependency>
 
-    <!-- Quarkus REST (artefatos novos pós-migração 3.9+) -->
+    <!-- Quarkus REST (substitui resteasy-reactive) -->
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-rest</artifactId>
@@ -30,14 +28,50 @@
       <artifactId>quarkus-rest-jackson</artifactId>
     </dependency>
 
-    <!-- OpenAPI/Swagger UI e Health -->
+    <!-- OpenAPI / Swagger UI -->
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-smallrye-openapi</artifactId>
     </dependency>
+
+    <!-- REST Client Reactive para integrar APIs externas -->
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-rest-client-reactive</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-rest-client-reactive-jackson</artifactId>
+    </dependency>
+
+    <!-- Health (opcional) -->
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-smallrye-health</artifactId>
+    </dependency>
+
+    <!-- Testes -->
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-junit5</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-junit5-mockito</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.rest-assured</groupId>
+      <artifactId>rest-assured</artifactId>
+      <version>5.4.0</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-core</artifactId>
+      <version>5.12.0</version>
+      <scope>test</scope>
     </dependency>
   </dependencies>
 
@@ -48,10 +82,6 @@
         <artifactId>quarkus-maven-plugin</artifactId>
         <version>${quarkus.platform.version}</version>
         <extensions>true</extensions>
-        <!-- Evita o "support library" e permite quarkus:dev aqui -->
-        <configuration>
-          <enforceBuildGoal>false</enforceBuildGoal>
-        </configuration>
         <executions>
           <execution>
             <goals>
