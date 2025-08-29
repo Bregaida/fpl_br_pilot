@@ -1,0 +1,56 @@
+# --- SO / Ferramentas ---
+.DS_Store
+Thumbs.db
+
+# --- IDEs ---
+.idea/
+.vscode/
+*.iml
+
+# --- Git / Logs / Temp ---
+*.log
+*.tmp
+*.swp
+*.swo
+*.orig
+
+# --- Node / React ---
+node_modules/
+dist/
+build/
+coverage/
+.npm/
+pnpm-lock.yaml
+yarn.lock
+
+# --- Java / Maven / Gradle / Quarkus ---
+target/
+.build/
+.mvn/wrapper/maven-wrapper.jar
+.quarkus/
+.quarkus-cache/
+surefire-reports/
+failsafe-reports/
+dependency-reduced-pom.xml
+
+# --- Gradle / Android ---
+.gradle/
+build/
+**/build/
+captures/
+local.properties
+.idea/caches/
+*.apk
+*.ap_
+*.aab
+
+# --- Testes / Ferramentas ---
+.pact/
+.cypress/
+.cy/
+jest-html-reporters-*.html
+reports/
+
+# --- Docker ---
+*.pid
+docker/*.env
