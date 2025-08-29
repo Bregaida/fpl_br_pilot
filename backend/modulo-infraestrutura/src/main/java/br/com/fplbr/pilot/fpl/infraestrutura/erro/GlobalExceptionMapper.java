@@ -34,3 +34,4 @@ public class GlobalExceptionMapper implements ExceptionMapper<Throwable> {
                 .build();
     }
 }
+

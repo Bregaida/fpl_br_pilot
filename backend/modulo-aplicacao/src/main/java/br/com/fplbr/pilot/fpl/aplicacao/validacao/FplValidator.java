@@ -1,6 +1,7 @@
-﻿package br.com.fplbr.pilot.fpl.aplicacao.validacao;
+package br.com.fplbr.pilot.fpl.aplicacao.validacao;
 
 import br.com.fplbr.pilot.fpl.aplicacao.dto.FplDTO;
+import br.com.fplbr.pilot.fpl.aplicacao.dto.FlightRules;
 import br.com.fplbr.pilot.fpl.aplicacao.dto.FplDTO.EquipA;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
@@ -51,10 +52,10 @@ public class FplValidator implements ConstraintValidator<ValidFpl, FplDTO> {
 
     // Regras de voo x NÃ­vel
     if ("VFR".equals(d.level) && d.flightRules != null &&
-        !(d.flightRules == FplDTO.FlightRules.V || d.flightRules == FplDTO.FlightRules.Z)) {
+        !(d.flightRules == FlightRules.VFR || d.flightRules == FlightRules.Z)) {
       ok = violation(ctx, "level", "Level VFR exige regras V ou Z") && ok;
     }
-    if ("VFR".equals(d.level) && d.flightRules == FplDTO.FlightRules.I) {
+    if ("VFR".equals(d.level) && d.flightRules == FlightRules.IFR) {
       ok = violation(ctx, "level", "IFR nÃ£o pode ter level VFR") && ok;
     }
 
@@ -109,4 +110,5 @@ public class FplValidator implements ConstraintValidator<ValidFpl, FplDTO> {
   private static boolean isBlank(String s){ return s == null || s.trim().isEmpty(); }
   private static boolean notBlank(String s){ return !isBlank(s); }
 }
+
 

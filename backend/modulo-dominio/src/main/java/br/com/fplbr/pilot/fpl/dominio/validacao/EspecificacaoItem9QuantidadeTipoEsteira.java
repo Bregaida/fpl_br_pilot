@@ -24,3 +24,4 @@ public class EspecificacaoItem9QuantidadeTipoEsteira implements Especificacao<Pl
         return erros;
     }
 }
+

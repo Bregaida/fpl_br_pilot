@@ -30,3 +30,4 @@ public class EspecificacaoItem19AutonomiaEPessoas implements Especificacao<Plano
         return erros;
     }
 }
+

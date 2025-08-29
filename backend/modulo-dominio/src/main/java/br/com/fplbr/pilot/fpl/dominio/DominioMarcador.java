@@ -8,3 +8,4 @@ public final class DominioMarcador {
     private DominioMarcador() {
     }
 }
+

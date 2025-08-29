@@ -1,4 +1,4 @@
-﻿package br.com.fplbr.pilot.fpl.aplicacao.portas;
+package br.com.fplbr.pilot.fpl.aplicacao.portas;
 
 import br.com.fplbr.pilot.fpl.aplicacao.dto.Notam;
 import br.com.fplbr.pilot.fpl.aplicacao.dto.CartaAerodromo;
@@ -11,6 +11,7 @@ public interface PortaAisweb {
     List<CartaAerodromo> listarCartas(String icao);
     Aerodromo obterAerodromo(String icao);
 }
+
 
 
 

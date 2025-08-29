@@ -1,4 +1,4 @@
-﻿package br.com.fplbr.pilot.fpl.aplicacao.casosdeuso;
+package br.com.fplbr.pilot.fpl.aplicacao.casosdeuso;
 
 import br.com.fplbr.pilot.fpl.aplicacao.dto.Aerodromo;
 
@@ -22,6 +22,7 @@ public class ObterDetalhesDoAerodromo {
         );
     }
 }
+
 
 
 

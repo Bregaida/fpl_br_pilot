@@ -1,4 +1,4 @@
-﻿package br.com.fplbr.pilot.fpl.aplicacao.dto;
+package br.com.fplbr.pilot.fpl.aplicacao.dto;
 
 public class RequisicaoPlanoDeVoo {
     public String identificacaoAeronave;
@@ -30,6 +30,7 @@ public class RequisicaoPlanoDeVoo {
     public Integer pessoasABordo;       // para P/
     public String piloto;               // livre
 }
+
 
 
 

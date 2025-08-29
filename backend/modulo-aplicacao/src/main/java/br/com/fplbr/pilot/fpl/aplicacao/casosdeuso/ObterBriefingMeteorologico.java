@@ -1,4 +1,4 @@
-﻿package br.com.fplbr.pilot.fpl.aplicacao.casosdeuso;
+package br.com.fplbr.pilot.fpl.aplicacao.casosdeuso;
 
 import br.com.fplbr.pilot.fpl.aplicacao.dto.BriefingMeteorologico;
 import br.com.fplbr.pilot.fpl.aplicacao.portas.PortaMeteorologia;
@@ -12,6 +12,7 @@ public class ObterBriefingMeteorologico {
         return porta.obterBriefing(icao);
     }
 }
+
 
 
 

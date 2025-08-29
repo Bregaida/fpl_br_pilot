@@ -27,3 +27,4 @@ public class EspecificacaoItem13PartidaEHora implements Especificacao<PlanoDeVoo
         return erros;
     }
 }
+

@@ -20,3 +20,4 @@ public class EspecificacaoItem7IdentificacaoAeronave implements Especificacao<Pl
         return erros;
     }
 }
+

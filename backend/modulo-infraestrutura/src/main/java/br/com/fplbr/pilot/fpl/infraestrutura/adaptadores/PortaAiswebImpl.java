@@ -1,4 +1,4 @@
-﻿package br.com.fplbr.pilot.fpl.infraestrutura.adaptadores;
+package br.com.fplbr.pilot.fpl.infraestrutura.adaptadores;
 
 import br.com.fplbr.pilot.fpl.aplicacao.dto.Aerodromo;
 import br.com.fplbr.pilot.fpl.aplicacao.dto.CartaAerodromo;
@@ -97,7 +97,7 @@ public class PortaAiswebImpl implements PortaAisweb {
         }
     }
 
-    private static String pick(JsonNode n, String. keys) {
+    private static String pick(JsonNode n, String... keys) {
         for (String k : keys) {
             if (n.has(k) && !n.get(k).isNull()) {
                 String v = n.get(k).asText();
@@ -107,7 +107,7 @@ public class PortaAiswebImpl implements PortaAisweb {
         return null;
     }
 
-    private static Double pickDouble(JsonNode n, String. keys) {
+    private static Double pickDouble(JsonNode n, String... keys) {
         for (String k : keys) {
             if (n.has(k) && n.get(k).isNumber()) return n.get(k).asDouble();
             if (n.has(k) && n.get(k).isTextual()) {
@@ -117,3 +117,4 @@ public class PortaAiswebImpl implements PortaAisweb {
         return null;
     }
 }
+
