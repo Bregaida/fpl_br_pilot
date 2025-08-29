@@ -21,7 +21,7 @@ public class ControladorMeteorologiaTest {
     @Test
     void deveRetornarBriefing() {
         Mockito.when(porta.obterBriefing("SBSP"))
-                .thenReturn(new BriefingMeteorologico("METAR SBSP..", "TAF SBSP..", List.of("SIGMET")));
+                .thenReturn(new BriefingMeteorologico("METAR SBSP.", "TAF SBSP.", List.of("SIGMET")));
 
         given()
             .when().get("/api/v1/meteorologia/SBSP/briefing")
