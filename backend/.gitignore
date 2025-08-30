@@ -25,3 +25,4 @@ Thumbs.db
 # Java / Build
 hs_err_pid*
 replay_pid*
+/remove_bom.ps1
