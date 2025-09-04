@@ -1,0 +1,45 @@
+services:
+  backend:
+    build:
+      context: ./backend
+    container_name: fplbr-backend
+    environment:
+      # H2 em memória (dev)
+      - QUARKUS_DATASOURCE_DB_KIND=h2
+      - QUARKUS_DATASOURCE_JDBC_URL=jdbc:h2:mem:fplrotaer;DB_CLOSE_DELAY=-1
+      - QUARKUS_DATASOURCE_USERNAME=sa
+      - QUARKUS_DATASOURCE_PASSWORD=sa
+      - QUARKUS_HIBERNATE_ORM_DATABASE_GENERATION=update
+      # Schedulers ativados em dev, se aplicável
+      - QUARKUS_SCHEDULER_ENABLED=true
+    ports:
+      - "8080:8080"
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:8080/api/v1/saude/ping"]
+      interval: 15s
+      timeout: 5s
+      retries: 30
+
+  bff:
+    build:
+      context: ./bff
+    container_name: fplbr-bff
+    environment:
+      - PORT=3001
+      - BACKEND_BASE_URL=http://backend:8080
+    depends_on:
+      backend:
+        condition: service_healthy
+    ports:
+      - "3001:3001"
+
+  web:
+    build:
+      context: ./fplbr-frontend
+      args:
+        VITE_BFF_URL: http://bff:3001
+    container_name: fplbr-web
+    depends_on:
+      - bff
+    ports:
+      - "8088:80"

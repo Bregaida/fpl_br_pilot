@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
  */
 @Entity
 @Table(name = "frequencias")
+@Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor

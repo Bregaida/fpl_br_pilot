@@ -10,10 +10,12 @@ import jakarta.inject.Inject;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.jboss.logging.Logger;
 
+import java.lang.annotation.*;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Predicate;
 
 @ApplicationScoped
 public class AtualizadorCartasScheduler {
@@ -50,7 +52,7 @@ public class AtualizadorCartasScheduler {
 
     @Scheduled(identity = "atualizacao-cartas", 
                cron = "{scheduler.cartas.cron:0 0 2 ? * MON}", // Every Monday at 2 AM
-               skipExecutionIf = SchedulerSkipPredicate.class)
+               skipExecutionIf = SchedulerSkipPredicate.Implementation.class)
     public void atualizarCartas() {
         if (!schedulerEnabled) {
             LOG.info("Agendador de atualização de cartas está desativado");
@@ -144,11 +146,21 @@ public class AtualizadorCartasScheduler {
                 duration.minusMinutes(duration.toMinutes()).getSeconds());
     }
     
-    public static class SchedulerSkipPredicate implements jakarta.enterprise.util.Nonbinding {
-        boolean test(AtualizadorCartasScheduler scheduler) {
-            return scheduler.isRunning() || 
-                   (scheduler.getLastRun() != null && 
-                    Duration.between(scheduler.getLastRun(), Instant.now()).toMinutes() < 60);
+    @Retention(RetentionPolicy.RUNTIME)
+    @Target({ElementType.METHOD, ElementType.TYPE})
+    public @interface SchedulerSkipPredicate {
+        class Implementation implements Annotation, Predicate<AtualizadorCartasScheduler> {
+            @Override
+            public boolean test(AtualizadorCartasScheduler scheduler) {
+                return scheduler.isRunning() || 
+                       (scheduler.getLastRun() != null && 
+                        Duration.between(scheduler.getLastRun(), Instant.now()).toMinutes() < 60);
+            }
+            
+            @Override
+            public Class<? extends Annotation> annotationType() {
+                return SchedulerSkipPredicate.class;
+            }
         }
     }
     

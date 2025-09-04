@@ -9,6 +9,12 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Objects;
+import java.util.Optional;
+
+/**
+ * Represents a runway (pista) in the database.
+ * Maps to the 'pistas' table.
+ */
 
 /**
  * Entidade JPA que representa uma pista de aeródromo no banco de dados.
@@ -16,10 +22,19 @@ import java.util.Objects;
 @Entity
 @Table(name = "pistas")
 @Data
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class PistaEntity extends PanacheEntityBase {
+
+    /**
+     * Finds a PistaEntity by its ID.
+     *
+     * @param id the ID of the pista to find
+     * @return an Optional containing the found PistaEntity, or empty if not found
+     */
+    public static Optional<PistaEntity> findByIdOptional(Long id) {
+        return find("id", id).firstResultOptional();
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -79,51 +94,73 @@ public class PistaEntity extends PanacheEntityBase {
 
 
     /**
-     * Cria uma nova instância de PistaEntity a partir de um objeto de domínio Pista.
+     * Creates a new PistaEntity from a domain Pista object.
+     *
+     * @param pista the domain Pista object
+     * @param aerodromo the AerodromoEntity this pista belongs to
+     * @return a new PistaEntity instance
      */
-    public static PistaEntity fromDomain(Pista pista, AerodromoEntity aerodromoEntity) {
-        return new PistaEntity.Builder(aerodromoEntity, pista.getDesignacao())
-                .comprimentoMetros(pista.getComprimentoMetros())
-                .larguraMetros(pista.getLarguraMetros())
-                .superficie(pista.getSuperficie())
-                .resistenciaPcn(pista.getResistenciaPcn())
-                .classificacaoPcn(pista.getClassificacaoPcn())
-                .tora(pista.getTora())
-                .toda(pista.getToda())
-                .asda(pista.getAsda())
-                .lda(pista.getLda())
-                .ils(pista.isIls())
-                .categoriaIls(pista.getCategoriaIls())
-                .papi(pista.getPapi())
-                .luzesBorda(pista.getLuzesBorda())
-                .luzesCentro(pista.getLuzesCentro())
-                .observacoes(pista.getObservacoes())
-                .build();
+    public static PistaEntity fromDomain(Pista pista, AerodromoEntity aerodromo) {
+        if (pista == null) {
+            return null;
+        }
+        
+        PistaEntity entity = new PistaEntity();
+        entity.setAerodromo(aerodromo);
+        entity.setDesignacao(pista.getDesignacao());
+        entity.setComprimentoMetros(pista.getComprimentoMetros());
+        entity.setLarguraMetros(pista.getLarguraMetros());
+        entity.setSuperficie(pista.getSuperficie());
+        entity.setResistenciaPcn(pista.getResistenciaPcn());
+        entity.setClassificacaoPcn(pista.getClassificacaoPcn());
+        entity.setTora(pista.getTora());
+        entity.setToda(pista.getToda());
+        entity.setAsda(pista.getAsda());
+        entity.setLda(pista.getLda());
+        entity.setIls(pista.isIls());
+        entity.setCategoriaIls(pista.getCategoriaIls());
+        entity.setPapi(pista.getPapi());
+        entity.setLuzesBorda(pista.getLuzesBorda());
+        entity.setLuzesCentro(pista.getLuzesCentro());
+        entity.setObservacoes(pista.getObservacoes());
+        
+        return entity;
     }
 
     /**
-     * Converte esta entidade para o domínio Pista.
+     * Converts this entity to a domain Pista object.
+     *
+     * @return a new Pista domain object
      */
     public Pista toDomain() {
-        return new Pista.Builder(this.designacao)
-                .comprimentoMetros(this.comprimentoMetros)
-                .larguraMetros(this.larguraMetros)
-                .superficie(this.superficie)
-                .resistenciaPcn(this.resistenciaPcn)
-                .classificacaoPcn(this.classificacaoPcn)
-                .tora(this.tora)
-                .toda(this.toda)
-                .asda(this.asda)
-                .lda(this.lda)
-                .ils(this.ils)
-                .categoriaIls(this.categoriaIls)
-                .papi(this.papi)
-                .luzesBorda(this.luzesBorda)
-                .luzesCentro(this.luzesCentro)
-                .observacoes(this.observacoes)
-                .build();
+        if (this.designacao == null) {
+            throw new IllegalStateException("Designação da pista não pode ser nula");
+        }
+        
+        Pista pista = new Pista();
+        pista.setDesignacao(this.designacao);
+        pista.setComprimentoMetros(this.comprimentoMetros);
+        pista.setLarguraMetros(this.larguraMetros);
+        pista.setSuperficie(this.superficie);
+        pista.setResistenciaPcn(this.resistenciaPcn);
+        pista.setClassificacaoPcn(this.classificacaoPcn);
+        pista.setTora(this.tora);
+        pista.setToda(this.toda);
+        pista.setAsda(this.asda);
+        pista.setLda(this.lda);
+        pista.setIls(this.ils);
+        pista.setCategoriaIls(this.categoriaIls);
+        pista.setPapi(this.papi);
+        pista.setLuzesBorda(this.luzesBorda);
+        pista.setLuzesCentro(this.luzesCentro);
+        pista.setObservacoes(this.observacoes);
+        
+        return pista;
     }
 
+    /**
+     * Cria uma nova instância de PistaEntity a partir de um objeto de domínio Pista.
+     *
      * @param pista O objeto de domínio Pista
      * @param aerodromo A entidade AerodromoEntity relacionada
      * @return Uma nova instância de PistaEntity
@@ -155,7 +192,9 @@ public class PistaEntity extends PanacheEntityBase {
         return entity;
     }
 
+    // ======================================
     // Getters and Setters
+    // ======================================
     public Long getId() {
         return id;
     }
