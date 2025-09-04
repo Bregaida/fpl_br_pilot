@@ -108,7 +108,6 @@ export const mockResponse: FplComposedResponse = {
     ...mockAerodromeInfo,
     icao: 'SBMT',
     nome: 'Aeroporto de Campo de Marte',
-    cidade: 'São Paulo',
     coord: { lat: -23.6267, lon: -46.6553 },
     elev: 802,
     sun: {
