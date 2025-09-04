@@ -1,6 +1,6 @@
 import axios, { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
-import { ApiError, ApiResponse, FplForm, FplComposedResponse, AerodromoInfo, Notam } from '@/types';
-import { mockResponse } from './mockData';
+import { ApiError, ApiResponse, FplForm, FplComposedResponse } from '@/types';
+import { mockResponse } from './mockData'; // Mock response is used in the code
 
 const BFF_BASE_URL = import.meta.env.VITE_BFF_URL || 'http://localhost:3001';
 

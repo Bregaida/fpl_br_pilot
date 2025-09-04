@@ -21,7 +21,7 @@ FROM eclipse-temurin:21-jre
 WORKDIR /app
 
 # Copy the built application
-COPY --from=build /workspace/target/*-runner.jar /app/app.jar
+COPY --from=build /workspace/target/quarkus-app/ /app/
 
 # Expose the port the app runs on
 EXPOSE 8080
@@ -31,4 +31,4 @@ ENV QUARKUS_HTTP_PORT=8080
 ENV QUARKUS_PROFILE=prod
 
 # Run the application
-ENTRYPOINT ["java", "-jar", "/app/app.jar"]
+ENTRYPOINT ["java", "-jar", "/app/quarkus-run.jar"]

@@ -42,4 +42,4 @@ services:
     depends_on:
       - bff
     ports:
-      - "8088:80"
+      - "8089:80"

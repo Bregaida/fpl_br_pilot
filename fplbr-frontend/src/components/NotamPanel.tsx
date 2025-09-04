@@ -15,7 +15,7 @@ interface NotamPanelProps {
 }
 
 export default function NotamPanel({ notams, aerodromes, isLoading = false }: NotamPanelProps) {
-  const [selectedAerodrome, setSelectedAerodrome] = useState<string>(
+  const [selectedAerodrome] = useState<string>(
     aerodromes.length > 0 ? aerodromes[0].icao : ''
   );
   const [showActiveOnly, setShowActiveOnly] = useState(true);
