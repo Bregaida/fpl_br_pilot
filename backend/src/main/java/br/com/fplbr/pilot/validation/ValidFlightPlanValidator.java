@@ -153,14 +153,18 @@ public class ValidFlightPlanValidator implements ConstraintValidator<ValidFlight
         if (flightPlan.getRota() == null || flightPlan.getRota().isBlank()) {
             erros.add("Rota é obrigatória");
         }
-        if (flightPlan.getOutrasInformacoes() == null || flightPlan.getOutrasInformacoes().isBlank()) {
+        if (flightPlan.getOutrasInformacoes() == null) {
             erros.add("Outras informações são obrigatórias");
+        } else if (flightPlan.getOutrasInformacoes().isBlank()) {
+            erros.add("Pelo menos um campo de 'Outras informações' deve ser preenchido");
         }
         if (flightPlan.getDof() == null) {
             erros.add("DOF (Data Operacional do Voo) é obrigatório");
         }
-        if (flightPlan.getInformacaoSuplementar() == null || flightPlan.getInformacaoSuplementar().isBlank()) {
+        if (flightPlan.getInformacaoSuplementar() == null) {
             erros.add("Informação suplementar é obrigatória");
+        } else if (flightPlan.getInformacaoSuplementar().isBlank()) {
+            erros.add("Pelo menos um campo de 'Informação suplementar' deve ser preenchido");
         }
         
         // Se for voo completo, valida campos adicionais

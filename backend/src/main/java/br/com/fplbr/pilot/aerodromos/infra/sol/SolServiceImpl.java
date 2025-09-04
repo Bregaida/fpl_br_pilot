@@ -93,7 +93,6 @@ public class SolServiceImpl implements SolServicePort {
                     .timeout(TIMEOUT_MS)
                     .maxBodySize(0) // No limit
                     .followRedirects(true)
-                    .validateTLSCertificates(true)
                     .get();
             
             // Sanitize and extract data

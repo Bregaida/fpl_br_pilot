@@ -14,6 +14,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "flight_plans")
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder

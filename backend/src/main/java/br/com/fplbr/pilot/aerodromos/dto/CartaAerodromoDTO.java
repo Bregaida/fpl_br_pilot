@@ -1,7 +1,16 @@
 package br.com.fplbr.pilot.aerodromos.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.time.LocalDate;
 import java.util.Objects;
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class CartaAerodromoDTO {
     private String icao;         // ex: SBSP
     private String titulo;       // ex: AD 2 SBSP IAC RWY 17R
@@ -10,7 +19,7 @@ public class CartaAerodromoDTO {
     private String hash;         // sha-256 para dedupe
     private LocalDate ciclo;     // se conseguirmos inferir do nome (opcional)
 
-    // Private constructor for builder
+    // Constructor for builder
     private CartaAerodromoDTO(Builder builder) {
         this.icao = builder.icao;
         this.titulo = builder.titulo;
@@ -62,59 +71,5 @@ public class CartaAerodromoDTO {
                 Objects.equals(caminho, that.caminho) &&
                 Objects.equals(hash, that.hash) &&
                 Objects.equals(ciclo, that.ciclo);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(icao, titulo, tipo, caminho, hash, ciclo);
-    }
-
-    // Getters and Setters
-    public String getIcao() {
-        return icao;
-    }
-
-    public void setIcao(String icao) {
-        this.icao = icao;
-    }
-
-    public String getTitulo() {
-        return titulo;
-    }
-
-    public void setTitulo(String titulo) {
-        this.titulo = titulo;
-    }
-
-    public String getTipo() {
-        return tipo;
-    }
-
-    public void setTipo(String tipo) {
-        this.tipo = tipo;
-    }
-
-    public String getCaminho() {
-        return caminho;
-    }
-
-    public void setCaminho(String caminho) {
-        this.caminho = caminho;
-    }
-
-    public String getHash() {
-        return hash;
-    }
-
-    public void setHash(String hash) {
-        this.hash = hash;
-    }
-
-    public LocalDate getCiclo() {
-        return ciclo;
-    }
-
-    public void setCiclo(LocalDate ciclo) {
-        this.ciclo = ciclo;
     }
 }
