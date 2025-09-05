@@ -1,0 +1,13 @@
+#!/bin/bash
+# Bloqueia commits com CRLF em arquivos de código
+files=$(git diff --cached --name-only --diff-filter=ACM | grep -E '\.(java|ts|tsx|js|jsx|json|yml|yaml|xml|md|css|html)$')
+status=0
+for f in $files; do
+  if grep -Iq . "$f"; then
+    if grep -U $'\r' "$f" >/dev/null; then
+      echo "❌ Arquivo $f contém CRLF. Corrija antes de commitar."
+      status=1
+    fi
+  fi
+done
+exit $status

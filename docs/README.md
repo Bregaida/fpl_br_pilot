@@ -1,5 +1,5 @@
-# docs
+﻿# docs
 
-- ADR/ — decisões de arquitetura
-- api/ — OpenAPI e esquemas
-- bdd/ — features e passos (a criar)
+- ADR/ â€” decisÃµes de arquitetura
+- api/ â€” OpenAPI e esquemas
+- bdd/ â€” features e passos (a criar)

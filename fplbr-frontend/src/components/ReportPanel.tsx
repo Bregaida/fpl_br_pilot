@@ -1,5 +1,5 @@
-import { useRef } from 'react';
-import { DocumentTextIcon, ArrowDownTrayIcon } from '@heroicons/react/24/outline';
+﻿import { useRef } from 'react';
+import { DocumentTextIcon } from '@heroicons/react/24/outline'; // Removed unused ArrowDownTrayIcon
 import { FplComposedResponse } from '@/types';
 
 interface ReportPanelProps {
@@ -12,7 +12,7 @@ export default function ReportPanel({ data, isLoading = false }: ReportPanelProp
 
   const handleExportPDF = () => {
     // TODO: Implement PDF export functionality
-    alert('Exportar para PDF será implementado em breve!');
+    alert('Exportar para PDF serÃ¡ implementado em breve!');
   };
 
   if (isLoading) {
@@ -31,8 +31,8 @@ export default function ReportPanel({ data, isLoading = false }: ReportPanelProp
     return (
       <div className="bg-white rounded-lg shadow p-6 text-center">
         <DocumentTextIcon className="mx-auto h-12 w-12 text-gray-400" />
-        <h3 className="mt-2 text-sm font-medium text-gray-900">Nenhum relatório disponível</h3>
-        <p className="mt-1 text-sm text-gray-500">Preencha o formulário para gerar o relatório.</p>
+        <h3 className="mt-2 text-sm font-medium text-gray-900">Nenhum relatÃ³rio disponÃ­vel</h3>
+        <p className="mt-1 text-sm text-gray-500">Preencha o formulÃ¡rio para gerar o relatÃ³rio.</p>
       </div>
     );
   }
@@ -43,12 +43,12 @@ export default function ReportPanel({ data, isLoading = false }: ReportPanelProp
     <div className="bg-white rounded-lg shadow overflow-hidden">
       <div className="p-4 border-b border-gray-200">
         <div className="flex justify-between items-center">
-          <h3 className="text-lg font-semibold">Relatório Consolidado</h3>
+          <h3 className="text-lg font-semibold">RelatÃ³rio Consolidado</h3>
           <button
             onClick={handleExportPDF}
             className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
           >
-            <DocumentTextIcon className="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
+            <DocumentTextIcon className="h-4 w-4 mr-1" aria-hidden="true" />
             Exportar PDF
           </button>
         </div>
@@ -62,7 +62,7 @@ export default function ReportPanel({ data, isLoading = false }: ReportPanelProp
           </h4>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <h5 className="font-medium text-gray-700 mb-2">Informações da Aeronave</h5>
+              <h5 className="font-medium text-gray-700 mb-2">InformaÃ§Ãµes da Aeronave</h5>
               <dl className="space-y-2">
                 <div className="sm:grid sm:grid-cols-3 sm:gap-4">
                   <dt className="text-sm font-medium text-gray-500">Modo</dt>
@@ -78,7 +78,7 @@ export default function ReportPanel({ data, isLoading = false }: ReportPanelProp
                 <div className="sm:grid sm:grid-cols-3 sm:gap-4">
                   <dt className="text-sm font-medium text-gray-500">Tipo</dt>
                   <dd className="mt-1 text-sm text-gray-900 sm:col-span-2">
-                    {form.item9.tipoAeronave} (Cat. Turbulência: {form.item9.catTurbulencia})
+                    {form.item9.tipoAeronave} (Cat. TurbulÃªncia: {form.item9.catTurbulencia})
                   </dd>
                 </div>
               </dl>
@@ -90,17 +90,17 @@ export default function ReportPanel({ data, isLoading = false }: ReportPanelProp
                 <div className="sm:grid sm:grid-cols-3 sm:gap-4">
                   <dt className="text-sm font-medium text-gray-500">De/Para</dt>
                   <dd className="mt-1 text-sm text-gray-900 sm:col-span-2">
-                    {form.item13.aerodromoPartida} → {form.item16.aerodromoDestino}
+                    {form.item13.aerodromoPartida} â†’ {form.item16.aerodromoDestino}
                   </dd>
                 </div>
                 <div className="sm:grid sm:grid-cols-3 sm:gap-4">
                   <dt className="text-sm font-medium text-gray-500">Data/Hora</dt>
                   <dd className="mt-1 text-sm text-gray-900 sm:col-span-2">
-                    {form.item18.dof} às {form.item13.hora}Z
+                    {form.item18.dof} Ã s {form.item13.hora}Z
                   </dd>
                 </div>
                 <div className="sm:grid sm:grid-cols-3 sm:gap-4">
-                  <dt className="text-sm font-medium text-gray-500">Rota/Nível</dt>
+                  <dt className="text-sm font-medium text-gray-500">Rota/NÃ­vel</dt>
                   <dd className="mt-1 text-sm text-gray-900 sm:col-span-2">
                     {form.item15.rota} a {form.item15.nivel} ({form.item15.velocidadeCruzeiro})
                   </dd>
@@ -113,7 +113,7 @@ export default function ReportPanel({ data, isLoading = false }: ReportPanelProp
         {/* Aerodromes Information */}
         <div>
           <h4 className="text-lg font-medium text-gray-900 mb-4 pb-2 border-b border-gray-200">
-            Informações dos Aeródromos
+            InformaÃ§Ãµes dos AerÃ³dromos
           </h4>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
@@ -121,15 +121,15 @@ export default function ReportPanel({ data, isLoading = false }: ReportPanelProp
               {origem.nome && <p className="text-sm text-gray-900">{origem.nome}</p>}
               {origem.coord && (
                 <p className="text-xs text-gray-500 mt-1">
-                  Coord: {origem.coord.lat > 0 ? 'N' : 'S'} {Math.abs(origem.coord.lat).toFixed(4)}° 
-                  {origem.coord.lon > 0 ? 'E' : 'W'} {Math.abs(origem.coord.lon).toFixed(4)}°
-                  {origem.elev !== undefined && ` • ${origem.elev}ft`}
+                  Coord: {origem.coord.lat > 0 ? 'N' : 'S'} {Math.abs(origem.coord.lat).toFixed(4)}Â° 
+                  {origem.coord.lon > 0 ? 'E' : 'W'} {Math.abs(origem.coord.lon).toFixed(4)}Â°
+                  {origem.elev !== undefined && ` â€¢ ${origem.elev}ft`}
                 </p>
               )}
               {origem.sun && (
                 <div className="mt-2 text-sm">
                   <p>Nascer do sol: {origem.sun.sunrise}</p>
-                  <p>Pôr do sol: {origem.sun.sunset}</p>
+                  <p>PÃ´r do sol: {origem.sun.sunset}</p>
                 </div>
               )}
             </div>
@@ -139,15 +139,15 @@ export default function ReportPanel({ data, isLoading = false }: ReportPanelProp
               {destino.nome && <p className="text-sm text-gray-900">{destino.nome}</p>}
               {destino.coord && (
                 <p className="text-xs text-gray-500 mt-1">
-                  Coord: {destino.coord.lat > 0 ? 'N' : 'S'} {Math.abs(destino.coord.lat).toFixed(4)}° 
-                  {destino.coord.lon > 0 ? 'E' : 'W'} {Math.abs(destino.coord.lon).toFixed(4)}°
-                  {destino.elev !== undefined && ` • ${destino.elev}ft`}
+                  Coord: {destino.coord.lat > 0 ? 'N' : 'S'} {Math.abs(destino.coord.lat).toFixed(4)}Â° 
+                  {destino.coord.lon > 0 ? 'E' : 'W'} {Math.abs(destino.coord.lon).toFixed(4)}Â°
+                  {destino.elev !== undefined && ` â€¢ ${destino.elev}ft`}
                 </p>
               )}
               {destino.sun && (
                 <div className="mt-2 text-sm">
                   <p>Nascer do sol: {destino.sun.sunrise}</p>
-                  <p>Pôr do sol: {destino.sun.sunset}</p>
+                  <p>PÃ´r do sol: {destino.sun.sunset}</p>
                 </div>
               )}
             </div>
