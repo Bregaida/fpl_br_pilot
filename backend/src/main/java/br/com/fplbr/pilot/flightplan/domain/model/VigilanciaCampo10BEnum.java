@@ -1,25 +1,25 @@
-package br.com.fplbr.pilot.flightplan.domain.model;
+﻿package br.com.fplbr.pilot.flightplan.domain.model;
 
 public enum VigilanciaCampo10BEnum {
     // Regra geral
     N("N",  "Sem equipamentos"),
 
     // SSR Modos A/C
-    A("A",  "Transponder Modo A (4 dígitos - 4096)"),
-    C("C",  "Transponder Modo A (4 dígitos - 4096) e Modo C"),
+    A("A",  "Transponder Modo A (4 dÃ­gitos - 4096)"),
+    C("C",  "Transponder Modo A (4 dÃ­gitos - 4096) e Modo C"),
 
     // ADS-C
     D1("D1","ADS-C com capacidades FANS 1/A"),
     G1("G1","ADS-C com capacidades ATN"),
 
     // SSR Modo S
-    E("E",  "Modo S: ID aeronave + altitude de pressão + ADS-B (ES)"),
-    H("H",  "Modo S: ID aeronave + altitude de pressão + vigilância melhorada"),
-    I("I",  "Modo S: ID aeronave, sem altitude de pressão"),
-    L("L",  "Modo S: ID aeronave + altitude de pressão + ADS-B (ES) + vigilância melhorada"),
+    E("E",  "Modo S: ID aeronave + altitude de pressÃ£o + ADS-B (ES)"),
+    H("H",  "Modo S: ID aeronave + altitude de pressÃ£o + vigilÃ¢ncia melhorada"),
+    I("I",  "Modo S: ID aeronave, sem altitude de pressÃ£o"),
+    L("L",  "Modo S: ID aeronave + altitude de pressÃ£o + ADS-B (ES) + vigilÃ¢ncia melhorada"),
     P("P",  "Modo S: sem ID da aeronave"),
-    S("S",  "Modo S: ID aeronave + altitude de pressão"),
-    X("X",  "Modo S: sem altitude de pressão e sem ID da aeronave"),
+    S("S",  "Modo S: ID aeronave + altitude de pressÃ£o"),
+    X("X",  "Modo S: sem altitude de pressÃ£o e sem ID da aeronave"),
 
     // ADS-B
     B1("B1","ADS-B out 1090 MHz (especializada)"),

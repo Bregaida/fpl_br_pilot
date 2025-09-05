@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { SunIcon } from '@heroicons/react/24/outline';
 import type { AerodromoInfo } from '@/types';
 
@@ -31,7 +31,7 @@ export default function AerodromePanel({ aerodrome, title, isLoading = false }: 
       <div className="bg-white rounded-lg shadow p-4">
         <h3 className="text-lg font-semibold mb-4">{title}</h3>
         <div className="text-gray-500 text-center py-8">
-          <p>Nenhum aeródromo selecionado</p>
+          <p>Nenhum aerÃ³dromo selecionado</p>
         </div>
       </div>
     );
@@ -53,9 +53,9 @@ export default function AerodromePanel({ aerodrome, title, isLoading = false }: 
           </h3>
           {coord && (
             <span className="text-sm text-gray-500">
-              {coord.lat > 0 ? 'N' : 'S'} {Math.abs(coord.lat).toFixed(4)}° 
-              {coord.lon > 0 ? 'E' : 'W'} {Math.abs(coord.lon).toFixed(4)}°
-              {elev !== undefined && ` • ${elev}ft`}
+              {coord.lat > 0 ? 'N' : 'S'} {Math.abs(coord.lat).toFixed(4)}Â° 
+              {coord.lon > 0 ? 'E' : 'W'} {Math.abs(coord.lon).toFixed(4)}Â°
+              {elev !== undefined && ` â€¢ ${elev}ft`}
             </span>
           )}
         </div>
@@ -107,7 +107,7 @@ export default function AerodromePanel({ aerodrome, title, isLoading = false }: 
                       {carta.tipo}
                     </span>
                     {carta.versao && (
-                      <span className="ml-2">Versão: {carta.versao}</span>
+                      <span className="ml-2">VersÃ£o: {carta.versao}</span>
                     )}
                   </div>
                 </div>

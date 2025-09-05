@@ -1,4 +1,4 @@
-name: EOL Check
+﻿name: EOL Check
 
 on:
   pull_request:
@@ -14,6 +14,6 @@ jobs:
       - name: Detect CRLF
         run: |
           if git grep -I $'\r' -- '*.java' '*.ts' '*.tsx' '*.js' '*.jsx' '*.json' '*.yml' '*.yaml' '*.xml' '*.md' '*.css' '*.html'; then
-            echo "❌ CRLF detected in source files"
+            echo "âŒ CRLF detected in source files"
             exit 1
           fi

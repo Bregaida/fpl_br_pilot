@@ -1,4 +1,4 @@
-package br.com.fplbr.pilot.aerodromos.application.dto;
+﻿package br.com.fplbr.pilot.aerodromos.application.dto;
 
 import java.time.LocalDate;
 import lombok.AllArgsConstructor;
@@ -7,7 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * DTO para representar uma carta aeronáutica de um aeródromo.
+ * DTO para representar uma carta aeronÃ¡utica de um aerÃ³dromo.
  */
 @Data
 @Builder

@@ -1,10 +1,10 @@
-package br.com.fplbr.pilot.flightplan.domain.model;
+﻿package br.com.fplbr.pilot.flightplan.domain.model;
 public enum TipoDeVooEnum {
     GERAL(1, "G", "Geral"),
-    SERVICOS_REGULARES(2, "S", "Serviços regulares"),
-    TRANSPORTE_AEREO_NAO_REGULAR(3, "N", "Transporte aéreo não regular"),
+    SERVICOS_REGULARES(2, "S", "ServiÃ§os regulares"),
+    TRANSPORTE_AEREO_NAO_REGULAR(3, "N", "Transporte aÃ©reo nÃ£o regular"),
     MILITAR(4, "M", "Militar"),
-    VOO_NAO_CLASSIFICADO(5, "X", "Voos não classificado nas categorias anteriores");
+    VOO_NAO_CLASSIFICADO(5, "X", "Voos nÃ£o classificado nas categorias anteriores");
 
     private final int id;
     private final String sigla;

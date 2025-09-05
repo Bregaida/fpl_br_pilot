@@ -1,4 +1,4 @@
-package br.com.fplbr.pilot.aerodromos.infra.sol;
+﻿package br.com.fplbr.pilot.aerodromos.infra.sol;
 
 import br.com.fplbr.pilot.aerodromos.ports.in.SolServicePort;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -38,11 +38,11 @@ public class SolServiceImpl implements SolServicePort {
 
     @Override
     public SolInfo obterSol(String icao, LocalDate data) {
-        Objects.requireNonNull(icao, "Código ICAO não pode ser nulo");
-        Objects.requireNonNull(data, "Data não pode ser nula");
+        Objects.requireNonNull(icao, "CÃ³digo ICAO nÃ£o pode ser nulo");
+        Objects.requireNonNull(data, "Data nÃ£o pode ser nula");
         
         if (icao.trim().isEmpty() || icao.length() != 4) {
-            throw new IllegalArgumentException("Código ICAO inválido: " + icao);
+            throw new IllegalArgumentException("CÃ³digo ICAO invÃ¡lido: " + icao);
         }
         
         try {
@@ -61,7 +61,7 @@ public class SolServiceImpl implements SolServicePort {
             return calcularAstronomicamente(icao, data);
             
         } catch (Exception e) {
-            LOG.errorf("Erro inesperado ao obter informações do sol para %s: %s", 
+            LOG.errorf("Erro inesperado ao obter informaÃ§Ãµes do sol para %s: %s", 
                     icao, e.getMessage(), e);
             // Return default values in case of any error
             return new SolInfo(data, 
@@ -72,7 +72,7 @@ public class SolServiceImpl implements SolServicePort {
 
     private Optional<SolInfo> obterDoCrawler(String icao, LocalDate data) throws IOException {
         if (!isValidUrl(crawlerUrl)) {
-            LOG.warnf("URL do crawler inválida: %s", crawlerUrl);
+            LOG.warnf("URL do crawler invÃ¡lida: %s", crawlerUrl);
             return Optional.empty();
         }
         
@@ -86,7 +86,7 @@ public class SolServiceImpl implements SolServicePort {
                     data.getMonthValue(),
                     data.getYear());
             
-            LOG.debugf("Buscando informações do sol em: %s", url);
+            LOG.debugf("Buscando informaÃ§Ãµes do sol em: %s", url);
             
             // Configure connection with timeouts
             Document doc = Jsoup.connect(url)
@@ -104,7 +104,7 @@ public class SolServiceImpl implements SolServicePort {
             String sunset = safeSelect(doc, "#sunset");
             
             if (sunrise == null || sunset == null) {
-                LOG.warnf("Não foi possível extrair horários do sol da página: %s", url);
+                LOG.warnf("NÃ£o foi possÃ­vel extrair horÃ¡rios do sol da pÃ¡gina: %s", url);
                 return Optional.empty();
             }
             
@@ -189,7 +189,7 @@ public class SolServiceImpl implements SolServicePort {
             );
             
         } catch (Exception e) {
-            LOG.errorf("Erro no cálculo astronômico para %s: %s", icao, e.getMessage(), e);
+            LOG.errorf("Erro no cÃ¡lculo astronÃ´mico para %s: %s", icao, e.getMessage(), e);
             // Fallback to reasonable defaults
             return new SolInfo(data, data.getDayOfWeek().toString(), "06:00", "18:00");
         }
@@ -197,7 +197,7 @@ public class SolServiceImpl implements SolServicePort {
     
     private double[] obterCoordenadasAerodromo(String icao) {
         // In a real implementation, this would query the aerodrome database
-        // For now, return coordinates for SBSP (São Paulo/Guarulhos) as default
+        // For now, return coordinates for SBSP (SÃ£o Paulo/Guarulhos) as default
         // Consider adding a proper repository for aerodrome coordinates
         return new double[] {-23.4257, -46.4819};
     }

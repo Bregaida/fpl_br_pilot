@@ -1,16 +1,16 @@
-services:
+﻿services:
   backend:
     build:
       context: ./backend
     container_name: fplbr-backend
     environment:
-      # H2 em memória (dev)
+      # H2 em memÃ³ria (dev)
       - QUARKUS_DATASOURCE_DB_KIND=h2
       - QUARKUS_DATASOURCE_JDBC_URL=jdbc:h2:mem:fplrotaer;DB_CLOSE_DELAY=-1
       - QUARKUS_DATASOURCE_USERNAME=sa
       - QUARKUS_DATASOURCE_PASSWORD=sa
       - QUARKUS_HIBERNATE_ORM_DATABASE_GENERATION=update
-      # Schedulers ativados em dev, se aplicável
+      # Schedulers ativados em dev, se aplicÃ¡vel
       - QUARKUS_SCHEDULER_ENABLED=true
     restart: unless-stopped
     healthcheck:

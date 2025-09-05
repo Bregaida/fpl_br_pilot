@@ -1,4 +1,4 @@
-package br.com.fplbr.pilot.aerodromos.infrastructure.persistence;
+﻿package br.com.fplbr.pilot.aerodromos.infrastructure.persistence;
 
 import br.com.fplbr.pilot.aerodromos.domain.model.Aerodromo;
 import br.com.fplbr.pilot.aerodromos.domain.model.Pista;
@@ -12,7 +12,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
- * Implementação do repositório de aeródromos usando Panache.
+ * ImplementaÃ§Ã£o do repositÃ³rio de aerÃ³dromos usando Panache.
  */
 @ApplicationScoped
 public class AerodromoPanacheRepository implements AerodromoRepository {
@@ -20,7 +20,7 @@ public class AerodromoPanacheRepository implements AerodromoRepository {
     @Override
     public Optional<Aerodromo> buscarPorIcao(String icao) {
         if (icao == null || icao.trim().isEmpty()) {
-            throw new IllegalArgumentException("Código ICAO não pode ser nulo ou vazio");
+            throw new IllegalArgumentException("CÃ³digo ICAO nÃ£o pode ser nulo ou vazio");
         }
         return AerodromoEntity.findByIdOptional(icao.toUpperCase())
                 .map(entity -> ((AerodromoEntity) entity).toDomain());
@@ -29,7 +29,7 @@ public class AerodromoPanacheRepository implements AerodromoRepository {
     @Override
     public Optional<Aerodromo> buscarPorIata(String iata) {
         if (iata == null || iata.trim().isEmpty()) {
-            throw new IllegalArgumentException("Código IATA não pode ser nulo ou vazio");
+            throw new IllegalArgumentException("CÃ³digo IATA nÃ£o pode ser nulo ou vazio");
         }
         return AerodromoEntity.find("UPPER(iata) = ?1", iata.trim().toUpperCase())
                 .project(AerodromoEntity.class)
@@ -42,7 +42,7 @@ public class AerodromoPanacheRepository implements AerodromoRepository {
         String termoBusca = termo != null ? termo.trim().toUpperCase() : "";
         String ufBusca = uf != null ? uf.trim().toUpperCase() : "";
         
-        // Se o termo tem 3 ou 4 caracteres, pode ser um código ICAO ou IATA
+        // Se o termo tem 3 ou 4 caracteres, pode ser um cÃ³digo ICAO ou IATA
         if (termoBusca.length() == 4) {
             // Tenta buscar por ICAO exato
             var aerodromo = buscarPorIcao(termoBusca);
@@ -79,7 +79,7 @@ public class AerodromoPanacheRepository implements AerodromoRepository {
             params.and("uf", ufBusca);
         }
         
-        // Ordenação priorizando correspondências exatas
+        // OrdenaÃ§Ã£o priorizando correspondÃªncias exatas
         query.append("order by ")
             .append("case ")
             .append("when upper(icao) = :exactTerm then 1 ")
@@ -103,7 +103,7 @@ public class AerodromoPanacheRepository implements AerodromoRepository {
     @Override
     public List<Aerodromo> buscarPorCidade(String cidade, int limite) {
         if (cidade == null || cidade.trim().isEmpty()) {
-            throw new IllegalArgumentException("Cidade não pode ser nula ou vazia");
+            throw new IllegalArgumentException("Cidade nÃ£o pode ser nula ou vazia");
         }
         
         String cidadeBusca = "%" + cidade.trim().toUpperCase() + "%";
@@ -120,7 +120,7 @@ public class AerodromoPanacheRepository implements AerodromoRepository {
     @Override
     public List<Aerodromo> buscarPorUf(String uf, int limite) {
         if (uf == null || uf.trim().isEmpty()) {
-            throw new IllegalArgumentException("UF não pode ser nula ou vazia");
+            throw new IllegalArgumentException("UF nÃ£o pode ser nula ou vazia");
         }
         
         String ufBusca = uf.trim().toUpperCase();
@@ -144,7 +144,7 @@ public class AerodromoPanacheRepository implements AerodromoRepository {
         }
         
         StringBuilder query = new StringBuilder();
-        Parameters params = Parameters.with("dummy", 0); // Parâmetro dummy para inicializar
+        Parameters params = Parameters.with("dummy", 0); // ParÃ¢metro dummy para inicializar
         
         if (!termoBusca.isEmpty()) {
             query.append("and (upper(icao) like :termo ")
@@ -167,7 +167,7 @@ public class AerodromoPanacheRepository implements AerodromoRepository {
     public Aerodromo salvar(Aerodromo aerodromo) {
         AerodromoEntity entity = AerodromoEntity.fromDomain(aerodromo);
         
-        // Se for uma atualização, primeiro carregamos a entidade existente
+        // Se for uma atualizaÃ§Ã£o, primeiro carregamos a entidade existente
         if (aerodromo.getIcao() != null && AerodromoEntity.count("icao", aerodromo.getIcao().toUpperCase()) > 0) {
             // Atualiza a entidade existente
             AerodromoEntity existingEntity = AerodromoEntity.findById(aerodromo.getIcao().toUpperCase());
@@ -185,7 +185,7 @@ public class AerodromoPanacheRepository implements AerodromoRepository {
     @Transactional
     public boolean removerPorIcao(String icao) {
         if (icao == null || icao.trim().isEmpty()) {
-            throw new IllegalArgumentException("Código ICAO não pode ser nulo ou vazio");
+            throw new IllegalArgumentException("CÃ³digo ICAO nÃ£o pode ser nulo ou vazio");
         }
         icao = icao.trim().toUpperCase();
         if (AerodromoEntity.count("upper(icao) = ?1", icao) > 0) {
@@ -198,7 +198,7 @@ public class AerodromoPanacheRepository implements AerodromoRepository {
     @Override
     public boolean existePorIcao(String icao) {
         if (icao == null || icao.trim().isEmpty()) {
-            throw new IllegalArgumentException("Código ICAO não pode ser nulo ou vazio");
+            throw new IllegalArgumentException("CÃ³digo ICAO nÃ£o pode ser nulo ou vazio");
         }
         return AerodromoEntity.count("upper(icao) = ?1", icao.trim().toUpperCase()) > 0;
     }
@@ -206,7 +206,7 @@ public class AerodromoPanacheRepository implements AerodromoRepository {
     @Override
     public boolean existePorIata(String iata) {
         if (iata == null || iata.trim().isEmpty()) {
-            throw new IllegalArgumentException("Código IATA não pode ser nulo ou vazio");
+            throw new IllegalArgumentException("CÃ³digo IATA nÃ£o pode ser nulo ou vazio");
         }
         return AerodromoEntity.count("upper(iata) = ?1", iata.trim().toUpperCase()) > 0;
     }
@@ -252,7 +252,7 @@ public class AerodromoPanacheRepository implements AerodromoRepository {
      * Atualiza os campos de uma entidade existente com base em uma entidade atualizada.
      */
     private void updateEntity(AerodromoEntity existing, AerodromoEntity updated) {
-        // Atualiza os campos básicos
+        // Atualiza os campos bÃ¡sicos
         existing.setIata(updated.getIata());
         existing.setNome(updated.getNome());
         existing.setMunicipio(updated.getMunicipio());
@@ -275,7 +275,7 @@ public class AerodromoPanacheRepository implements AerodromoRepository {
         
         // Atualiza as pistas
         if (updated.getPistas() != null) {
-            // Remove as pistas existentes que não estão mais na lista atualizada
+            // Remove as pistas existentes que nÃ£o estÃ£o mais na lista atualizada
             existing.getPistas().removeIf(pistaExistente -> 
                 updated.getPistas().stream()
                     .noneMatch(pistaAtualizada -> 
@@ -305,7 +305,7 @@ public class AerodromoPanacheRepository implements AerodromoRepository {
             }
         }
         
-        // Atualiza as frequências (mesma lógica das pistas)
+        // Atualiza as frequÃªncias (mesma lÃ³gica das pistas)
         if (updated.getFrequencias() != null) {
             existing.getFrequencias().removeIf(freqExistente -> 
                 updated.getFrequencias().stream()
@@ -324,7 +324,7 @@ public class AerodromoPanacheRepository implements AerodromoRepository {
                         freqAtualizada.getValor() != null &&
                         freqAtualizada.getTipo().equals(freqExistente.getTipo()) &&
                         freqAtualizada.getValor().equals(freqExistente.getValor())) {
-                        // Atualiza a frequência existente
+                        // Atualiza a frequÃªncia existente
                         updateFrequenciaEntity(freqExistente, freqAtualizada);
                         encontrada = true;
                         break;
@@ -332,7 +332,7 @@ public class AerodromoPanacheRepository implements AerodromoRepository {
                 }
                 
                 if (!encontrada && freqAtualizada.getTipo() != null && freqAtualizada.getValor() != null) {
-                    // Adiciona uma nova frequência
+                    // Adiciona uma nova frequÃªncia
                     var novaFreq = FrequenciaEntity.fromDomain(freqAtualizada.toDomain(), existing);
                     existing.getFrequencias().add(novaFreq);
                 }
@@ -363,7 +363,7 @@ public class AerodromoPanacheRepository implements AerodromoRepository {
     }
     
     /**
-     * Atualiza os campos de uma entidade de frequência existente.
+     * Atualiza os campos de uma entidade de frequÃªncia existente.
      */
     private void updateFrequenciaEntity(FrequenciaEntity existing, FrequenciaEntity updated) {
         existing.setTipo(updated.getTipo());

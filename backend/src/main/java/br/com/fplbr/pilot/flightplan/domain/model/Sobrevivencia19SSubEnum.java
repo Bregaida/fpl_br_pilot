@@ -1,9 +1,9 @@
-package br.com.fplbr.pilot.flightplan.domain.model;
+﻿package br.com.fplbr.pilot.flightplan.domain.model;
 
 public enum Sobrevivencia19SSubEnum {
     P("P", "Polar"),
     D("D", "Deserto"),
-    M("M", "Marítimo"),
+    M("M", "MarÃ­timo"),
     J("J", "Selva");
 
     private final String sigla;

@@ -1,4 +1,4 @@
-export type FplMode = 'PVC' | 'PVS';
+﻿export type FplMode = 'PVC' | 'PVS';
 
 export interface FplForm {
   modo: FplMode;

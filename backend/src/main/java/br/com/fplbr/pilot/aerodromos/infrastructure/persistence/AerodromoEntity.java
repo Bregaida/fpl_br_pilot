@@ -1,4 +1,4 @@
-package br.com.fplbr.pilot.aerodromos.infrastructure.persistence;
+﻿package br.com.fplbr.pilot.aerodromos.infrastructure.persistence;
 
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import jakarta.persistence.*;
@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * Entidade JPA que representa um aeródromo no banco de dados.
+ * Entidade JPA que representa um aerÃ³dromo no banco de dados.
  */
 @Entity
 @Table(name = "aerodromos")
@@ -350,7 +350,7 @@ public class AerodromoEntity extends PanacheEntityBase {
     }
 
     /**
-     * Converte esta entidade para o domínio Aerodromo.
+     * Converte esta entidade para o domÃ­nio Aerodromo.
      */
     public br.com.fplbr.pilot.aerodromos.domain.model.Aerodromo toDomain() {
         return br.com.fplbr.pilot.aerodromos.domain.model.Aerodromo.builder()
@@ -386,7 +386,7 @@ public class AerodromoEntity extends PanacheEntityBase {
     }
 
     /**
-     * Cria uma nova entidade a partir de um domínio Aerodromo.
+     * Cria uma nova entidade a partir de um domÃ­nio Aerodromo.
      */
     public static AerodromoEntity fromDomain(br.com.fplbr.pilot.aerodromos.domain.model.Aerodromo aerodromo) {
         if (aerodromo == null) {
@@ -414,11 +414,11 @@ public class AerodromoEntity extends PanacheEntityBase {
                 .responsavel(aerodromo.getResponsavel())
                 .pistas(aerodromo.getPistas() != null ? 
                         aerodromo.getPistas().stream()
-                                .map(p -> PistaEntity.fromDomain(p, null)) // O aeródromo será definido após a criação
+                                .map(p -> PistaEntity.fromDomain(p, null)) // O aerÃ³dromo serÃ¡ definido apÃ³s a criaÃ§Ã£o
                                 .collect(java.util.stream.Collectors.toList()) : null)
                 .frequencias(aerodromo.getFrequencias() != null ? 
                         aerodromo.getFrequencias().stream()
-                                .map(f -> FrequenciaEntity.fromDomain(f, null)) // O aeródromo será definido após a criação
+                                .map(f -> FrequenciaEntity.fromDomain(f, null)) // O aerÃ³dromo serÃ¡ definido apÃ³s a criaÃ§Ã£o
                                 .collect(java.util.stream.Collectors.toList()) : null)
                 .observacoes(aerodromo.getObservacoes())
                 .ativo(aerodromo.isAtivo())

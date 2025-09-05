@@ -1,4 +1,4 @@
-package br.com.fplbr.pilot.aerodromos.infrastructure.persistence;
+﻿package br.com.fplbr.pilot.aerodromos.infrastructure.persistence;
 
 import br.com.fplbr.pilot.aerodromos.domain.model.Pista;
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
@@ -88,7 +88,7 @@ public class PistaEntity extends PanacheEntityBase {
      */
     public Pista toDomain() {
         if (this.designacao == null) {
-            throw new IllegalStateException("Designação da pista não pode ser nula");
+            throw new IllegalStateException("DesignaÃ§Ã£o da pista nÃ£o pode ser nula");
         }
         
         return Pista.builder()

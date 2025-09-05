@@ -1,10 +1,10 @@
-package br.com.fplbr.pilot.aerodromos.application.dto;
+﻿package br.com.fplbr.pilot.aerodromos.application.dto;
 
 import br.com.fplbr.pilot.aerodromos.domain.model.Pista;
 import java.util.Objects;
 
 /**
- * DTO para representação de uma pista de aeródromo na camada de apresentação.
+ * DTO para representaÃ§Ã£o de uma pista de aerÃ³dromo na camada de apresentaÃ§Ã£o.
  */
 public class PistaDTO {
     // Fields
@@ -232,7 +232,7 @@ public class PistaDTO {
     }
 
     /**
-     * Converte este DTO para uma entidade de domínio Pista.
+     * Converte este DTO para uma entidade de domÃ­nio Pista.
      */
     public br.com.fplbr.pilot.aerodromos.domain.model.Pista toDomain() {
         // Assuming Pista has a similar builder pattern implemented

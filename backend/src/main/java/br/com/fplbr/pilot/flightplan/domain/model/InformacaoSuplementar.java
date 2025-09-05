@@ -1,4 +1,4 @@
-package br.com.fplbr.pilot.flightplan.domain.model;
+﻿package br.com.fplbr.pilot.flightplan.domain.model;
 
 import jakarta.persistence.Embeddable;
 
@@ -18,8 +18,8 @@ public class InformacaoSuplementar {
     private Long telefone;
 
     /**
-     * Verifica se todas as informações suplementares estão em branco (nulas ou vazias).
-     * @return true se todas as informações estiverem em branco, false caso contrário
+     * Verifica se todas as informaÃ§Ãµes suplementares estÃ£o em branco (nulas ou vazias).
+     * @return true se todas as informaÃ§Ãµes estiverem em branco, false caso contrÃ¡rio
      */
     public boolean isBlank() {
         return autonimia == null &&

@@ -1,12 +1,12 @@
-package br.com.fplbr.pilot.aerodromos.domain.model;
+﻿package br.com.fplbr.pilot.aerodromos.domain.model;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 /**
- * Representa um aeródromo no sistema.
- * Um aeródromo pode ser um aeroporto, heliporto, aeroclube, etc.
+ * Representa um aerÃ³dromo no sistema.
+ * Um aerÃ³dromo pode ser um aeroporto, heliporto, aeroclube, etc.
  */
 public class Aerodromo {
     // Builder pattern implementation
@@ -71,28 +71,28 @@ public class Aerodromo {
     }
     
     // Fields
-    private final String icao;               // Código ICAO do aeródromo (4 letras)
-    private final String iata;               // Código IATA (opcional, 3 letras)
-    private final String nome;               // Nome do aeródromo
-    private final String municipio;          // Município onde está localizado
+    private final String icao;               // CÃ³digo ICAO do aerÃ³dromo (4 letras)
+    private final String iata;               // CÃ³digo IATA (opcional, 3 letras)
+    private final String nome;               // Nome do aerÃ³dromo
+    private final String municipio;          // MunicÃ­pio onde estÃ¡ localizado
     private final String uf;                 // Unidade Federativa (estado)
-    private final String regiao;             // Região do Brasil
+    private final String regiao;             // RegiÃ£o do Brasil
     private final Double latitude;           // Latitude em graus decimais
     private final Double longitude;          // Longitude em graus decimais
-    private final Integer altitudePes;       // Altitude em pés
-    private final String tipo;               // Tipo de aeródromo (AD, HELIPONTO, etc)
-    private final String uso;                // Uso (Público, Privado, Misto)
-    private final String cindacta;           // Código CINDACTA (se aplicável)
-    private final Boolean internacional;     // Se é um aeroporto internacional
-    private final Boolean terminal;          // Se é um aeroporto terminal
-    private String horarioFuncionamento;     // Horário de funcionamento
+    private final Integer altitudePes;       // Altitude em pÃ©s
+    private final String tipo;               // Tipo de aerÃ³dromo (AD, HELIPONTO, etc)
+    private final String uso;                // Uso (PÃºblico, Privado, Misto)
+    private final String cindacta;           // CÃ³digo CINDACTA (se aplicÃ¡vel)
+    private final Boolean internacional;     // Se Ã© um aeroporto internacional
+    private final Boolean terminal;          // Se Ã© um aeroporto terminal
+    private String horarioFuncionamento;     // HorÃ¡rio de funcionamento
     private String telefone;                 // Telefone para contato
     private String email;                    // E-mail para contato
-    private String responsavel;              // Responsável pelo aeródromo
-    private String observacoes;              // Observações adicionais
-    private Boolean ativo;                   // Se o aeródromo está ativo
-    private List<Pista> pistas;              // Lista de pistas do aeródromo
-    private List<Frequencia> frequencias;    // Frequências de rádio
+    private String responsavel;              // ResponsÃ¡vel pelo aerÃ³dromo
+    private String observacoes;              // ObservaÃ§Ãµes adicionais
+    private Boolean ativo;                   // Se o aerÃ³dromo estÃ¡ ativo
+    private List<Pista> pistas;              // Lista de pistas do aerÃ³dromo
+    private List<Frequencia> frequencias;    // FrequÃªncias de rÃ¡dio
     
     // Constructor
     public Aerodromo(

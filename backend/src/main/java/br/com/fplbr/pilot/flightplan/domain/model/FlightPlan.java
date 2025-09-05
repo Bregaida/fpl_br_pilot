@@ -1,4 +1,4 @@
-package br.com.fplbr.pilot.flightplan.domain.model;
+﻿package br.com.fplbr.pilot.flightplan.domain.model;
 
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import br.com.fplbr.pilot.flightplan.validation.ValidFlightPlan;
@@ -71,9 +71,9 @@ public class FlightPlan extends PanacheEntityBase {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // Campo 7 - Identificação da Aeronave
-    @NotBlank(message = "Identificação da aeronave é obrigatória")
-    @Size(max = 5, message = "Identificação da aeronave deve ter no máximo 5 caracteres")
+    // Campo 7 - IdentificaÃ§Ã£o da Aeronave
+    @NotBlank(message = "IdentificaÃ§Ã£o da aeronave Ã© obrigatÃ³ria")
+    @Size(max = 5, message = "IdentificaÃ§Ã£o da aeronave deve ter no mÃ¡ximo 5 caracteres")
     @Column(name = "identificacao_aeronave", nullable = false, length = 5)
     private String identificacaoDaAeronave;
 
@@ -81,91 +81,91 @@ public class FlightPlan extends PanacheEntityBase {
     private String indicativoDeChamada;
 
     // Campo 8 - Regras de Voo e Tipo de Voo
-    @NotNull(message = "Regra de voo é obrigatória")
+    @NotNull(message = "Regra de voo Ã© obrigatÃ³ria")
     @Enumerated(EnumType.STRING)
     @Column(name = "regra_voo", nullable = false, length = 10)
     private RegraDeVooEnum regraDeVooEnum;
 
-    @NotNull(message = "Tipo de voo é obrigatório")
+    @NotNull(message = "Tipo de voo Ã© obrigatÃ³rio")
     @Enumerated(EnumType.STRING)
     @Column(name = "tipo_voo", nullable = false, length = 30)
     private TipoDeVooEnum tipoDeVooEnum;
 
-    // Campo 9 - Informações da Aeronave
-    @Min(value = 1, message = "Número de aeronaves deve ser no mínimo 1")
+    // Campo 9 - InformaÃ§Ãµes da Aeronave
+    @Min(value = 1, message = "NÃºmero de aeronaves deve ser no mÃ­nimo 1")
     @Column(name = "numero_aeronaves")
     private Integer numeroDeAeronaves;
 
-    @NotBlank(message = "Tipo de aeronave é obrigatório")
-    @Size(max = 4, message = "Tipo de aeronave deve ter no máximo 4 caracteres")
+    @NotBlank(message = "Tipo de aeronave Ã© obrigatÃ³rio")
+    @Size(max = 4, message = "Tipo de aeronave deve ter no mÃ¡ximo 4 caracteres")
     @Column(name = "tipo_aeronave", nullable = false, length = 4)
     private String tipoDeAeronave;
 
-    @NotNull(message = "Categoria de esteira de turbulência é obrigatória")
+    @NotNull(message = "Categoria de esteira de turbulÃªncia Ã© obrigatÃ³ria")
     @Enumerated(EnumType.STRING)
     @Column(name = "categoria_esteira", nullable = false, length = 10)
     private CategoriaEsteiraTurbulenciaEnum categoriaEsteiraTurbulenciaEnum;
 
-    // Campo 10 - Equipamentos e Vigilância (não persistir campos detalhados para evitar conflito de colunas)
+    // Campo 10 - Equipamentos e VigilÃ¢ncia (nÃ£o persistir campos detalhados para evitar conflito de colunas)
     @Transient
     private EquipamentoCapacidadeDaAeronave equipamentoCapacidadeDaAeronave;
 
     @Transient
     private Vigilancia vigilancia;
 
-    // Campo 13 - Informações de Partida
-    @NotBlank(message = "Aeródromo de partida é obrigatório")
-    @Size(min = 4, max = 4, message = "Aeródromo de partida deve ter 4 caracteres")
+    // Campo 13 - InformaÃ§Ãµes de Partida
+    @NotBlank(message = "AerÃ³dromo de partida Ã© obrigatÃ³rio")
+    @Size(min = 4, max = 4, message = "AerÃ³dromo de partida deve ter 4 caracteres")
     @Column(name = "aerodromo_partida", nullable = false, length = 4)
     private String aerodromoDePartida;
 
-    @NotNull(message = "Hora de partida é obrigatória")
-    @FutureOrPresent(message = "Hora de partida deve ter no mínimo 30 minutos da hora atual")
+    @NotNull(message = "Hora de partida Ã© obrigatÃ³ria")
+    @FutureOrPresent(message = "Hora de partida deve ter no mÃ­nimo 30 minutos da hora atual")
     @Column(name = "hora_partida", nullable = false)
     private LocalDateTime horaPartida;
 
     // Campo 16 - Destino e Alternativas
-    @NotBlank(message = "Aeródromo de destino é obrigatório")
-    @Size(min = 4, max = 4, message = "Aeródromo de destino deve ter 4 caracteres")
+    @NotBlank(message = "AerÃ³dromo de destino Ã© obrigatÃ³rio")
+    @Size(min = 4, max = 4, message = "AerÃ³dromo de destino deve ter 4 caracteres")
     @Column(name = "aerodromo_destino", nullable = false, length = 4)
     private String aerodromoDeDestino;
 
-    @NotNull(message = "Tempo de voo previsto é obrigatório")
+    @NotNull(message = "Tempo de voo previsto Ã© obrigatÃ³rio")
     @Column(name = "tempo_voo_previsto", nullable = false)
     private LocalDateTime tempoDeVooPrevisto;
 
-    @NotBlank(message = "Aeródromo de alternativa é obrigatório")
-    @Size(min = 4, max = 4, message = "Aeródromo de alternativa deve ter 4 caracteres")
+    @NotBlank(message = "AerÃ³dromo de alternativa Ã© obrigatÃ³rio")
+    @Size(min = 4, max = 4, message = "AerÃ³dromo de alternativa deve ter 4 caracteres")
     @Column(name = "aerodromo_alternativa", nullable = false, length = 4)
     private String aerodromoDeAlternativa;
 
-    @Size(min = 4, max = 4, message = "Segundo aeródromo de alternativa deve ter 4 caracteres")
+    @Size(min = 4, max = 4, message = "Segundo aerÃ³dromo de alternativa deve ter 4 caracteres")
     @Column(name = "aerodromo_alternativa_segundo", length = 4)
     private String aerodromoDeAlternativaSegundo;
 
-    // Campo 15 - Informações de Rota
-    @NotBlank(message = "Velocidade de cruzeiro é obrigatória")
+    // Campo 15 - InformaÃ§Ãµes de Rota
+    @NotBlank(message = "Velocidade de cruzeiro Ã© obrigatÃ³ria")
     @Column(name = "velocidade_cruzeiro", nullable = false, length = 10)
     private String velocidadeDeCruzeiro;
 
-    @NotBlank(message = "Nível de voo é obrigatório")
-    @Pattern(regexp = "^[Ff]?\\d{3}$", message = "Formato de nível de voo inválido. Use F seguido de 3 dígitos")
+    @NotBlank(message = "NÃ­vel de voo Ã© obrigatÃ³rio")
+    @Pattern(regexp = "^[Ff]?\\d{3}$", message = "Formato de nÃ­vel de voo invÃ¡lido. Use F seguido de 3 dÃ­gitos")
     @Column(name = "nivel_voo", nullable = false, length = 4)
     private String nivelDeVoo;
 
-    @NotBlank(message = "Rota é obrigatória")
+    @NotBlank(message = "Rota Ã© obrigatÃ³ria")
     @Column(name = "rota", nullable = false, columnDefinition = "TEXT")
     private String rota;
 
-    // Campo 18 - Outras Informações
+    // Campo 18 - Outras InformaÃ§Ãµes
     @Transient
     private OutrasInformacoes outrasInformacoes;
 
-    @NotNull(message = "Data de operação do voo é obrigatória")
+    @NotNull(message = "Data de operaÃ§Ã£o do voo Ã© obrigatÃ³ria")
     @Column(name = "dof", nullable = false)
     private LocalDate dof = LocalDate.now();
 
-    // Campo 19 - Informações Suplementares
+    // Campo 19 - InformaÃ§Ãµes Suplementares
     @Transient
     private InformacaoSuplementar informacaoSuplementar;
 

@@ -1,22 +1,22 @@
-package br.com.fplbr.pilot.aerodromos.domain.model;
+﻿package br.com.fplbr.pilot.aerodromos.domain.model;
 
 import java.util.Objects;
 
 /**
- * Representa uma frequência de rádio disponível em um aeródromo.
+ * Representa uma frequÃªncia de rÃ¡dio disponÃ­vel em um aerÃ³dromo.
  */
 public class Frequencia {
     public enum TipoFrequencia {
         TWR,    // Torre de Controle
         GND,    // Solo
         ATIS,   // ATIS
-        APCH,   // Aproximação
+        APCH,   // AproximaÃ§Ã£o
         DEP,    // Partida
-        RADIO,  // Rádio
+        RADIO,  // RÃ¡dio
         OPR,    // Operadora
         RMP,    // Rampa
-        TMA,    // Área Terminal
-        INFO    // Informações
+        TMA,    // Ãrea Terminal
+        INFO    // InformaÃ§Ãµes
     }
 
     // Builder pattern implementation
@@ -46,11 +46,11 @@ public class Frequencia {
     }
     
     // Fields with JavaDoc
-    private final TipoFrequencia tipo;    // Tipo de frequência
-    private final String descricao;       // Descrição da frequência (ex: "Torre Principal")
-    private final String valor;           // Valor da frequência (ex: "118.10")
-    private String horarioFuncionamento;  // Horário de funcionamento (ex: "24H", "HORÁRIO DE VOO")
-    private String observacoes;           // Observações adicionais
+    private final TipoFrequencia tipo;    // Tipo de frequÃªncia
+    private final String descricao;       // DescriÃ§Ã£o da frequÃªncia (ex: "Torre Principal")
+    private final String valor;           // Valor da frequÃªncia (ex: "118.10")
+    private String horarioFuncionamento;  // HorÃ¡rio de funcionamento (ex: "24H", "HORÃRIO DE VOO")
+    private String observacoes;           // ObservaÃ§Ãµes adicionais
     
     // Constructor
     public Frequencia(

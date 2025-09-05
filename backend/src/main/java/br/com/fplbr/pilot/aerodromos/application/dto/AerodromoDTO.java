@@ -1,4 +1,4 @@
-package br.com.fplbr.pilot.aerodromos.application.dto;
+﻿package br.com.fplbr.pilot.aerodromos.application.dto;
 
 import br.com.fplbr.pilot.aerodromos.domain.model.Aerodromo;
 import lombok.AllArgsConstructor;
@@ -13,8 +13,8 @@ import java.util.stream.Collectors;
 import br.com.fplbr.pilot.aerodromos.application.dto.CartaAerodromoDTO;
 
 /**
- * DTO para representação de um aeródromo na API.
- * Inclui informações básicas, pistas, cartas e informações de sol.
+ * DTO para representaÃ§Ã£o de um aerÃ³dromo na API.
+ * Inclui informaÃ§Ãµes bÃ¡sicas, pistas, cartas e informaÃ§Ãµes de sol.
  */
 @Data
 @Builder
@@ -23,10 +23,10 @@ import br.com.fplbr.pilot.aerodromos.application.dto.CartaAerodromoDTO;
 public class AerodromoDTO {
     
     /**
-     * Converte um objeto de domínio Aerodromo para DTO.
+     * Converte um objeto de domÃ­nio Aerodromo para DTO.
      * 
-     * @param aerodromo O objeto de domínio a ser convertido
-     * @return O DTO correspondente, ou null se o parâmetro for null
+     * @param aerodromo O objeto de domÃ­nio a ser convertido
+     * @return O DTO correspondente, ou null se o parÃ¢metro for null
      */
     public static AerodromoDTO fromDomain(Aerodromo aerodromo) {
         if (aerodromo == null) {
@@ -58,9 +58,9 @@ public class AerodromoDTO {
     }
     
     /**
-     * Converte este DTO para um objeto de domínio Aerodromo.
+     * Converte este DTO para um objeto de domÃ­nio Aerodromo.
      * 
-     * @return O objeto de domínio correspondente
+     * @return O objeto de domÃ­nio correspondente
      */
     public Aerodromo toDomain() {
         return Aerodromo.builder()
@@ -86,37 +86,37 @@ public class AerodromoDTO {
                 .ativo(this.ativo != null && this.ativo)
                 .build();
     }
-    // Identificação
-    private String icao;                   // Código ICAO do aeródromo (4 letras)
-    private String iata;                   // Código IATA (opcional, 3 letras)
-    private String nomeOficial;            // Nome oficial do aeródromo
+    // IdentificaÃ§Ã£o
+    private String icao;                   // CÃ³digo ICAO do aerÃ³dromo (4 letras)
+    private String iata;                   // CÃ³digo IATA (opcional, 3 letras)
+    private String nomeOficial;            // Nome oficial do aerÃ³dromo
     
-    // Localização
-    private String municipio;              // Município onde está localizado
+    // LocalizaÃ§Ã£o
+    private String municipio;              // MunicÃ­pio onde estÃ¡ localizado
     private String uf;                     // Unidade Federativa (estado)
-    private String regiao;                 // Região do Brasil
-    private String latitude;               // Latitude em graus decimais (string para evitar problemas de precisão)
-    private String longitude;              // Longitude em graus decimais (string para evitar problemas de precisão)
-    private String altitudePistaPes;       // Altitude da pista em pés
+    private String regiao;                 // RegiÃ£o do Brasil
+    private String latitude;               // Latitude em graus decimais (string para evitar problemas de precisÃ£o)
+    private String longitude;              // Longitude em graus decimais (string para evitar problemas de precisÃ£o)
+    private String altitudePistaPes;       // Altitude da pista em pÃ©s
     
-    // Informações gerais
-    private String tipo;                   // Tipo de aeródromo (AD, HELIPONTO, etc)
-    private String uso;                    // Uso (Público, Privado, Misto)
-    private String cindacta;               // Código CINDACTA (se aplicável)
-    private Boolean internacional;         // Se é um aeroporto internacional
-    private Boolean terminal;              // Se é um aeroporto terminal
-    private String horarioFuncionamento;   // Horário de funcionamento
+    // InformaÃ§Ãµes gerais
+    private String tipo;                   // Tipo de aerÃ³dromo (AD, HELIPONTO, etc)
+    private String uso;                    // Uso (PÃºblico, Privado, Misto)
+    private String cindacta;               // CÃ³digo CINDACTA (se aplicÃ¡vel)
+    private Boolean internacional;         // Se Ã© um aeroporto internacional
+    private Boolean terminal;              // Se Ã© um aeroporto terminal
+    private String horarioFuncionamento;   // HorÃ¡rio de funcionamento
     private String telefone;               // Telefone para contato
     private String email;                  // E-mail para contato
-    private String responsavel;            // Responsável pelo aeródromo
-    private String observacoes;            // Observações adicionais
-    private Boolean ativo;                 // Se o aeródromo está ativo
+    private String responsavel;            // ResponsÃ¡vel pelo aerÃ³dromo
+    private String observacoes;            // ObservaÃ§Ãµes adicionais
+    private Boolean ativo;                 // Se o aerÃ³dromo estÃ¡ ativo
     
-    // Informações adicionais
+    // InformaÃ§Ãµes adicionais
     @Builder.Default
-    private List<CartaAerodromoDTO> cartas = new ArrayList<>();  // Cartas aeronáuticas disponíveis
-    private String nascerSol;              // Horário do nascer do sol
-    private String porDoSol;               // Horário do pôr do sol
+    private List<CartaAerodromoDTO> cartas = new ArrayList<>();  // Cartas aeronÃ¡uticas disponÃ­veis
+    private String nascerSol;              // HorÃ¡rio do nascer do sol
+    private String porDoSol;               // HorÃ¡rio do pÃ´r do sol
     
     // Additional setter methods for the fields
     public void setCartas(List<CartaAerodromoDTO> cartas) {

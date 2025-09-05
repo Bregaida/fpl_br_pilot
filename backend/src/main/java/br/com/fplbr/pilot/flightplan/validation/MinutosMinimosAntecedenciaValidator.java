@@ -1,4 +1,4 @@
-package br.com.fplbr.pilot.flightplan.validation;
+﻿package br.com.fplbr.pilot.flightplan.validation;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.validation.ConstraintValidator;
@@ -7,9 +7,9 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
 /**
- * Validador para garantir que a hora de partida tenha a antecedência mínima necessária.
- * Para voos simplificados: 15 minutos de antecedência
- * Para voos completos: 30 minutos de antecedência
+ * Validador para garantir que a hora de partida tenha a antecedÃªncia mÃ­nima necessÃ¡ria.
+ * Para voos simplificados: 15 minutos de antecedÃªncia
+ * Para voos completos: 30 minutos de antecedÃªncia
  */
 @ApplicationScoped
 public class MinutosMinimosAntecedenciaValidator 
@@ -19,14 +19,14 @@ public class MinutosMinimosAntecedenciaValidator
     private int minutosSimplificado;
 
     /**
-     * Obtém o tempo mínimo de antecedência para voos completos
+     * ObtÃ©m o tempo mÃ­nimo de antecedÃªncia para voos completos
      */
     public int getMinutosCompleto() {
         return minutosCompleto;
     }
 
     /**
-     * Obtém o tempo mínimo de antecedência para voos simplificados
+     * ObtÃ©m o tempo mÃ­nimo de antecedÃªncia para voos simplificados
      */
     public int getMinutosSimplificado() {
         return minutosSimplificado;
@@ -40,16 +40,16 @@ public class MinutosMinimosAntecedenciaValidator
 
     @Override
     public boolean isValid(LocalDateTime value, ConstraintValidatorContext context) {
-        // Esta validação é feita no nível de classe pelo ValidFlightPlanValidator
+        // Esta validaÃ§Ã£o Ã© feita no nÃ­vel de classe pelo ValidFlightPlanValidator
         return true;
     }
 
     /**
-     * Valida se a data/hora de partida tem a antecedência mínima necessária
+     * Valida se a data/hora de partida tem a antecedÃªncia mÃ­nima necessÃ¡ria
      * 
      * @param dataHoraPartida Data e hora de partida a ser validada
-     * @param isVooSimplificado Indica se é um voo simplificado
-     * @return true se a validação for bem-sucedida, false caso contrário
+     * @param isVooSimplificado Indica se Ã© um voo simplificado
+     * @return true se a validaÃ§Ã£o for bem-sucedida, false caso contrÃ¡rio
      */
     public boolean validarAntecedencia(LocalDateTime dataHoraPartida, boolean isVooSimplificado) {
         if (dataHoraPartida == null) {
@@ -68,6 +68,6 @@ public class MinutosMinimosAntecedenciaValidator
      */
     public String getMensagemErro(boolean isVooSimplificado) {
         int minutos = isVooSimplificado ? minutosSimplificado : minutosCompleto;
-        return String.format("A hora de partida deve ter no mínimo %d minutos de antecedência", minutos);
+        return String.format("A hora de partida deve ter no mÃ­nimo %d minutos de antecedÃªncia", minutos);
     }
 }

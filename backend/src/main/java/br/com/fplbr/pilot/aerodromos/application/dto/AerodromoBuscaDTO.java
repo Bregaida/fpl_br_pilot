@@ -1,11 +1,11 @@
-package br.com.fplbr.pilot.aerodromos.application.dto;
+﻿package br.com.fplbr.pilot.aerodromos.application.dto;
 
 import io.quarkus.runtime.annotations.RegisterForReflection;
 import java.util.Objects;
 
 /**
- * DTO para resultados de busca de aeródromos no formulário de plano de voo.
- * Contém apenas as informações essenciais para exibição na lista de sugestões.
+ * DTO para resultados de busca de aerÃ³dromos no formulÃ¡rio de plano de voo.
+ * ContÃ©m apenas as informaÃ§Ãµes essenciais para exibiÃ§Ã£o na lista de sugestÃµes.
  */
 @RegisterForReflection
 public class AerodromoBuscaDTO {
@@ -83,7 +83,7 @@ public class AerodromoBuscaDTO {
     }
     
     /**
-     * Retorna uma representação em string formatada para exibição na interface.
+     * Retorna uma representaÃ§Ã£o em string formatada para exibiÃ§Ã£o na interface.
      */
     // ===== Getters and Setters =====
     

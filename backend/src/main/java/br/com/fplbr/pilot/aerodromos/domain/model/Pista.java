@@ -1,9 +1,9 @@
-package br.com.fplbr.pilot.aerodromos.domain.model;
+﻿package br.com.fplbr.pilot.aerodromos.domain.model;
 
 import java.util.Objects;
 
 /**
- * Representa uma pista de pouso e decolagem em um aeródromo.
+ * Representa uma pista de pouso e decolagem em um aerÃ³dromo.
  */
 public class Pista {
     // Builder pattern implementation
@@ -59,9 +59,9 @@ public class Pista {
     private final String designacao;          // Ex: 10/28, 15/33
     private final Double comprimentoMetros;   // Comprimento em metros
     private final Double larguraMetros;       // Largura em metros
-    private final String superficie;          // Tipo de superfície (ASPH, CONC, GRVL, etc)
-    private final Integer resistenciaPcn;     // Número PCN da pista
-    private final String classificacaoPcn;    // Classificação PCN (A/B/C/D, Alto/Baixo, etc)
+    private final String superficie;          // Tipo de superfÃ­cie (ASPH, CONC, GRVL, etc)
+    private final Integer resistenciaPcn;     // NÃºmero PCN da pista
+    private final String classificacaoPcn;    // ClassificaÃ§Ã£o PCN (A/B/C/D, Alto/Baixo, etc)
     private final Integer tora;               // TORA - Take-Off Run Available
     private final Integer toda;               // TODA - Take-Off Distance Available
     private final Integer asda;               // ASDA - Accelerate-Stop Distance Available
@@ -69,9 +69,9 @@ public class Pista {
     private final boolean ils;                // Se possui ILS
     private final String categoriaIls;        // Categoria do ILS (I, II, III)
     private final String papi;                // Tipo de PAPI (PAPI, APAPI, etc)
-    private final String luzesBorda;          // Tipo de iluminação de borda
-    private final String luzesCentro;         // Tipo de iluminação de centro
-    private String observacoes;               // Observações adicionais
+    private final String luzesBorda;          // Tipo de iluminaÃ§Ã£o de borda
+    private final String luzesCentro;         // Tipo de iluminaÃ§Ã£o de centro
+    private String observacoes;               // ObservaÃ§Ãµes adicionais
     
     // Constructor
     public Pista(

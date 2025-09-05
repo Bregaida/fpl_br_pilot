@@ -1,8 +1,8 @@
-package br.com.fplbr.pilot.flightplan.domain.model;
+﻿package br.com.fplbr.pilot.flightplan.domain.model;
 
 public enum EquipamentoCampo10AEnum {
     N("N", "sem equipamentos"),
-    S("S", "equipamento padrão"),
+    S("S", "equipamento padrÃ£o"),
     A("A", "sistema de pouso GBAS"),
     B("B", "LPV (APV com SBAS)"),
     C("C", "LORAN C"),
@@ -13,7 +13,7 @@ public enum EquipamentoCampo10AEnum {
     F("F", "ADF"),
     G("G", "GNSS"),
     H("H", "HF RTF"),
-    I("I", "navegação inercial"),
+    I("I", "navegaÃ§Ã£o inercial"),
     J1("J1", "CPDLC ATN VDL Modo 2"),
     J2("J2", "CPDLC FANS 1/A HFDL"),
     J3("J3", "CPDLC FANS 1/A VDL Modo A"),
@@ -42,7 +42,7 @@ public enum EquipamentoCampo10AEnum {
     V("V", "VHF RTF"),
     W("W", "aprovado RVSM"),
     X("X", "aprovado MNPS"),
-    Y("Y", "VHF com espaçamento 8,33 kHz"),
+    Y("Y", "VHF com espaÃ§amento 8,33 kHz"),
     Z("Z", "outro equipamento/capacidade (detalhar no Item 18)");
 
     private final String sigla;

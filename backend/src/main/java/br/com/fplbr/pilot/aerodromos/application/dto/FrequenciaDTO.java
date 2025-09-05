@@ -1,23 +1,23 @@
-package br.com.fplbr.pilot.aerodromos.application.dto;
+﻿package br.com.fplbr.pilot.aerodromos.application.dto;
 
 import br.com.fplbr.pilot.aerodromos.domain.model.Frequencia;
 import java.util.Objects;
 
 /**
- * DTO para representação de uma frequência de rádio na camada de apresentação.
+ * DTO para representaÃ§Ã£o de uma frequÃªncia de rÃ¡dio na camada de apresentaÃ§Ã£o.
  */
 public class FrequenciaDTO {
     public enum TipoFrequenciaDTO {
         TWR,    // Torre de Controle
         GND,    // Solo
         ATIS,   // ATIS
-        APCH,   // Aproximação
+        APCH,   // AproximaÃ§Ã£o
         DEP,    // Partida
-        RADIO,  // Rádio
+        RADIO,  // RÃ¡dio
         OPR,    // Operadora
         RMP,    // Rampa
-        TMA,    // Área Terminal
-        INFO    // Informações
+        TMA,    // Ãrea Terminal
+        INFO    // InformaÃ§Ãµes
     }
 
     // Fields
@@ -128,7 +128,7 @@ public class FrequenciaDTO {
     }
 
     /**
-     * Converte este DTO para uma entidade de domínio Frequencia.
+     * Converte este DTO para uma entidade de domÃ­nio Frequencia.
      */
     public Frequencia toDomain() {
         // Assuming Frequencia has a similar builder pattern implemented

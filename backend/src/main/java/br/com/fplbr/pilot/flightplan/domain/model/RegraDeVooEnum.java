@@ -1,4 +1,4 @@
-package br.com.fplbr.pilot.flightplan.domain.model;
+﻿package br.com.fplbr.pilot.flightplan.domain.model;
 
 public enum RegraDeVooEnum {
     IFR(1, "I", "IFR"),
@@ -21,8 +21,8 @@ public enum RegraDeVooEnum {
     public String getDescricao() { return descricao; }
     
     /**
-     * Verifica se a regra de voo é IFR.
-     * @return true se for IFR, false caso contrário
+     * Verifica se a regra de voo Ã© IFR.
+     * @return true se for IFR, false caso contrÃ¡rio
      */
     public boolean isIFR() {
         return this == IFR || this == IFR_VFR || this == VFR_IFR;

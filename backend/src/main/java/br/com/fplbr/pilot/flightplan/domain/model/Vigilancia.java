@@ -1,4 +1,4 @@
-package br.com.fplbr.pilot.flightplan.domain.model;
+﻿package br.com.fplbr.pilot.flightplan.domain.model;
 
 import jakarta.persistence.Embeddable;
 import lombok.AllArgsConstructor;
@@ -43,7 +43,7 @@ public class Vigilancia {
     private boolean v1;
     private boolean v2;
 
-    // Ordem estável recomendada (N, SSR A/C, ADS-C, Modo S, ADS-B)
+    // Ordem estÃ¡vel recomendada (N, SSR A/C, ADS-C, Modo S, ADS-B)
     private static final List<VigilanciaCampo10BEnum> ORDEM = List.of(
         VigilanciaCampo10BEnum.N,
         VigilanciaCampo10BEnum.A, VigilanciaCampo10BEnum.C,
@@ -78,7 +78,7 @@ public class Vigilancia {
         if (v1) list.add(VigilanciaCampo10BEnum.V1);
         if (v2) list.add(VigilanciaCampo10BEnum.V2);
 
-        // Regra: se "N" estiver com outros, manter só N
+        // Regra: se "N" estiver com outros, manter sÃ³ N
         if (list.contains(VigilanciaCampo10BEnum.N) && list.size() > 1) {
             return List.of(VigilanciaCampo10BEnum.N);
         }
@@ -88,7 +88,7 @@ public class Vigilancia {
             .collect(Collectors.toList());
     }
 
-    /** Ex.: "CSG1S" (códigos de múltiplas letras entram como estão, sem separador) */
+    /** Ex.: "CSG1S" (cÃ³digos de mÃºltiplas letras entram como estÃ£o, sem separador) */
     public String siglasConcatenadas() {
         StringBuilder sb = new StringBuilder();
         for (VigilanciaCampo10BEnum e : selecionados()) {
@@ -97,7 +97,7 @@ public class Vigilancia {
         return sb.toString();
     }
 
-    /** Lista só das siglas, ex.: ["C","S","G1"] */
+    /** Lista sÃ³ das siglas, ex.: ["C","S","G1"] */
     public List<String> siglasLista() {
         return selecionados().stream()
             .map(e -> e.getSigla())
@@ -111,7 +111,7 @@ public class Vigilancia {
             .collect(Collectors.joining(separador));
     }
 
-    /** Lista com "sigla - descrição" */
+    /** Lista com "sigla - descriÃ§Ã£o" */
     public List<String> siglaMaisDescricaoLista() {
         List<String> result = new ArrayList<>();
         for (VigilanciaCampo10BEnum e : selecionados()) {

@@ -1,4 +1,4 @@
-package br.com.fplbr.pilot.infrastructure.web;
+﻿package br.com.fplbr.pilot.infrastructure.web;
 
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.http.ContentType;

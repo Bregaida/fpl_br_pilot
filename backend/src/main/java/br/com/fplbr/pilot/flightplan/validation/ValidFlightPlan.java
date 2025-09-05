@@ -1,21 +1,21 @@
-package br.com.fplbr.pilot.flightplan.validation;
+﻿package br.com.fplbr.pilot.flightplan.validation;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 import java.lang.annotation.*;
 
 /**
- * Anotação para validação de plano de voo.
+ * AnotaÃ§Ã£o para validaÃ§Ã£o de plano de voo.
  * 
- * <p>Esta anotação valida se um plano de voo atende a todas as regras de negócio,
- * incluindo a antecedência mínima para decolagem e a completude dos campos obrigatórios
+ * <p>Esta anotaÃ§Ã£o valida se um plano de voo atende a todas as regras de negÃ³cio,
+ * incluindo a antecedÃªncia mÃ­nima para decolagem e a completude dos campos obrigatÃ³rios
  * com base no tipo de voo (simplificado ou completo).</p>
  * 
- * <p>Um voo é considerado simplificado quando é entre aeródromos terminais e com distância
- * menor ou igual a 26 NM. Demais casos são considerados voos completos.</p>
+ * <p>Um voo Ã© considerado simplificado quando Ã© entre aerÃ³dromos terminais e com distÃ¢ncia
+ * menor ou igual a 26 NM. Demais casos sÃ£o considerados voos completos.</p>
  * 
- * <p>Para voos simplificados, a antecedência mínima é de 15 minutos.
- * Para voos completos, a antecedência mínima é de 30 minutos.</p>
+ * <p>Para voos simplificados, a antecedÃªncia mÃ­nima Ã© de 15 minutos.
+ * Para voos completos, a antecedÃªncia mÃ­nima Ã© de 30 minutos.</p>
  */
 @Documented
 @Constraint(validatedBy = ValidFlightPlanValidator.class)
@@ -23,12 +23,12 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ValidFlightPlan {
     /**
-     * Mensagem de erro padrão
+     * Mensagem de erro padrÃ£o
      */
-    String message() default "Dados do plano de voo inválidos. Verifique os campos obrigatórios e as regras de antecedência.";
+    String message() default "Dados do plano de voo invÃ¡lidos. Verifique os campos obrigatÃ³rios e as regras de antecedÃªncia.";
     
     /**
-     * Grupos de validação
+     * Grupos de validaÃ§Ã£o
      */
     Class<?>[] groups() default {};
     

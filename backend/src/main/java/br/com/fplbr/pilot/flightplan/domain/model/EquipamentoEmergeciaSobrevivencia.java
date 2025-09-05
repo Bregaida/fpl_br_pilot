@@ -1,4 +1,4 @@
-package br.com.fplbr.pilot.flightplan.domain.model;
+﻿package br.com.fplbr.pilot.flightplan.domain.model;
 
 import br.com.fplbr.pilot.flightplan.domain.model.Coletes19JSubEnum;
 import br.com.fplbr.pilot.flightplan.domain.model.EmergenciaRadio19Enum;
@@ -11,14 +11,14 @@ import java.util.stream.Collectors;
 @Embeddable
 public class EquipamentoEmergeciaSobrevivencia {
     // -------------------------
-    // E/ - Equipamento Rádio de Emergência
+    // E/ - Equipamento RÃ¡dio de EmergÃªncia
     // -------------------------
     private boolean eUhf;   // U
     private boolean eVhf;   // V
     private boolean eElt;   // E
 
     // -------------------------
-    // S/ - Equipamento de Sobrevivência
+    // S/ - Equipamento de SobrevivÃªncia
     // -------------------------
     private boolean s;               // S habilita os subitens abaixo
     private boolean sPolar;          // P
@@ -39,10 +39,10 @@ public class EquipamentoEmergeciaSobrevivencia {
     // D/ - Botes
     // -------------------------
     private boolean d;               // D habilita campos abaixo
-    private Long    dNumero;         // obrigatório se D=true
-    private Long    dCapacidade;     // obrigatório se D=true
+    private Long    dNumero;         // obrigatÃ³rio se D=true
+    private Long    dCapacidade;     // obrigatÃ³rio se D=true
     private boolean dAbrigo;         // C
-    private String  dCor;            // obrigatório se D=true e dAbrigo=true
+    private String  dCor;            // obrigatÃ³rio se D=true e dAbrigo=true
 
     // ===== Constructors =====
 
@@ -241,7 +241,7 @@ public class EquipamentoEmergeciaSobrevivencia {
                '}';
     }
 
-    // ===== Helpers de seleção =====
+    // ===== Helpers de seleÃ§Ã£o =====
 
     public List<EmergenciaRadio19Enum> selecionadosE() {
         List<EmergenciaRadio19Enum> list = new ArrayList<>();
@@ -304,7 +304,7 @@ public class EquipamentoEmergeciaSobrevivencia {
     public static EquipamentoEmergeciaSobrevivencia fromString(String e, String s, String j, String d) {
         EquipamentoEmergeciaSobrevivenciaBuilder builder = builder();
 
-        // Processa E/ - Equipamento Rádio de Emergência
+        // Processa E/ - Equipamento RÃ¡dio de EmergÃªncia
         if (e != null && e.startsWith("E/")) {
             String codes = e.substring(2);
             builder.eUhf(codes.contains("U"))
@@ -312,7 +312,7 @@ public class EquipamentoEmergeciaSobrevivencia {
                   .eElt(codes.contains("E"));
         }
 
-        // Processa S/ - Equipamento de Sobrevivência
+        // Processa S/ - Equipamento de SobrevivÃªncia
         if (s != null && s.startsWith("S/")) {
             String codes = s.substring(2);
             builder.s(true)
@@ -336,7 +336,7 @@ public class EquipamentoEmergeciaSobrevivencia {
         if (d != null && d.startsWith("D/")) {
             String dValue = d.substring(2);
 
-            // Extrai número de botes (primeiros dígitos)
+            // Extrai nÃºmero de botes (primeiros dÃ­gitos)
             int numEnd = 0;
             while (numEnd < dValue.length() && Character.isDigit(dValue.charAt(numEnd))) {
                 numEnd++;
@@ -347,7 +347,7 @@ public class EquipamentoEmergeciaSobrevivencia {
                     Long numero = Long.parseLong(dValue.substring(0, numEnd));
                     builder.dNumero(numero);
 
-                    // Extrai capacidade (próximos dígitos)
+                    // Extrai capacidade (prÃ³ximos dÃ­gitos)
                     int capStart = numEnd;
                     int capEnd = capStart;
                     while (capEnd < dValue.length() && Character.isDigit(dValue.charAt(capEnd))) {
@@ -390,9 +390,9 @@ public class EquipamentoEmergeciaSobrevivencia {
         return list;
     }
 
-    // ===== Saídas em siglas =====
+    // ===== SaÃ­das em siglas =====
 
-    /** E/UV(E) — concatena na ordem U, V, E */
+    /** E/UV(E) â€” concatena na ordem U, V, E */
     public String toItem19E() {
         List<String> siglas = new ArrayList<>();
         for (EmergenciaRadio19Enum e : selecionadosE()) {
@@ -402,7 +402,7 @@ public class EquipamentoEmergeciaSobrevivencia {
         return "E/" + String.join("", siglas);
     }
 
-    /** S/PDMJ — se S=false, retorna vazio; se S=true sem subitens, retorna "S" */
+    /** S/PDMJ â€” se S=false, retorna vazio; se S=true sem subitens, retorna "S" */
     public String toItem19S() {
         if (!s) return "";
         List<String> sub = new ArrayList<>();
@@ -412,7 +412,7 @@ public class EquipamentoEmergeciaSobrevivencia {
         return sub.isEmpty() ? "S" : "S/" + String.join("", sub);
     }
 
-    /** J/LFUV — se J=false, retorna vazio; se J=true sem subitens, retorna "J" */
+    /** J/LFUV â€” se J=false, retorna vazio; se J=true sem subitens, retorna "J" */
     public String toItem19J() {
         if (!j) return "";
         List<String> sub = new ArrayList<>();
@@ -443,7 +443,7 @@ public class EquipamentoEmergeciaSobrevivencia {
         return sb.toString();
     }
 
-    /** Junta os tokens não vazios em uma linha final para o Item 19 */
+    /** Junta os tokens nÃ£o vazios em uma linha final para o Item 19 */
     public String toItem19() {
         return Arrays.asList(toItem19E(), toItem19S(), toItem19J(), toItem19D())
             .stream()
@@ -451,7 +451,7 @@ public class EquipamentoEmergeciaSobrevivencia {
             .collect(Collectors.joining(" "));
     }
 
-    // ===== Saídas "sigla - descrição" (úteis para UI/relatórios) =====
+    // ===== SaÃ­das "sigla - descriÃ§Ã£o" (Ãºteis para UI/relatÃ³rios) =====
 
     public List<String> eSiglaMaisDescricao() {
         List<String> result = new ArrayList<>();
@@ -464,7 +464,7 @@ public class EquipamentoEmergeciaSobrevivencia {
     public List<String> sSiglaMaisDescricao() {
         if (!s) return new ArrayList<>();
         List<String> out = new ArrayList<>();
-        out.add("S - Equipamento de Sobrevivência");
+        out.add("S - Equipamento de SobrevivÃªncia");
         for (Sobrevivencia19SSubEnum s : selecionadosS()) {
             out.add(s.getSigla() + " - " + s.getDescricao());
         }
@@ -484,25 +484,25 @@ public class EquipamentoEmergeciaSobrevivencia {
     public List<String> dSiglaMaisDescricao() {
         if (!d) return new ArrayList<>();
         List<String> out = new ArrayList<>();
-        out.add("D - Botes (Número: " + dNumero + ", Capacidade: " + dCapacidade + ")");
+        out.add("D - Botes (NÃºmero: " + dNumero + ", Capacidade: " + dCapacidade + ")");
         if (dAbrigo) out.add("C - Abrigo" + ((dCor != null && !dCor.isBlank()) ? (" (Cor: " + dCor.trim() + ")") : ""));
         return out;
     }
 
-    // ===== Validação das regras de obrigatoriedade =====
+    // ===== ValidaÃ§Ã£o das regras de obrigatoriedade =====
 
-    /** Retorna a lista de erros de validação; vazia se tudo OK. */
+    /** Retorna a lista de erros de validaÃ§Ã£o; vazia se tudo OK. */
     public List<String> validarErros() {
         List<String> erros = new ArrayList<>();
         if (d) {
             if (dNumero == null || dNumero <= 0) {
-                erros.add("Item 19 D: 'Número' é obrigatório e deve ser > 0.");
+                erros.add("Item 19 D: 'NÃºmero' Ã© obrigatÃ³rio e deve ser > 0.");
             }
             if (dCapacidade == null || dCapacidade <= 0) {
-                erros.add("Item 19 D: 'Capacidade' é obrigatória e deve ser > 0.");
+                erros.add("Item 19 D: 'Capacidade' Ã© obrigatÃ³ria e deve ser > 0.");
             }
             if (dAbrigo && (dCor == null || dCor.isBlank())) {
-                erros.add("Item 19 D: 'Cor' é obrigatória quando 'C' (Abrigo) está selecionado.");
+                erros.add("Item 19 D: 'Cor' Ã© obrigatÃ³ria quando 'C' (Abrigo) estÃ¡ selecionado.");
             }
         }
         return erros;

@@ -1,4 +1,4 @@
-package br.com.fplbr.pilot.flightplan.domain.model;
+﻿package br.com.fplbr.pilot.flightplan.domain.model;
 
 import jakarta.persistence.Embeddable;
 import lombok.AllArgsConstructor;
@@ -40,8 +40,8 @@ public class OutrasInformacoes {
     private String from;
 
     /**
-     * Verifica se todas as informações estão em branco (nulas ou vazias).
-     * @return true se todas as informações estiverem em branco, false caso contrário
+     * Verifica se todas as informaÃ§Ãµes estÃ£o em branco (nulas ou vazias).
+     * @return true se todas as informaÃ§Ãµes estiverem em branco, false caso contrÃ¡rio
      */
     public boolean isBlank() {
         return (sts == null || sts.trim().isEmpty()) &&

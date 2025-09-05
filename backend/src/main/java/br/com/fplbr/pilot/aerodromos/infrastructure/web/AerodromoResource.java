@@ -1,4 +1,4 @@
-package br.com.fplbr.pilot.aerodromos.infrastructure.web;
+﻿package br.com.fplbr.pilot.aerodromos.infrastructure.web;
 
 import br.com.fplbr.pilot.aerodromos.application.dto.AerodromoBuscaDTO;
 import br.com.fplbr.pilot.aerodromos.application.dto.AerodromoDTO;
@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 @Path("/api/v1/aerodromos")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-@Tag(name = "Aeródromos", description = "Operações relacionadas a aeródromos")
+@Tag(name = "AerÃ³dromos", description = "OperaÃ§Ãµes relacionadas a aerÃ³dromos")
 public class AerodromoResource {
 
     @Inject
@@ -33,20 +33,20 @@ public class AerodromoResource {
     @GET
     @Path("/{icao}")
     @Operation(
-        summary = "Busca um aeródromo pelo código ICAO",
-        description = "Retorna os detalhes de um aeródromo com base no código ICAO fornecido"
+        summary = "Busca um aerÃ³dromo pelo cÃ³digo ICAO",
+        description = "Retorna os detalhes de um aerÃ³dromo com base no cÃ³digo ICAO fornecido"
     )
     @APIResponse(
         responseCode = "200",
-        description = "Aeródromo encontrado",
+        description = "AerÃ³dromo encontrado",
         content = @Content(schema = @Schema(implementation = AerodromoDTO.class))
     )
-    @APIResponse(responseCode = "404", description = "Aeródromo não encontrado")
-    @APIResponse(responseCode = "400", description = "Código ICAO inválido")
+    @APIResponse(responseCode = "404", description = "AerÃ³dromo nÃ£o encontrado")
+    @APIResponse(responseCode = "400", description = "CÃ³digo ICAO invÃ¡lido")
     public Response buscarPorIcao(
         @PathParam("icao")
-        @NotBlank(message = "Código ICAO é obrigatório")
-        @Pattern(regexp = "[A-Za-z]{4}", message = "Código ICAO deve conter exatamente 4 letras")
+        @NotBlank(message = "CÃ³digo ICAO Ã© obrigatÃ³rio")
+        @Pattern(regexp = "[A-Za-z]{4}", message = "CÃ³digo ICAO deve conter exatamente 4 letras")
         String icao) {
 
         return aerodromoService.buscarPorIcao(icao.toUpperCase())
@@ -56,19 +56,19 @@ public class AerodromoResource {
 
     @GET
     @Operation(
-        summary = "Busca/Listagem de aeródromos",
+        summary = "Busca/Listagem de aerÃ³dromos",
         description = "Retorna uma lista paginada filtrando por query (icao/iata/nome/UF)"
     )
     @APIResponse(
         responseCode = "200",
-        description = "Lista de aeródromos",
+        description = "Lista de aerÃ³dromos",
         content = @Content(schema = @Schema(implementation = AerodromoDTO[].class))
     )
     public List<AerodromoDTO> listar(
         @Parameter(description = "Termo de busca (icao/iata/nome/UF)") @QueryParam("query") String query,
         @Parameter(description = "Filtro por UF") @QueryParam("uf") String uf,
-        @Parameter(description = "Número da página (0-based)") @DefaultValue("0") @QueryParam("pagina") int pagina,
-        @Parameter(description = "Tamanho da página") @DefaultValue("20") @QueryParam("tamanho") int tamanho) {
+        @Parameter(description = "NÃºmero da pÃ¡gina (0-based)") @DefaultValue("0") @QueryParam("pagina") int pagina,
+        @Parameter(description = "Tamanho da pÃ¡gina") @DefaultValue("20") @QueryParam("tamanho") int tamanho) {
 
         return aerodromoService.buscarAerodromos(query, uf, pagina, tamanho);
     }
@@ -76,16 +76,16 @@ public class AerodromoResource {
     @GET
     @Path("/contar")
     @Operation(
-        summary = "Conta o total de aeródromos que correspondem aos critérios de busca",
-        description = "Retorna o total de aeródromos que correspondem aos critérios fornecidos"
+        summary = "Conta o total de aerÃ³dromos que correspondem aos critÃ©rios de busca",
+        description = "Retorna o total de aerÃ³dromos que correspondem aos critÃ©rios fornecidos"
     )
     @APIResponse(
         responseCode = "200",
-        description = "Total de aeródromos encontrados",
+        description = "Total de aerÃ³dromos encontrados",
         content = @Content(schema = @Schema(implementation = Long.class))
     )
     public long contar(
-        @Parameter(description = "Termo para busca (nome, código, cidade, etc.)") @QueryParam("busca") String termoBusca,
+        @Parameter(description = "Termo para busca (nome, cÃ³digo, cidade, etc.)") @QueryParam("busca") String termoBusca,
         @Parameter(description = "Filtro por UF") @QueryParam("uf") String uf) {
 
         return aerodromoService.contarAerodromos(termoBusca, uf);
@@ -93,16 +93,16 @@ public class AerodromoResource {
 
     @POST
     @Operation(
-        summary = "Cria um novo aeródromo",
-        description = "Cria um novo aeródromo com os dados fornecidos"
+        summary = "Cria um novo aerÃ³dromo",
+        description = "Cria um novo aerÃ³dromo com os dados fornecidos"
     )
     @APIResponse(
         responseCode = "201",
-        description = "Aeródromo criado com sucesso",
+        description = "AerÃ³dromo criado com sucesso",
         content = @Content(schema = @Schema(implementation = AerodromoDTO.class))
     )
-    @APIResponse(responseCode = "400", description = "Dados inválidos fornecidos")
-    @APIResponse(responseCode = "409", description = "Já existe um aeródromo com o mesmo código ICAO")
+    @APIResponse(responseCode = "400", description = "Dados invÃ¡lidos fornecidos")
+    @APIResponse(responseCode = "409", description = "JÃ¡ existe um aerÃ³dromo com o mesmo cÃ³digo ICAO")
     public Response criar(@Valid AerodromoDTO aerodromoDTO) {
         var aerodromo = aerodromoService.salvarAerodromo(aerodromoDTO.toDomain());
         return Response
@@ -114,16 +114,16 @@ public class AerodromoResource {
     @PUT
     @Path("/{icao}")
     @Operation(
-        summary = "Atualiza um aeródromo existente",
-        description = "Atualiza os dados de um aeródromo existente com base no código ICAO"
+        summary = "Atualiza um aerÃ³dromo existente",
+        description = "Atualiza os dados de um aerÃ³dromo existente com base no cÃ³digo ICAO"
     )
     @APIResponse(
         responseCode = "200",
-        description = "Aeródromo atualizado com sucesso",
+        description = "AerÃ³dromo atualizado com sucesso",
         content = @Content(schema = @Schema(implementation = AerodromoDTO.class))
     )
-    @APIResponse(responseCode = "400", description = "Dados inválidos fornecidos")
-    @APIResponse(responseCode = "404", description = "Aeródromo não encontrado")
+    @APIResponse(responseCode = "400", description = "Dados invÃ¡lidos fornecidos")
+    @APIResponse(responseCode = "404", description = "AerÃ³dromo nÃ£o encontrado")
     public Response atualizar(
         @PathParam("icao") String icao,
         @Valid AerodromoDTO aerodromoDTO) {
@@ -139,15 +139,15 @@ public class AerodromoResource {
     @DELETE
     @Path("/{icao}")
     @Operation(
-        summary = "Remove um aeródromo",
-        description = "Remove um aeródromo com base no código ICAO fornecido"
+        summary = "Remove um aerÃ³dromo",
+        description = "Remove um aerÃ³dromo com base no cÃ³digo ICAO fornecido"
     )
-    @APIResponse(responseCode = "204", description = "Aeródromo removido com sucesso")
-    @APIResponse(responseCode = "404", description = "Aeródromo não encontrado")
+    @APIResponse(responseCode = "204", description = "AerÃ³dromo removido com sucesso")
+    @APIResponse(responseCode = "404", description = "AerÃ³dromo nÃ£o encontrado")
     public Response remover(
         @PathParam("icao")
-        @NotBlank(message = "Código ICAO é obrigatório")
-        @Pattern(regexp = "[A-Za-z]{4}", message = "Código ICAO deve conter exatamente 4 letras")
+        @NotBlank(message = "CÃ³digo ICAO Ã© obrigatÃ³rio")
+        @Pattern(regexp = "[A-Za-z]{4}", message = "CÃ³digo ICAO deve conter exatamente 4 letras")
         String icao) {
 
         if (aerodromoService.removerAerodromo(icao.toUpperCase())) {
@@ -160,19 +160,19 @@ public class AerodromoResource {
     @GET
     @Path("/{icao}/terminal")
     @Operation(
-        summary = "Verifica se um aeródromo é terminal",
-        description = "Verifica se o aeródromo com o código ICAO fornecido é um aeródromo terminal"
+        summary = "Verifica se um aerÃ³dromo Ã© terminal",
+        description = "Verifica se o aerÃ³dromo com o cÃ³digo ICAO fornecido Ã© um aerÃ³dromo terminal"
     )
     @APIResponse(
         responseCode = "200",
-        description = "Indica se o aeródromo é terminal",
+        description = "Indica se o aerÃ³dromo Ã© terminal",
         content = @Content(schema = @Schema(implementation = Boolean.class))
     )
-    @APIResponse(responseCode = "400", description = "Código ICAO inválido")
+    @APIResponse(responseCode = "400", description = "CÃ³digo ICAO invÃ¡lido")
     public Response isTerminal(
         @PathParam("icao")
-        @NotBlank(message = "Código ICAO é obrigatório")
-        @Pattern(regexp = "[A-Za-z]{4}", message = "Código ICAO deve conter exatamente 4 letras")
+        @NotBlank(message = "CÃ³digo ICAO Ã© obrigatÃ³rio")
+        @Pattern(regexp = "[A-Za-z]{4}", message = "CÃ³digo ICAO deve conter exatamente 4 letras")
         String icao) {
 
         boolean isTerminal = aerodromoService.isAerodromoTerminal(icao.toUpperCase());
@@ -182,19 +182,19 @@ public class AerodromoResource {
     @GET
     @Path("/{icao}/frequencias")
     @Operation(
-        summary = "Lista as frequências de um aeródromo",
-        description = "Retorna a lista de frequências de rádio disponíveis para o aeródromo"
+        summary = "Lista as frequÃªncias de um aerÃ³dromo",
+        description = "Retorna a lista de frequÃªncias de rÃ¡dio disponÃ­veis para o aerÃ³dromo"
     )
     @APIResponse(
         responseCode = "200",
-        description = "Lista de frequências do aeródromo",
+        description = "Lista de frequÃªncias do aerÃ³dromo",
         content = @Content(schema = @Schema(implementation = FrequenciaDTO[].class))
     )
-    @APIResponse(responseCode = "404", description = "Aeródromo não encontrado")
+    @APIResponse(responseCode = "404", description = "AerÃ³dromo nÃ£o encontrado")
     public Response listarFrequencias(
         @PathParam("icao")
-        @NotBlank(message = "Código ICAO é obrigatório")
-        @Pattern(regexp = "[A-Za-z]{4}", message = "Código ICAO deve conter exatamente 4 letras")
+        @NotBlank(message = "CÃ³digo ICAO Ã© obrigatÃ³rio")
+        @Pattern(regexp = "[A-Za-z]{4}", message = "CÃ³digo ICAO deve conter exatamente 4 letras")
         String icao) {
 
         return aerodromoService.buscarPorIcao(icao.toUpperCase())
@@ -212,18 +212,18 @@ public class AerodromoResource {
     @GET
     @Path("/existe/{codigo}")
     @Operation(
-        summary = "Verifica se um aeródromo existe",
-        description = "Verifica se um aeródromo existe com base no código ICAO (4 letras) ou IATA (3 letras)"
+        summary = "Verifica se um aerÃ³dromo existe",
+        description = "Verifica se um aerÃ³dromo existe com base no cÃ³digo ICAO (4 letras) ou IATA (3 letras)"
     )
     @APIResponse(
         responseCode = "200",
-        description = "Indica se o aeródromo existe",
+        description = "Indica se o aerÃ³dromo existe",
         content = @Content(schema = @Schema(implementation = Boolean.class))
     )
     public Response aerodromoExiste(
         @PathParam("codigo")
-        @NotBlank(message = "Código do aeródromo é obrigatório")
-        @Pattern(regexp = "[A-Za-z]{3,4}", message = "Código deve ter 3 (IATA) ou 4 (ICAO) letras")
+        @NotBlank(message = "CÃ³digo do aerÃ³dromo Ã© obrigatÃ³rio")
+        @Pattern(regexp = "[A-Za-z]{3,4}", message = "CÃ³digo deve ter 3 (IATA) ou 4 (ICAO) letras")
         String codigo) {
 
         final String codigoBusca = codigo.trim().toUpperCase();
@@ -245,19 +245,19 @@ public class AerodromoResource {
     @GET
     @Path("/detalhes/{icao}")
     @Operation(
-        summary = "Obtém os detalhes completos de um aeródromo",
-        description = "Retorna todas as informações detalhadas de um aeródromo, incluindo pistas e frequências"
+        summary = "ObtÃ©m os detalhes completos de um aerÃ³dromo",
+        description = "Retorna todas as informaÃ§Ãµes detalhadas de um aerÃ³dromo, incluindo pistas e frequÃªncias"
     )
     @APIResponse(
         responseCode = "200",
-        description = "Detalhes do aeródromo",
+        description = "Detalhes do aerÃ³dromo",
         content = @Content(schema = @Schema(implementation = AerodromoDTO.class))
     )
-    @APIResponse(responseCode = "404", description = "Aeródromo não encontrado")
+    @APIResponse(responseCode = "404", description = "AerÃ³dromo nÃ£o encontrado")
     public Response obterDetalhesAerodromo(
         @PathParam("icao")
-        @NotBlank(message = "Código ICAO é obrigatório")
-        @Pattern(regexp = "[A-Za-z]{4}", message = "Código ICAO deve conter exatamente 4 letras")
+        @NotBlank(message = "CÃ³digo ICAO Ã© obrigatÃ³rio")
+        @Pattern(regexp = "[A-Za-z]{4}", message = "CÃ³digo ICAO deve conter exatamente 4 letras")
         String icao) {
 
         return aerodromoService.buscarPorIcao(icao.toUpperCase())
@@ -268,18 +268,18 @@ public class AerodromoResource {
     @GET
     @Path("/buscar")
     @Operation(
-        summary = "Busca aeródromos por termo",
-        description = "Busca aeródromos por código ICAO, IATA, nome da cidade ou UF"
+        summary = "Busca aerÃ³dromos por termo",
+        description = "Busca aerÃ³dromos por cÃ³digo ICAO, IATA, nome da cidade ou UF"
     )
     @APIResponse(
         responseCode = "200",
-        description = "Lista de aeródromos que correspondem ao critério de busca",
+        description = "Lista de aerÃ³dromos que correspondem ao critÃ©rio de busca",
         content = @Content(schema = @Schema(implementation = AerodromoBuscaDTO[].class))
     )
     public Response buscarAerodromos(
-        @Parameter(description = "Termo de busca (código ICAO, IATA, nome da cidade ou UF)")
-        @QueryParam("q") @NotBlank(message = "Termo de busca é obrigatório") String termo,
-        @Parameter(description = "Limitar o número de resultados")
+        @Parameter(description = "Termo de busca (cÃ³digo ICAO, IATA, nome da cidade ou UF)")
+        @QueryParam("q") @NotBlank(message = "Termo de busca Ã© obrigatÃ³rio") String termo,
+        @Parameter(description = "Limitar o nÃºmero de resultados")
         @QueryParam("limite") @DefaultValue("10") int limite) {
 
         String termoBusca = termo.trim().toUpperCase();

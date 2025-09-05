@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+﻿import { useState, useMemo } from 'react';
 import { ExclamationCircleIcon, ClockIcon } from '@heroicons/react/24/outline';
 
 interface Notam {
@@ -77,7 +77,7 @@ export default function NotamPanel({ notams, aerodromes, isLoading = false }: No
     return (
       <div className="bg-white rounded-lg shadow p-4">
         <div className="text-center py-4 text-gray-500">
-          <p>Nenhum aeródromo selecionado</p>
+          <p>Nenhum aerÃ³dromo selecionado</p>
         </div>
       </div>
     );
@@ -153,8 +153,8 @@ export default function NotamPanel({ notams, aerodromes, isLoading = false }: No
             <h3 className="mt-2 text-sm font-medium text-gray-900">Nenhum NOTAM encontrado</h3>
             <p className="mt-1 text-sm text-gray-500">
               {showActiveOnly 
-                ? 'Nenhum NOTAM ativo encontrado para o aeródromo selecionado.'
-                : 'Nenhum NOTAM encontrado para o aeródromo selecionado.'}
+                ? 'Nenhum NOTAM ativo encontrado para o aerÃ³dromo selecionado.'
+                : 'Nenhum NOTAM encontrado para o aerÃ³dromo selecionado.'}
             </p>
           </div>
         )}

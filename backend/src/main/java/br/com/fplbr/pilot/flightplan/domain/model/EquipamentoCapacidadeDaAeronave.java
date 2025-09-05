@@ -1,4 +1,4 @@
-package br.com.fplbr.pilot.flightplan.domain.model;
+﻿package br.com.fplbr.pilot.flightplan.domain.model;
 
 import jakarta.persistence.Embeddable;
 
@@ -493,7 +493,7 @@ public class EquipamentoCapacidadeDaAeronave {
     }
 
     /**
-     * Ex.: "SDGRY" (multi-letras como E1/J1 etc. entram como estão, sem separador)
+     * Ex.: "SDGRY" (multi-letras como E1/J1 etc. entram como estÃ£o, sem separador)
      */
     public String siglasConcatenadas() {
         return selecionados().stream()
@@ -502,14 +502,14 @@ public class EquipamentoCapacidadeDaAeronave {
     }
 
     /**
-     * Lista só das siglas, ex.: ["S","D","G","R","Y"]
+     * Lista sÃ³ das siglas, ex.: ["S","D","G","R","Y"]
      */
     public List<String> siglasLista() {
         return selecionados().stream().map(EquipamentoCampo10AEnum::getSigla).toList();
     }
 
     /**
-     * "S - equipamento padrão; D - DME; G - GNSS" (customize o separador)
+     * "S - equipamento padrÃ£o; D - DME; G - GNSS" (customize o separador)
      */
     public String siglaMaisDescricao(String separador) {
         return selecionados().stream()
@@ -518,7 +518,7 @@ public class EquipamentoCapacidadeDaAeronave {
     }
 
     /**
-     * Lista com "sigla - descrição"
+     * Lista com "sigla - descriÃ§Ã£o"
      */
     public List<String> siglaMaisDescricaoLista() {
         return selecionados().stream()
@@ -534,7 +534,7 @@ public class EquipamentoCapacidadeDaAeronave {
     }
 
     /**
-     * Fabricação a partir de um conjunto de enums (se preferir não usar booleans)
+     * FabricaÃ§Ã£o a partir de um conjunto de enums (se preferir nÃ£o usar booleans)
      */
     public static EquipamentoCapacidadeDaAeronave fromSet(Set<EquipamentoCampo10AEnum> set) {
         EquipamentoCapacidadeDaAeronave c = new EquipamentoCapacidadeDaAeronave();

@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest'
+﻿import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { AerodromosAPI } from '../services/api'
 
 vi.mock('../services/api', async () => {
@@ -13,7 +13,7 @@ vi.mock('../services/api', async () => {
 
 describe('AerodromosAPI', () => {
   beforeEach(() => { vi.clearAllMocks() })
-  it('deve buscar aeródromos com sucesso', async () => {
+  it('deve buscar aerÃ³dromos com sucesso', async () => {
     const resp = await AerodromosAPI.search('SBSP')
     expect(resp.status).toBe(200)
     expect(resp.data[0].codigo).toBe('SBSP')

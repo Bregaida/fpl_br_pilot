@@ -1,4 +1,4 @@
-package br.com.fplbr.pilot.infrastructure.web;
+﻿package br.com.fplbr.pilot.infrastructure.web;
 
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
