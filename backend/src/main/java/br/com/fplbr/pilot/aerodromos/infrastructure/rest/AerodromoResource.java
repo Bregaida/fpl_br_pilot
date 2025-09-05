@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 /**
  * Recurso REST para operações relacionadas a aeródromos.
  */
-@Path("/api/aerodromos")
+@Path("/api/v1/aerodromos")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 @Tag(name = "Aeródromos", description = "Operações relacionadas a aeródromos")
@@ -59,8 +59,8 @@ public class AerodromoResource {
 
     @GET
     @Operation(
-        summary = "Lista aeródromos com filtros",
-        description = "Retorna uma lista paginada de aeródromos que correspondem aos critérios de busca"
+        summary = "Busca/Listagem de aeródromos",
+        description = "Retorna uma lista paginada filtrando por query (icao/iata/nome/UF)"
     )
     @APIResponse(
         responseCode = "200",
@@ -68,12 +68,12 @@ public class AerodromoResource {
         content = @Content(schema = @Schema(implementation = AerodromoDTO[].class))
     )
     public List<AerodromoDTO> listar(
-        @Parameter(description = "Termo para busca (nome, código, cidade, etc.)") @QueryParam("busca") String termoBusca,
+        @Parameter(description = "Termo de busca (icao/iata/nome/UF)") @QueryParam("query") String query,
         @Parameter(description = "Filtro por UF") @QueryParam("uf") String uf,
         @Parameter(description = "Número da página (0-based)") @DefaultValue("0") @QueryParam("pagina") int pagina,
         @Parameter(description = "Tamanho da página") @DefaultValue("20") @QueryParam("tamanho") int tamanho) {
         
-        return aerodromoService.buscarAerodromos(termoBusca, uf, pagina, tamanho);
+        return aerodromoService.buscarAerodromos(query, uf, pagina, tamanho);
     }
 
     @GET

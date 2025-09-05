@@ -1,0 +1,56 @@
+version: '3.8'
+
+# Disable the backend service since we're running in mock mode
+services:
+  backend:
+    image: alpine:3.14
+    command: "echo 'Backend service is disabled in mock mode' && tail -f /dev/null"
+    container_name: fplbr-backend-disabled
+    networks:
+      - fplbr-network
+
+  bff:
+    build: 
+      context: ./bff
+      dockerfile: Dockerfile
+    container_name: fplbr-bff
+    ports:
+      - "3001:3001"
+    environment:
+      - PORT=3001
+      - MOCK_MODE=true
+      - NODE_ENV=development
+      - ALLOWED_ORIGINS=http://localhost:8088,http://localhost:5173,http://localhost:3000
+      - BACKEND_BASE_URL=http://dummy:8080  # Dummy URL since we're in mock mode
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3001/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+      disable: false
+    networks:
+      - fplbr-network
+
+  web:
+    build:
+      context: ./fplbr-frontend
+      dockerfile: Dockerfile
+      args:
+        - VITE_BFF_URL=http://localhost:3001
+    container_name: fplbr-web
+    ports:
+      - "8088:80"
+    environment:
+      - VITE_BFF_URL=http://localhost:3001
+    depends_on:
+      bff:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - fplbr-network
+
+networks:
+  fplbr-network:
+    driver: bridge

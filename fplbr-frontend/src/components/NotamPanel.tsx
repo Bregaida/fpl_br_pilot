@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { ExclamationCircleIcon, ClockIcon as ClockIconOutline, CalendarIcon } from '@heroicons/react/24/outline';
+import { ExclamationCircleIcon, ClockIcon } from '@heroicons/react/24/outline';
 
 interface Notam {
   id: string;
@@ -15,7 +15,7 @@ interface NotamPanelProps {
 }
 
 export default function NotamPanel({ notams, aerodromes, isLoading = false }: NotamPanelProps) {
-  const [selectedAerodrome] = useState<string>(
+  const [selectedAerodrome, setSelectedAerodrome] = useState<string>(
     aerodromes.length > 0 ? aerodromes[0].icao : ''
   );
   const [showActiveOnly, setShowActiveOnly] = useState(true);
@@ -137,11 +137,9 @@ export default function NotamPanel({ notams, aerodromes, isLoading = false }: No
                 <div className="ml-3 flex-1">
                   <div className="flex flex-col sm:flex-row sm:items-baseline justify-between">
                     <h4 className="text-sm font-medium text-gray-900">NOTAM {notam.id}</h4>
-                    <div className="mt-1 sm:mt-0 flex items-center text-xs text-gray-500">
-                      <ClockIconOutline className="h-3.5 w-3.5 mr-1" />
-                      <span>{formatDate(notam.from)}</span>
-                      <span className="mx-1">-</span>
-                      <span>{formatDate(notam.to) || 'PERM'}</span>
+                    <div className="flex items-center text-xs text-gray-500">
+                      <ClockIcon className="h-3.5 w-3.5 mr-1 text-gray-400" />
+                      {formatDate(notam.from)} - {notam.to ? formatDate(notam.to) : 'PERM'}
                     </div>
                   </div>
                   <p className="mt-1 text-sm text-gray-700 whitespace-pre-line">{notam.texto}</p>

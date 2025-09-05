@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { CloudIcon, SunIcon, ArrowPathIcon, ExclamationTriangleIcon } from '@heroicons/react/24/outline';
+import { CloudIcon, ExclamationTriangleIcon } from '@heroicons/react/24/outline'; // Removed unused SunIcon and ArrowPathIcon
 
 type MeteoData = {
   raw: {
@@ -24,8 +24,6 @@ export default function MeteoPanel({ meteoData, aerodromes, isLoading = false }:
     aerodromes.length > 0 ? aerodromes[0].icao : ''
   );
   const [activeTab, setActiveTab] = useState<'raw' | 'decoded'>('raw');
-  const [isRefreshing] = useState(false);
-  const [showSunTimes] = useState(false);
 
   if (isLoading) {
     return (
@@ -112,7 +110,7 @@ export default function MeteoPanel({ meteoData, aerodromes, isLoading = false }:
           <h3 className="text-lg font-semibold">Meteorologia</h3>
           {updatedAt && (
             <div className="flex items-center text-sm text-gray-500">
-              <ClockIconOutline className="h-4 w-4 mr-1" />
+              <CloudIcon className="h-4 w-4 mr-1 text-yellow-400" />
               Atualizado: {updatedAt.toLocaleTimeString()}
             </div>
           )}

@@ -118,7 +118,10 @@ public class AerodromoService {
         }
         
         // Garante que o código ICAO esteja em maiúsculas
-        aerodromo.setIcao(aerodromo.getIcao().toUpperCase().trim());
+        // Ajuste: domínio usa campos imutáveis; recria com builder
+        aerodromo = aerodromo.toBuilder()
+                .icao(aerodromo.getIcao().toUpperCase().trim())
+                .build();
         
         return aerodromoRepository.salvar(aerodromo);
     }

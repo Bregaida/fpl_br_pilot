@@ -6,7 +6,7 @@ const BFF_BASE_URL = import.meta.env.VITE_BFF_URL || 'http://localhost:3001';
 
 // Create axios instance with base URL and default headers
 const api: AxiosInstance = axios.create({
-  baseURL: BFF_BASE_URL,
+  baseURL: BFF_BASE_URL.endsWith('/') ? BFF_BASE_URL.slice(0, -1) : BFF_BASE_URL,  // Remove trailing slash if present
   timeout: 10000,
   headers: {
     'Content-Type': 'application/json',

@@ -12,34 +12,50 @@ services:
       - QUARKUS_HIBERNATE_ORM_DATABASE_GENERATION=update
       # Schedulers ativados em dev, se aplicável
       - QUARKUS_SCHEDULER_ENABLED=true
-    ports:
-      - "8080:8080"
+    restart: unless-stopped
     healthcheck:
-      test: ["CMD", "wget", "-qO-", "http://localhost:8080/api/v1/saude/ping"]
-      interval: 15s
-      timeout: 5s
-      retries: 30
+      test: ["CMD", "curl", "-f", "http://localhost:8080/api/v1/saude/ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 5s
 
   bff:
-    build:
-      context: ./bff
+    build: ./bff
     container_name: fplbr-bff
+    ports:
+      - "3001:3001"
     environment:
       - PORT=3001
       - BACKEND_BASE_URL=http://backend:8080
+      - NODE_ENV=production
     depends_on:
       backend:
         condition: service_healthy
-    ports:
-      - "3001:3001"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3001/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 5s
 
   web:
     build:
       context: ./fplbr-frontend
       args:
-        VITE_BFF_URL: http://bff:3001
+        - VITE_BFF_URL=/api
     container_name: fplbr-web
-    depends_on:
-      - bff
     ports:
+      - "8088:80"
       - "8089:80"
+    depends_on:
+      bff:
+        condition: service_healthy
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 5s

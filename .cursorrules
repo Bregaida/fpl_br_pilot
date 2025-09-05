@@ -1,0 +1,229 @@
+# ================================
+# .cursorrules — fpl_br_pilot
+# ================================
+# Modo de atuação
+mode = non_interactive
+confirmations = false
+ask_before_changes = false
+
+# Objetivo macro
+# - Padronizar arquitetura e nomenclatura (DDD + Clean Architecture/Hexagonal)
+# - Garantir build limpo (Maven backend Quarkus + Vite/React frontend)
+# - Escrever testes automáticos (unit, integration, e2e) com cobertura >= 80%
+# - Não remover variáveis preexistentes (conservar campos/atributos públicos/privados)
+# - Aplicar Lombok no backend (POJOs/Entities/DTOs/Records/Builders)
+# - Entregar scripts de execução local e em background
+# - Ao finalizar, imprimir URLs válidas de Backend (health, openapi, swagger, endpoints)
+#   e Frontend (rotas principais)
+
+# ================================
+# 0. NÃO NEGOCIÁVEIS
+# ================================
+[non_negotiables]
+# Nunca remover variáveis, campos ou atributos onde há comentários do autor,
+# TODOs do autor, ou nomes de domínio de negócio do autor.
+# Se uma variável não estiver usada, tornar seu uso coerente no fluxo
+# (ex.: alimentar logs, mapear em DTOs ou incluir no agregado correto),
+# sem eliminá-la.
+do_not_remove_variables = true
+preserve_domain_names = true
+preserve_comments_from_author = true
+
+# ================================
+# 1. ESTRUTURA DE PASTAS / MAVEN
+# ================================
+[project_layout]
+respect_maven_conventions = true
+backend_module = "backend"
+frontend_module = "fplbr-frontend"
+remove_android_module_temporarily = true
+
+# Maven layout:
+# backend/src/main/java
+# backend/src/main/resources
+# backend/src/test/java
+# frontend: Vite/React + Vitest/RTL + Playwright
+# Testes devem ficar em pastas de teste (sem mocks no código de produção).
+tests_only_in_test_sources = true
+no_mocks_in_production_code = true
+
+# ================================
+# 2. ARQUITETURA & DDD
+# ================================
+[architecture]
+apply_clean_architecture = true
+style = "hexagonal"
+per_feature_package = true
+packages = ["domain", "application", "infrastructure"]
+infrastructure_subpackages = ["persistence", "web", "mapper"]
+
+# Regras:
+# - Interfaces (ports) de repositório no domínio (domain)
+# - Implementações concretas em infrastructure/persistence
+# - Controladores REST em infrastructure/web
+# - DTOs de API em infrastructure/web/dto (ou similar)
+# - MapStruct em infrastructure/mapper
+# - Proibir imports do domínio para camadas acima
+forbid_domain_depends_on_application_or_infrastructure = true
+
+# ================================
+# 3. BACKEND (Quarkus + Lombok)
+# ================================
+[backend]
+framework = "quarkus"
+java_version = "17"
+enforce_lombok_everywhere = true
+lombok_annotations = ["@Getter", "@Setter", "@Builder", "@AllArgsConstructor", "@NoArgsConstructor", "@ToString", "@EqualsAndHashCode"]
+
+# Dependências mínimas:
+required_dependencies = [
+  "io.quarkus:quarkus-resteasy-reactive-jackson",
+  "io.quarkus:quarkus-hibernate-orm",
+  "io.quarkus:quarkus-jdbc-h2",
+  "io.quarkus:quarkus-smallrye-openapi",
+  "io.quarkus:quarkus-smallrye-health",
+  "org.projectlombok:lombok",
+  "org.mockito:mockito-core",
+  "org.junit.jupiter:junit-jupiter",
+  "io.rest-assured:rest-assured"
+]
+
+# Config dev (H2)
+application_properties_dev = """
+quarkus.datasource.db-kind=h2
+quarkus.datasource.jdbc.url=jdbc:h2:mem:fpl;DB_CLOSE_DELAY=-1
+quarkus.datasource.username=sa
+quarkus.datasource.password=sa
+quarkus.hibernate-orm.database.generation=update
+quarkus.smallrye-openapi.path=/q/openapi
+quarkus.http.cors=true
+quarkus.http.cors.origins=http://localhost:5173
+"""
+
+# Convenções de rotas/paths:
+api_base_path = "/api/v1"
+resources_plural = true
+example_routes = [
+  "GET /api/v1/health (pode delegar a /q/health)",
+  "GET /api/v1/aerodromos?query=",
+  "POST /api/v1/flightplans",
+  "GET /api/v1/flightplans/{id}"
+]
+
+# ================================
+# 4. FRONTEND (Vite/React)
+# ================================
+[frontend]
+builder = "vite"
+typescript = true
+testing = ["vitest", "@testing-library/react", "@testing-library/user-event"]
+e2e = "playwright"
+env_file = true
+env_dev = "VITE_API_URL=http://localhost:8080"
+
+routes = [
+  "/",
+  "/aerodromos",
+  "/flightplan/novo",
+  "/flightplan/:id"
+]
+
+# ================================
+# 5. TESTES / QUALIDADE
+# ================================
+[testing]
+methodologies = ["TDD", "BDD"]
+bdd_framework_backend = "cucumber-junit (se já existir); caso contrário, manter Given/When/Then com JUnit5"
+coverage_min = 0.80
+coverage_backend = "JaCoCo (maven)"
+coverage_frontend = "vitest + c8"
+ci_optional = true
+
+# Backend: Unit (domain, application), Integration (web/persistence com H2), API (RestAssured)
+backend_unit_test_packages = ["domain", "application"]
+backend_integration_test_packages = ["infrastructure/web", "infrastructure/persistence"]
+
+# Frontend: unit + component (RTL), e2e (Playwright)
+frontend_tests_required = true
+
+# ================================
+# 6. REFACTOR & DUPLICIDADES
+# ================================
+[refactor]
+unify_duplicate_classes_methods_enums = true
+merge_duplicate_dtos_and_mappers = true
+fix_imports_after_moves = true
+keep_author_variables = true
+
+# ================================
+# 7. SCRIPTS DE EXECUÇÃO
+# ================================
+[runtime]
+makefile = true
+make_targets = {
+  "dev": "Subir backend (8080) + frontend (5173) em paralelo",
+  "backend": "cd backend && ./mvnw -q quarkus:dev",
+  "frontend": "cd fplbr-frontend && npm i && npm run dev -- --port 5173",
+  "test": "backend+frontend tests com cobertura e relatórios"
+}
+
+# ================================
+# 8. SAÍDA FINAL / URLs
+# ================================
+[final_output]
+print_valid_urls = true
+backend_urls = [
+  "http://localhost:8080/q/health",
+  "http://localhost:8080/q/openapi",
+  "http://localhost:8080/q/swagger-ui",
+  "http://localhost:8080/api/v1/aerodromos?query=SBSP",
+  "http://localhost:8080/api/v1/flightplans"
+]
+frontend_urls = [
+  "http://localhost:5173/",
+  "http://localhost:5173/aerodromos",
+  "http://localhost:5173/flightplan/novo",
+  "http://localhost:5173/flightplan/123"
+]
+
+# ================================
+# 9. POLÍTICAS DE CÓDIGO LIMPO
+# ================================
+[clean_code]
+no_dead_code = true
+no_comment_out_blocks = true
+no_god_classes = true
+single_responsibility = true
+explicit_errors = true
+validation_on_edges = true
+meaningful_names = true
+consistent_naming_english = true
+no_static_mutable_state = true
+
+# ================================
+# 10. LOGGING & OBSERVABILITY
+# ================================
+[logging]
+use_structured_logging = true
+do_not_log_secrets = true
+include_request_id_when_possible = true
+
+# ================================
+# 11. CONVENÇÕES DE COMMITS
+# ================================
+[git]
+commit_style = "conventional_commits"
+granularity = "logical_steps"
+require_build_green_before_final_commit = true
+open_pr_when_done = true
+pr_title = "Refactor: Clean Architecture, tests >=80%, run scripts, URLs & Swagger"
+pr_body_must_include = [
+  "Visão geral do refactor e movimentações de pacotes",
+  "Como rodar (make dev)",
+  "Cobertura alcançada (backend e frontend)",
+  "URLs finais para testes (backend e frontend)",
+  "Itens do checklist e status"
+]
+
+# EditorConfig + .gitignore + docker-compose content below was wrongly appended to this file earlier.
+# Keeping .cursorrules strictly as rules only per user's spec.

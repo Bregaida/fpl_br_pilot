@@ -150,15 +150,13 @@ export const mockResponse: FplComposedResponse = {
         id: 'A1234/25',
         from: '2509011200',
         to: '2512312359',
-        texto: 'RWY 09R/27L CLSD DUE TO MAINTENANCE',
-        icao: 'SBGR'
+        texto: 'RWY 09R/27L CLSD DUE TO MAINTENANCE'
       },
       {
-        id: 'A1235/25',
+        id: 'A1234/25',
         from: '2509011200',
-        to: '2509102359',
-        texto: 'TWY A CLSD BTN TWY B AND TWY C',
-        icao: 'SBGR'
+        to: '2512312359',
+        texto: 'RWY 09R/27L CLSD DUE TO MAINTENANCE'
       }
     ]
   }

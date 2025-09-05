@@ -1,9 +1,9 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useCallback, useRef } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import { FplForm, FplMode } from '@/types';
-import { composeFpl } from '@/services/fpl';
+import type { FplForm, FplMode } from '@/types';
+// import { composeFpl } from '@/services/fpl'; // Temporarily commented out as it's not being used
 
 // Validation schema for the form
 const formSchema = yup.object().shape({
@@ -66,15 +66,16 @@ interface FplFormProps {
 
 export default function FplForm({ onCompose, isComposing }: FplFormProps) {
   const [mode, setMode] = useState<FplMode>('PVC');
-  const [showSobrevivencia, setShowSobrevivencia] = useState(false);
-  const [showColetes, setShowColetes] = useState(false);
-  const [showBotes, setShowBotes] = useState(false);
+  // State variables removed as they were not being used
   
   const { control, handleSubmit, watch, setValue, formState: { errors } } = useForm<FplForm>({
     resolver: yupResolver(formSchema),
     defaultValues: {
       modo: 'PVC',
-      item7: { identificacaoAeronave: '', indicativoChamada: false },
+      item7: {
+        identificacaoAeronave: '',
+        indicativoChamada: false,
+      },
       item8: { regrasVoo: 'IFR', tipoVoo: 'N' },
       item9: { tipoAeronave: '', catTurbulencia: 'L' },
       item10A: {},
@@ -100,23 +101,7 @@ export default function FplForm({ onCompose, isComposing }: FplFormProps) {
     },
   });
 
-  // Watch for changes in specific fields to update UI state
-  const sobrevivenciaS = watch('item19.sobrevivencia.S');
-  const sobrevivenciaJ = watch('item19.sobrevivencia.J');
-  const botesD = watch('item19.botes.D');
-
-  // Update UI state when watched fields change
-  useEffect(() => {
-    setShowSobrevivencia(!!sobrevivenciaS);
-  }, [sobrevivenciaS]);
-
-  useEffect(() => {
-    setShowColetes(!!sobrevivenciaJ);
-  }, [sobrevivenciaJ]);
-
-  useEffect(() => {
-    setShowBotes(!!botesD);
-  }, [botesD]);
+  // Watched fields removed as they were not being used
 
   // Handle form submission with debounce
   const debounceTimeout = useRef<ReturnType<typeof setTimeout>>();
@@ -187,14 +172,14 @@ export default function FplForm({ onCompose, isComposing }: FplFormProps) {
               <Controller
                 name="item7.indicativoChamada"
                 control={control}
-                render={({ field }) => (
+                render={({ field: { value, ...field } }) => (
                   <div className="flex items-center">
                     <input
                       {...field}
                       type="checkbox"
                       id="indicativoChamada"
                       className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-                      checked={!!field.value}
+                      checked={!!value}
                       onChange={(e) => field.onChange(e.target.checked)}
                     />
                     <label htmlFor="indicativoChamada" className="ml-2 block text-sm text-gray-700">
