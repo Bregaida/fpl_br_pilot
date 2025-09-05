@@ -13,7 +13,7 @@ import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import org.eclipse.microprofile.openapi.annotations.parameters.Parameter;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
-import lombok.RequiredArgsConstructor;
+import jakarta.inject.Inject;
 
 import java.util.List;
 
@@ -22,10 +22,14 @@ import java.util.List;
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 @Tag(name = "Flight Plans", description = "Operations related to flight plans")
-@RequiredArgsConstructor
 public class FlightPlanResource {
 
     private final FlightPlanService flightPlanService;
+
+    @Inject
+    public FlightPlanResource(FlightPlanService flightPlanService) {
+        this.flightPlanService = flightPlanService;
+    }
 
     @POST
     @Operation(

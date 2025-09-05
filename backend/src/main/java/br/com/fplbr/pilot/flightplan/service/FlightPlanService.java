@@ -8,17 +8,21 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.NotFoundException;
-import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @ApplicationScoped
-@RequiredArgsConstructor
 public class FlightPlanService {
 
     private final FlightPlanRepository flightPlanRepository;
     private final FlightPlanMapper flightPlanMapper;
+
+    @Inject
+    public FlightPlanService(FlightPlanRepository flightPlanRepository, FlightPlanMapper flightPlanMapper) {
+        this.flightPlanRepository = flightPlanRepository;
+        this.flightPlanMapper = flightPlanMapper;
+    }
 
     @Transactional
     public FlightPlanDTO createFlightPlan(FlightPlanDTO flightPlanDTO) {

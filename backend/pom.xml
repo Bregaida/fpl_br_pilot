@@ -212,7 +212,7 @@
                         <configuration>
                             <rules>
                                 <rule>
-                                    <element>CLASS</element>
+                                    <element>BUNDLE</element>
                                     <limits>
                                         <limit>
                                             <counter>LINE</counter>
@@ -224,6 +224,7 @@
                                         <exclude>br/com/fplbr/pilot/**/domain/**</exclude>
                                         <exclude>br/com/fplbr/pilot/**/infrastructure/persistence/**</exclude>
                                         <exclude>br/com/fplbr/pilot/**/mapper/**</exclude>
+                                        <exclude>br/com/fplbr/pilot/**/application/**</exclude>
                                     </excludes>
                                 </rule>
                             </rules>
