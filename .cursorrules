@@ -73,7 +73,7 @@ forbid_domain_depends_on_application_or_infrastructure = true
 framework = "quarkus"
 java_version = "17"
 enforce_lombok_everywhere = true
-lombok_annotations = ["@Getter", "@Setter", "@Builder", "@AllArgsConstructor", "@NoArgsConstructor", "@ToString", "@EqualsAndHashCode"]
+lombok_annotations = ["@Getter","@Setter","@Builder","@AllArgsConstructor","@NoArgsConstructor","@ToString","@EqualsAndHashCode"]
 
 # Dependências mínimas:
 required_dependencies = [
@@ -83,8 +83,8 @@ required_dependencies = [
   "io.quarkus:quarkus-smallrye-openapi",
   "io.quarkus:quarkus-smallrye-health",
   "org.projectlombok:lombok",
-  "org.mockito:mockito-core",
   "org.junit.jupiter:junit-jupiter",
+  "org.mockito:mockito-core",
   "io.rest-assured:rest-assured"
 ]
 
@@ -104,7 +104,7 @@ quarkus.http.cors.origins=http://localhost:5173
 api_base_path = "/api/v1"
 resources_plural = true
 example_routes = [
-  "GET /api/v1/health (pode delegar a /q/health)",
+  "GET /api/v1/health",
   "GET /api/v1/aerodromos?query=",
   "POST /api/v1/flightplans",
   "GET /api/v1/flightplans/{id}"
@@ -116,32 +116,26 @@ example_routes = [
 [frontend]
 builder = "vite"
 typescript = true
-testing = ["vitest", "@testing-library/react", "@testing-library/user-event"]
+testing = ["vitest","@testing-library/react","@testing-library/user-event"]
 e2e = "playwright"
 env_file = true
 env_dev = "VITE_API_URL=http://localhost:8080"
 
-routes = [
-  "/",
-  "/aerodromos",
-  "/flightplan/novo",
-  "/flightplan/:id"
-]
+routes = ["/","/aerodromos","/flightplan/novo","/flightplan/:id"]
 
 # ================================
 # 5. TESTES / QUALIDADE
 # ================================
 [testing]
-methodologies = ["TDD", "BDD"]
-bdd_framework_backend = "cucumber-junit (se já existir); caso contrário, manter Given/When/Then com JUnit5"
+methodologies = ["TDD","BDD"]
 coverage_min = 0.80
-coverage_backend = "JaCoCo (maven)"
+coverage_backend = "JaCoCo"
 coverage_frontend = "vitest + c8"
 ci_optional = true
 
 # Backend: Unit (domain, application), Integration (web/persistence com H2), API (RestAssured)
-backend_unit_test_packages = ["domain", "application"]
-backend_integration_test_packages = ["infrastructure/web", "infrastructure/persistence"]
+backend_unit_test_packages = ["domain","application"]
+backend_integration_test_packages = ["infrastructure/web","infrastructure/persistence"]
 
 # Frontend: unit + component (RTL), e2e (Playwright)
 frontend_tests_required = true
@@ -161,10 +155,10 @@ keep_author_variables = true
 [runtime]
 makefile = true
 make_targets = {
-  "dev": "Subir backend (8080) + frontend (5173) em paralelo",
   "backend": "cd backend && ./mvnw -q quarkus:dev",
   "frontend": "cd fplbr-frontend && npm i && npm run dev -- --port 5173",
-  "test": "backend+frontend tests com cobertura e relatórios"
+  "dev": "npx concurrently -k -n backend,frontend -c blue,magenta \"cd backend && ./mvnw -q quarkus:dev\" \"cd fplbr-frontend && npm i && npm run dev -- --port 5173\"",
+  "test": "cd backend && ./mvnw -q clean verify && cd ../fplbr-frontend && npm i && npm test -- --coverage"
 }
 
 # ================================
@@ -222,8 +216,6 @@ pr_body_must_include = [
   "Como rodar (make dev)",
   "Cobertura alcançada (backend e frontend)",
   "URLs finais para testes (backend e frontend)",
-  "Itens do checklist e status"
+  "Itens do checklist e status",
+  "Futuras Sugestões & Próximos Passos (backlog priorizado)"
 ]
-
-# EditorConfig + .gitignore + docker-compose content below was wrongly appended to this file earlier.
-# Keeping .cursorrules strictly as rules only per user's spec.

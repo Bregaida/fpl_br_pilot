@@ -17,199 +17,55 @@ import java.util.Objects;
 @Builder
 @ValidFlightPlan
 public class FlightPlan extends PanacheEntityBase {
-    
     // Getters e Setters manuais
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getIdentificacaoDaAeronave() {
-        return identificacaoDaAeronave;
-    }
-
-    public void setIdentificacaoDaAeronave(String identificacaoDaAeronave) {
-        this.identificacaoDaAeronave = identificacaoDaAeronave;
-    }
-
-    public String getIndicativoDeChamada() {
-        return indicativoDeChamada;
-    }
-
-    public void setIndicativoDeChamada(String indicativoDeChamada) {
-        this.indicativoDeChamada = indicativoDeChamada;
-    }
-
-    public RegraDeVooEnum getRegraDeVooEnum() {
-        return regraDeVooEnum;
-    }
-
-    public void setRegraDeVooEnum(RegraDeVooEnum regraDeVooEnum) {
-        this.regraDeVooEnum = regraDeVooEnum;
-    }
-
-    public TipoDeVooEnum getTipoDeVooEnum() {
-        return tipoDeVooEnum;
-    }
-
-    public void setTipoDeVooEnum(TipoDeVooEnum tipoDeVooEnum) {
-        this.tipoDeVooEnum = tipoDeVooEnum;
-    }
-
-    public Integer getNumeroDeAeronaves() {
-        return numeroDeAeronaves;
-    }
-
-    public void setNumeroDeAeronaves(Integer numeroDeAeronaves) {
-        this.numeroDeAeronaves = numeroDeAeronaves;
-    }
-
-    public String getTipoDeAeronave() {
-        return tipoDeAeronave;
-    }
-
-    public void setTipoDeAeronave(String tipoDeAeronave) {
-        this.tipoDeAeronave = tipoDeAeronave;
-    }
-
-    public CategoriaEsteiraTurbulenciaEnum getCategoriaEsteiraTurbulenciaEnum() {
-        return categoriaEsteiraTurbulenciaEnum;
-    }
-
-    public void setCategoriaEsteiraTurbulenciaEnum(CategoriaEsteiraTurbulenciaEnum categoriaEsteiraTurbulenciaEnum) {
-        this.categoriaEsteiraTurbulenciaEnum = categoriaEsteiraTurbulenciaEnum;
-    }
-
-    public EquipamentoCapacidadeDaAeronave getEquipamentoCapacidadeDaAeronave() {
-        return equipamentoCapacidadeDaAeronave;
-    }
-
-    public void setEquipamentoCapacidadeDaAeronave(EquipamentoCapacidadeDaAeronave equipamentoCapacidadeDaAeronave) {
-        this.equipamentoCapacidadeDaAeronave = equipamentoCapacidadeDaAeronave;
-    }
-
-    public Vigilancia getVigilancia() {
-        return vigilancia;
-    }
-
-    public void setVigilancia(Vigilancia vigilancia) {
-        this.vigilancia = vigilancia;
-    }
-
-    public String getAerodromoDePartida() {
-        return aerodromoDePartida;
-    }
-
-    public void setAerodromoDePartida(String aerodromoDePartida) {
-        this.aerodromoDePartida = aerodromoDePartida;
-    }
-
-    public LocalDateTime getHoraPartida() {
-        return horaPartida;
-    }
-
-    public void setHoraPartida(LocalDateTime horaPartida) {
-        this.horaPartida = horaPartida;
-    }
-
-    public String getAerodromoDeDestino() {
-        return aerodromoDeDestino;
-    }
-
-    public void setAerodromoDeDestino(String aerodromoDeDestino) {
-        this.aerodromoDeDestino = aerodromoDeDestino;
-    }
-
-    public LocalDateTime getTempoDeVooPrevisto() {
-        return tempoDeVooPrevisto;
-    }
-
-    public void setTempoDeVooPrevisto(LocalDateTime tempoDeVooPrevisto) {
-        this.tempoDeVooPrevisto = tempoDeVooPrevisto;
-    }
-
-    public String getAerodromoDeAlternativa() {
-        return aerodromoDeAlternativa;
-    }
-
-    public void setAerodromoDeAlternativa(String aerodromoDeAlternativa) {
-        this.aerodromoDeAlternativa = aerodromoDeAlternativa;
-    }
-
-    public String getAerodromoDeAlternativaSegundo() {
-        return aerodromoDeAlternativaSegundo;
-    }
-
-    public void setAerodromoDeAlternativaSegundo(String aerodromoDeAlternativaSegundo) {
-        this.aerodromoDeAlternativaSegundo = aerodromoDeAlternativaSegundo;
-    }
-
-    public String getVelocidadeDeCruzeiro() {
-        return velocidadeDeCruzeiro;
-    }
-
-    public void setVelocidadeDeCruzeiro(String velocidadeDeCruzeiro) {
-        this.velocidadeDeCruzeiro = velocidadeDeCruzeiro;
-    }
-
-    public String getNivelDeVoo() {
-        return nivelDeVoo;
-    }
-
-    public void setNivelDeVoo(String nivelDeVoo) {
-        this.nivelDeVoo = nivelDeVoo;
-    }
-
-    public String getRota() {
-        return rota;
-    }
-
-    public void setRota(String rota) {
-        this.rota = rota;
-    }
-
-    public OutrasInformacoes getOutrasInformacoes() {
-        return outrasInformacoes;
-    }
-
-    public void setOutrasInformacoes(OutrasInformacoes outrasInformacoes) {
-        this.outrasInformacoes = outrasInformacoes;
-    }
-
-    public LocalDate getDof() {
-        return dof;
-    }
-
-    public void setDof(LocalDate dof) {
-        this.dof = dof;
-    }
-
-    public InformacaoSuplementar getInformacaoSuplementar() {
-        return informacaoSuplementar;
-    }
-
-    public void setInformacaoSuplementar(InformacaoSuplementar informacaoSuplementar) {
-        this.informacaoSuplementar = informacaoSuplementar;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
-    }
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+    public String getIdentificacaoDaAeronave() { return identificacaoDaAeronave; }
+    public void setIdentificacaoDaAeronave(String identificacaoDaAeronave) { this.identificacaoDaAeronave = identificacaoDaAeronave; }
+    public String getIndicativoDeChamada() { return indicativoDeChamada; }
+    public void setIndicativoDeChamada(String indicativoDeChamada) { this.indicativoDeChamada = indicativoDeChamada; }
+    public RegraDeVooEnum getRegraDeVooEnum() { return regraDeVooEnum; }
+    public void setRegraDeVooEnum(RegraDeVooEnum regraDeVooEnum) { this.regraDeVooEnum = regraDeVooEnum; }
+    public TipoDeVooEnum getTipoDeVooEnum() { return tipoDeVooEnum; }
+    public void setTipoDeVooEnum(TipoDeVooEnum tipoDeVooEnum) { this.tipoDeVooEnum = tipoDeVooEnum; }
+    public Integer getNumeroDeAeronaves() { return numeroDeAeronaves; }
+    public void setNumeroDeAeronaves(Integer numeroDeAeronaves) { this.numeroDeAeronaves = numeroDeAeronaves; }
+    public String getTipoDeAeronave() { return tipoDeAeronave; }
+    public void setTipoDeAeronave(String tipoDeAeronave) { this.tipoDeAeronave = tipoDeAeronave; }
+    public CategoriaEsteiraTurbulenciaEnum getCategoriaEsteiraTurbulenciaEnum() { return categoriaEsteiraTurbulenciaEnum; }
+    public void setCategoriaEsteiraTurbulenciaEnum(CategoriaEsteiraTurbulenciaEnum categoriaEsteiraTurbulenciaEnum) { this.categoriaEsteiraTurbulenciaEnum = categoriaEsteiraTurbulenciaEnum; }
+    public EquipamentoCapacidadeDaAeronave getEquipamentoCapacidadeDaAeronave() { return equipamentoCapacidadeDaAeronave; }
+    public void setEquipamentoCapacidadeDaAeronave(EquipamentoCapacidadeDaAeronave equipamentoCapacidadeDaAeronave) { this.equipamentoCapacidadeDaAeronave = equipamentoCapacidadeDaAeronave; }
+    public Vigilancia getVigilancia() { return vigilancia; }
+    public void setVigilancia(Vigilancia vigilancia) { this.vigilancia = vigilancia; }
+    public String getAerodromoDePartida() { return aerodromoDePartida; }
+    public void setAerodromoDePartida(String aerodromoDePartida) { this.aerodromoDePartida = aerodromoDePartida; }
+    public LocalDateTime getHoraPartida() { return horaPartida; }
+    public void setHoraPartida(LocalDateTime horaPartida) { this.horaPartida = horaPartida; }
+    public String getAerodromoDeDestino() { return aerodromoDeDestino; }
+    public void setAerodromoDeDestino(String aerodromoDeDestino) { this.aerodromoDeDestino = aerodromoDeDestino; }
+    public LocalDateTime getTempoDeVooPrevisto() { return tempoDeVooPrevisto; }
+    public void setTempoDeVooPrevisto(LocalDateTime tempoDeVooPrevisto) { this.tempoDeVooPrevisto = tempoDeVooPrevisto; }
+    public String getAerodromoDeAlternativa() { return aerodromoDeAlternativa; }
+    public void setAerodromoDeAlternativa(String aerodromoDeAlternativa) { this.aerodromoDeAlternativa = aerodromoDeAlternativa; }
+    public String getAerodromoDeAlternativaSegundo() { return aerodromoDeAlternativaSegundo; }
+    public void setAerodromoDeAlternativaSegundo(String aerodromoDeAlternativaSegundo) { this.aerodromoDeAlternativaSegundo = aerodromoDeAlternativaSegundo; }
+    public String getVelocidadeDeCruzeiro() { return velocidadeDeCruzeiro; }
+    public void setVelocidadeDeCruzeiro(String velocidadeDeCruzeiro) { this.velocidadeDeCruzeiro = velocidadeDeCruzeiro; }
+    public String getNivelDeVoo() { return nivelDeVoo; }
+    public void setNivelDeVoo(String nivelDeVoo) { this.nivelDeVoo = nivelDeVoo; }
+    public String getRota() { return rota; }
+    public void setRota(String rota) { this.rota = rota; }
+    public OutrasInformacoes getOutrasInformacoes() { return outrasInformacoes; }
+    public void setOutrasInformacoes(OutrasInformacoes outrasInformacoes) { this.outrasInformacoes = outrasInformacoes; }
+    public LocalDate getDof() { return dof; }
+    public void setDof(LocalDate dof) { this.dof = dof; }
+    public InformacaoSuplementar getInformacaoSuplementar() { return informacaoSuplementar; }
+    public void setInformacaoSuplementar(InformacaoSuplementar informacaoSuplementar) { this.informacaoSuplementar = informacaoSuplementar; }
+    public LocalDateTime getCreatedAt() { return createdAt; }
+    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
+    public LocalDateTime getUpdatedAt() { return updatedAt; }
+    public void setUpdatedAt(LocalDateTime updatedAt) { this.updatedAt = updatedAt; }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -250,13 +106,11 @@ public class FlightPlan extends PanacheEntityBase {
     @Column(name = "categoria_esteira", nullable = false, length = 10)
     private CategoriaEsteiraTurbulenciaEnum categoriaEsteiraTurbulenciaEnum;
 
-    // Campo 10 - Equipamentos e Vigilância
-    @NotNull(message = "Equipamento e capacidade da aeronave são obrigatórios")
-    @Embedded
+    // Campo 10 - Equipamentos e Vigilância (não persistir campos detalhados para evitar conflito de colunas)
+    @Transient
     private EquipamentoCapacidadeDaAeronave equipamentoCapacidadeDaAeronave;
 
-    @NotNull(message = "Vigilância é obrigatória")
-    @Embedded
+    @Transient
     private Vigilancia vigilancia;
 
     // Campo 13 - Informações de Partida
@@ -266,7 +120,7 @@ public class FlightPlan extends PanacheEntityBase {
     private String aerodromoDePartida;
 
     @NotNull(message = "Hora de partida é obrigatória")
-    @FutureOrPresent(message = "Hora de partida deve ter no mínimo 30 minutos da hora atual") //Hora de partida deve ter no mínimo 30 minutos da hora atual se plano de voo completo e 15 minutos da hora atual no caso de voo simplificado
+    @FutureOrPresent(message = "Hora de partida deve ter no mínimo 30 minutos da hora atual")
     @Column(name = "hora_partida", nullable = false)
     private LocalDateTime horaPartida;
 
@@ -304,8 +158,7 @@ public class FlightPlan extends PanacheEntityBase {
     private String rota;
 
     // Campo 18 - Outras Informações
-    @NotNull(message = "Outras informações são obrigatórias")
-    @Embedded
+    @Transient
     private OutrasInformacoes outrasInformacoes;
 
     @NotNull(message = "Data de operação do voo é obrigatória")
@@ -313,8 +166,7 @@ public class FlightPlan extends PanacheEntityBase {
     private LocalDate dof = LocalDate.now();
 
     // Campo 19 - Informações Suplementares
-    @NotNull(message = "Informações suplementares são obrigatórias")
-    @Embedded
+    @Transient
     private InformacaoSuplementar informacaoSuplementar;
 
     // Campos de auditoria
@@ -325,7 +177,5 @@ public class FlightPlan extends PanacheEntityBase {
     private LocalDateTime updatedAt = LocalDateTime.now();
 
     @PreUpdate
-    protected void onUpdate() {
-        this.updatedAt = LocalDateTime.now();
-    }
+    protected void onUpdate() { this.updatedAt = LocalDateTime.now(); }
 }

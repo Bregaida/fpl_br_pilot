@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 
 import static io.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.equalTo;
 import static org.mockito.Mockito.when;
 
 @QuarkusTest
@@ -31,6 +31,6 @@ class AerodromoResourceTest {
             .get("/api/v1/aerodromos")
         .then()
             .statusCode(200)
-            .body("size()", hasSize(1));
+            .body("size()", equalTo(1));
     }
 }

@@ -21,9 +21,6 @@ import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 import java.util.List;
 import java.util.stream.Collectors;
 
-/**
- * Recurso REST para operações relacionadas a aeródromos.
- */
 @Path("/api/v1/aerodromos")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
@@ -47,11 +44,11 @@ public class AerodromoResource {
     @APIResponse(responseCode = "404", description = "Aeródromo não encontrado")
     @APIResponse(responseCode = "400", description = "Código ICAO inválido")
     public Response buscarPorIcao(
-        @PathParam("icao") 
+        @PathParam("icao")
         @NotBlank(message = "Código ICAO é obrigatório")
         @Pattern(regexp = "[A-Za-z]{4}", message = "Código ICAO deve conter exatamente 4 letras")
         String icao) {
-        
+
         return aerodromoService.buscarPorIcao(icao.toUpperCase())
                 .map(aerodromo -> Response.ok(AerodromoDTO.fromDomain(aerodromo)).build())
                 .orElse(Response.status(Response.Status.NOT_FOUND).build());
@@ -72,7 +69,7 @@ public class AerodromoResource {
         @Parameter(description = "Filtro por UF") @QueryParam("uf") String uf,
         @Parameter(description = "Número da página (0-based)") @DefaultValue("0") @QueryParam("pagina") int pagina,
         @Parameter(description = "Tamanho da página") @DefaultValue("20") @QueryParam("tamanho") int tamanho) {
-        
+
         return aerodromoService.buscarAerodromos(query, uf, pagina, tamanho);
     }
 
@@ -90,7 +87,7 @@ public class AerodromoResource {
     public long contar(
         @Parameter(description = "Termo para busca (nome, código, cidade, etc.)") @QueryParam("busca") String termoBusca,
         @Parameter(description = "Filtro por UF") @QueryParam("uf") String uf) {
-        
+
         return aerodromoService.contarAerodromos(termoBusca, uf);
     }
 
@@ -130,12 +127,11 @@ public class AerodromoResource {
     public Response atualizar(
         @PathParam("icao") String icao,
         @Valid AerodromoDTO aerodromoDTO) {
-        
-        // Garante que o código ICAO do path corresponde ao do corpo
+
         if (!icao.equalsIgnoreCase(aerodromoDTO.getIcao())) {
             aerodromoDTO.setIcao(icao.toUpperCase());
         }
-        
+
         var aerodromoAtualizado = aerodromoService.salvarAerodromo(aerodromoDTO.toDomain());
         return Response.ok(AerodromoDTO.fromDomain(aerodromoAtualizado)).build();
     }
@@ -149,11 +145,11 @@ public class AerodromoResource {
     @APIResponse(responseCode = "204", description = "Aeródromo removido com sucesso")
     @APIResponse(responseCode = "404", description = "Aeródromo não encontrado")
     public Response remover(
-        @PathParam("icao") 
+        @PathParam("icao")
         @NotBlank(message = "Código ICAO é obrigatório")
         @Pattern(regexp = "[A-Za-z]{4}", message = "Código ICAO deve conter exatamente 4 letras")
         String icao) {
-        
+
         if (aerodromoService.removerAerodromo(icao.toUpperCase())) {
             return Response.noContent().build();
         } else {
@@ -174,11 +170,11 @@ public class AerodromoResource {
     )
     @APIResponse(responseCode = "400", description = "Código ICAO inválido")
     public Response isTerminal(
-        @PathParam("icao") 
+        @PathParam("icao")
         @NotBlank(message = "Código ICAO é obrigatório")
         @Pattern(regexp = "[A-Za-z]{4}", message = "Código ICAO deve conter exatamente 4 letras")
         String icao) {
-        
+
         boolean isTerminal = aerodromoService.isAerodromoTerminal(icao.toUpperCase());
         return Response.ok(isTerminal).build();
     }
@@ -196,14 +192,14 @@ public class AerodromoResource {
     )
     @APIResponse(responseCode = "404", description = "Aeródromo não encontrado")
     public Response listarFrequencias(
-        @PathParam("icao") 
+        @PathParam("icao")
         @NotBlank(message = "Código ICAO é obrigatório")
         @Pattern(regexp = "[A-Za-z]{4}", message = "Código ICAO deve conter exatamente 4 letras")
         String icao) {
-        
+
         return aerodromoService.buscarPorIcao(icao.toUpperCase())
                 .map(aerodromo -> {
-                    var frequencias = aerodromo.getFrequencias() != null ? 
+                    var frequencias = aerodromo.getFrequencias() != null ?
                             aerodromo.getFrequencias().stream()
                                     .map(FrequenciaDTO::fromDomain)
                                     .collect(java.util.stream.Collectors.toList()) :
@@ -212,7 +208,7 @@ public class AerodromoResource {
                 })
                 .orElse(Response.status(Response.Status.NOT_FOUND).build());
     }
-    
+
     @GET
     @Path("/existe/{codigo}")
     @Operation(
@@ -229,25 +225,23 @@ public class AerodromoResource {
         @NotBlank(message = "Código do aeródromo é obrigatório")
         @Pattern(regexp = "[A-Za-z]{3,4}", message = "Código deve ter 3 (IATA) ou 4 (ICAO) letras")
         String codigo) {
-        
+
         final String codigoBusca = codigo.trim().toUpperCase();
         boolean existe;
-        
+
         if (codigoBusca.length() == 4) {
-            // Busca por ICAO
             existe = aerodromoService.buscarPorIcao(codigoBusca).isPresent();
         } else {
-            // Busca por IATA
             existe = !aerodromoService.buscarAerodromos(codigoBusca, null, 0, 1)
                     .stream()
                     .filter(a -> codigoBusca.equals(a.getIata()))
                     .findFirst()
                     .isPresent();
         }
-        
+
         return Response.ok(existe).build();
     }
-    
+
     @GET
     @Path("/detalhes/{icao}")
     @Operation(
@@ -265,12 +259,12 @@ public class AerodromoResource {
         @NotBlank(message = "Código ICAO é obrigatório")
         @Pattern(regexp = "[A-Za-z]{4}", message = "Código ICAO deve conter exatamente 4 letras")
         String icao) {
-        
+
         return aerodromoService.buscarPorIcao(icao.toUpperCase())
                 .map(aerodromo -> Response.ok(AerodromoDTO.fromDomain(aerodromo)).build())
                 .orElse(Response.status(Response.Status.NOT_FOUND).build());
     }
-    
+
     @GET
     @Path("/buscar")
     @Operation(
@@ -287,43 +281,38 @@ public class AerodromoResource {
         @QueryParam("q") @NotBlank(message = "Termo de busca é obrigatório") String termo,
         @Parameter(description = "Limitar o número de resultados")
         @QueryParam("limite") @DefaultValue("10") int limite) {
-        
-        // Converte o termo para maiúsculas para busca case-insensitive
+
         String termoBusca = termo.trim().toUpperCase();
-        
-        // Se o termo tiver 3 ou 4 caracteres, pode ser um código IATA ou ICAO
+
         if (termoBusca.matches("[A-Z]{3,4}")) {
-            // Tenta buscar por ICAO exato (4 letras)
             if (termoBusca.length() == 4) {
                 var aerodromo = aerodromoService.buscarPorIcao(termoBusca)
                         .map(a -> List.of(AerodromoBuscaDTO.fromAerodromoDTO(AerodromoDTO.fromDomain(a))))
                         .orElseGet(List::of);
-                
+
                 if (!aerodromo.isEmpty()) {
                     return Response.ok(aerodromo).build();
                 }
             }
-            
-            // Tenta buscar por IATA exato (3 letras)
+
             if (termoBusca.length() == 3) {
                 var aerodromos = aerodromoService.buscarAerodromos(termoBusca, null, 0, limite)
                         .stream()
                         .filter(a -> termoBusca.equals(a.getIata()))
                         .map(AerodromoBuscaDTO::fromAerodromoDTO)
                         .collect(Collectors.toList());
-                
+
                 if (!aerodromos.isEmpty()) {
                     return Response.ok(aerodromos).build();
                 }
             }
         }
-        
-        // Busca genérica por nome, cidade ou UF
+
         List<AerodromoBuscaDTO> resultados = aerodromoService.buscarAerodromos(termoBusca, null, 0, limite)
                 .stream()
                 .map(AerodromoBuscaDTO::fromAerodromoDTO)
                 .collect(Collectors.toList());
-        
+
         return Response.ok(resultados).build();
     }
 }
