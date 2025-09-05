@@ -10,6 +10,9 @@ export default defineConfig({
     host: true,
     // Uncomment to hide error overlay
     // hmr: { overlay: false }
+    proxy: {
+      '/api': 'http://localhost:8080'
+    }
   },
   resolve: {
     alias: {

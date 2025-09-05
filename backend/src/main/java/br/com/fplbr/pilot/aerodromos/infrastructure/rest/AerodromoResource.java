@@ -1,4 +1,4 @@
-package br.com.fplbr.pilot.aerodromos.infrastructure.rest;
+package br.com.fplbr.pilot.aerodromos.infrastructure.web;
 
 import br.com.fplbr.pilot.aerodromos.application.dto.AerodromoBuscaDTO;
 import br.com.fplbr.pilot.aerodromos.application.dto.AerodromoDTO;

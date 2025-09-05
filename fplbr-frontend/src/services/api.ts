@@ -1,12 +1,12 @@
 import axios, { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 import { ApiError, ApiResponse, FplForm, FplComposedResponse } from '@/types';
-import { mockResponse } from './mockData'; // Mock response is used in the code
+import { mockResponse } from './mockData';
 
-const BFF_BASE_URL = import.meta.env.VITE_BFF_URL || 'http://localhost:3001';
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080';
 
 // Create axios instance with base URL and default headers
 const api: AxiosInstance = axios.create({
-  baseURL: BFF_BASE_URL.endsWith('/') ? BFF_BASE_URL.slice(0, -1) : BFF_BASE_URL,  // Remove trailing slash if present
+  baseURL: API_BASE_URL.endsWith('/') ? API_BASE_URL.slice(0, -1) : API_BASE_URL,
   timeout: 10000,
   headers: {
     'Content-Type': 'application/json',
@@ -72,7 +72,7 @@ api.interceptors.response.use(
 
 const isBackendAvailable = async (): Promise<boolean> => {
   try {
-    await axios.get(`${import.meta.env.VITE_BFF_URL || 'http://localhost:3001'}/health`, {
+    await axios.get(`${API_BASE_URL}/q/health`, {
       timeout: 2000 // 2 seconds timeout
     });
     return true;
