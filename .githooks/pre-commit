@@ -1,3 +1,8 @@
+#!/usr/bin/env bash
+set -euo pipefail
+echo "[pre-commit] fmt+lint"
+make fmt lint
+
 #!/bin/bash
 # Bloqueia commits com CRLF em arquivos de código
 files=$(git diff --cached --name-only --diff-filter=ACM | grep -E '\.(java|ts|tsx|js|jsx|json|yml|yaml|xml|md|css|html)$')
