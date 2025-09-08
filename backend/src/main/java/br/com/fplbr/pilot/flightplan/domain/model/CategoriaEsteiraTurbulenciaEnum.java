@@ -2,7 +2,7 @@ package br.com.fplbr.pilot.flightplan.domain.model;
 
 public enum CategoriaEsteiraTurbulenciaEnum {
     LEVE(1, "L", "Leve"),
-    MEDIA(2, "M", "MÃƒÂ©dia"),
+    MEDIA(2, "M", "Média"),
     PESADO(3, "H", "Pesado"),
     SUPER(4, "J", "Super");
 

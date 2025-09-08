@@ -9,20 +9,20 @@ public enum RegraDeVooEnum {
     private final int id;
     private final String sigla;
     private final String descricao;
-    
+
     RegraDeVooEnum(int id, String sigla, String descricao) {
         this.id = id;
         this.sigla = sigla;
         this.descricao = descricao;
     }
-    
+
     public int getId() { return id; }
     public String getSigla() { return sigla; }
     public String getDescricao() { return descricao; }
-    
+
     /**
-     * Verifica se a regra de voo ÃƒÂ© IFR.
-     * @return true se for IFR, false caso contrÃƒÂ¡rio
+     * Verifica se a regra de voo é IFR.
+     * @return true se for IFR, false caso contrário
      */
     public boolean isIFR() {
         return this == IFR || this == IFR_VFR || this == VFR_IFR;
