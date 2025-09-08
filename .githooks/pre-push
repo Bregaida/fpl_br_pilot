@@ -1,5 +1,12 @@
 #!/usr/bin/env bash
 set -euo pipefail
+
+# Se 'make' não estiver disponível, pula sem falhar
+if ! command -v make >/dev/null 2>&1; then
+  echo "[pre-push] 'make' não encontrado no PATH; pulando validação."
+  exit 0
+fi
+
 echo "[pre-push] validação rápida"
 make backend-lint frontend-lint
 
