@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+set -euo pipefail
+echo "[post-merge] sincronizando dependências do frontend"
+[ -d "fplbr-frontend" ] && (cd fplbr-frontend && npm i --no-fund --no-audit || true)
+
+
