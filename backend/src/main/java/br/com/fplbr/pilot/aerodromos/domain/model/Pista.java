@@ -1,58 +1,18 @@
-package br.com.fplbr.pilot.aerodromos.domain.model;
+﻿package br.com.fplbr.pilot.aerodromos.domain.model;
 
 import java.util.Objects;
 
 /**
- * Representa uma pista de pouso e decolagem em um aeródromo.
+ * Representa uma pista de pouso e decolagem em um aerÃƒÂ³dromo.
  */
 public class Pista {
-    private String designacao;          // Ex: 10/28, 15/33
-    private Double comprimentoMetros;   // Comprimento em metros
-    private Double larguraMetros;       // Largura em metros
-    private String superficie;          // Tipo de superfície (ASPH, CONC, GRVL, etc)
-    private Integer resistenciaPcn;     // Número PCN da pista
-    private String classificacaoPcn;    // Classificação PCN (A/B/C/D, Alto/Baixo, etc)
-    private Integer tora;               // TORA - Take-Off Run Available
-    private Integer toda;               // TODA - Take-Off Distance Available
-    private Integer asda;               // ASDA - Accelerate-Stop Distance Available
-    private Integer lda;                // LDA - Landing Distance Available
-    private boolean ils;                // Se possui ILS
-    private String categoriaIls;        // Categoria do ILS (I, II, III)
-    private String papi;                // Tipo de PAPI (PAPI, APAPI, etc)
-    private String luzesBorda;          // Tipo de iluminação de borda
-    private String luzesCentro;         // Tipo de iluminação de centro
-    private String observacoes;        // Observações adicionais
-
-    // Private constructor for builder
-    private Pista(Builder builder) {
-        this.designacao = builder.designacao;
-        this.comprimentoMetros = builder.comprimentoMetros;
-        this.larguraMetros = builder.larguraMetros;
-        this.superficie = builder.superficie;
-        this.resistenciaPcn = builder.resistenciaPcn;
-        this.classificacaoPcn = builder.classificacaoPcn;
-        this.tora = builder.tora;
-        this.toda = builder.toda;
-        this.asda = builder.asda;
-        this.lda = builder.lda;
-        this.ils = builder.ils;
-        this.categoriaIls = builder.categoriaIls;
-        this.papi = builder.papi;
-        this.luzesBorda = builder.luzesBorda;
-        this.luzesCentro = builder.luzesCentro;
-        this.observacoes = builder.observacoes;
+    // Builder pattern implementation
+    public static PistaBuilder builder() {
+        return new PistaBuilder();
     }
-
-    // Default constructor
-    public Pista() {
-    }
-
-    // Builder class
-    public static class Builder {
-        // Required parameters
-        private final String designacao;
-
-        // Optional parameters - initialized to default values
+    
+    public static class PistaBuilder {
+        private String designacao;
         private Double comprimentoMetros;
         private Double larguraMetros;
         private String superficie;
@@ -68,30 +28,138 @@ public class Pista {
         private String luzesBorda;
         private String luzesCentro;
         private String observacoes;
-
-        public Builder(String designacao) {
-            this.designacao = designacao;
-        }
-
-        public Builder comprimentoMetros(Double val) { comprimentoMetros = val; return this; }
-        public Builder larguraMetros(Double val) { larguraMetros = val; return this; }
-        public Builder superficie(String val) { superficie = val; return this; }
-        public Builder resistenciaPcn(Integer val) { resistenciaPcn = val; return this; }
-        public Builder classificacaoPcn(String val) { classificacaoPcn = val; return this; }
-        public Builder tora(Integer val) { tora = val; return this; }
-        public Builder toda(Integer val) { toda = val; return this; }
-        public Builder asda(Integer val) { asda = val; return this; }
-        public Builder lda(Integer val) { lda = val; return this; }
-        public Builder ils(boolean val) { ils = val; return this; }
-        public Builder categoriaIls(String val) { categoriaIls = val; return this; }
-        public Builder papi(String val) { papi = val; return this; }
-        public Builder luzesBorda(String val) { luzesBorda = val; return this; }
-        public Builder luzesCentro(String val) { luzesCentro = val; return this; }
-        public Builder observacoes(String val) { observacoes = val; return this; }
-
+        
+        public PistaBuilder designacao(String designacao) { this.designacao = designacao; return this; }
+        public PistaBuilder comprimentoMetros(Double comprimentoMetros) { this.comprimentoMetros = comprimentoMetros; return this; }
+        public PistaBuilder larguraMetros(Double larguraMetros) { this.larguraMetros = larguraMetros; return this; }
+        public PistaBuilder superficie(String superficie) { this.superficie = superficie; return this; }
+        public PistaBuilder resistenciaPcn(Integer resistenciaPcn) { this.resistenciaPcn = resistenciaPcn; return this; }
+        public PistaBuilder classificacaoPcn(String classificacaoPcn) { this.classificacaoPcn = classificacaoPcn; return this; }
+        public PistaBuilder tora(Integer tora) { this.tora = tora; return this; }
+        public PistaBuilder toda(Integer toda) { this.toda = toda; return this; }
+        public PistaBuilder asda(Integer asda) { this.asda = asda; return this; }
+        public PistaBuilder lda(Integer lda) { this.lda = lda; return this; }
+        public PistaBuilder ils(boolean ils) { this.ils = ils; return this; }
+        public PistaBuilder categoriaIls(String categoriaIls) { this.categoriaIls = categoriaIls; return this; }
+        public PistaBuilder papi(String papi) { this.papi = papi; return this; }
+        public PistaBuilder luzesBorda(String luzesBorda) { this.luzesBorda = luzesBorda; return this; }
+        public PistaBuilder luzesCentro(String luzesCentro) { this.luzesCentro = luzesCentro; return this; }
+        public PistaBuilder observacoes(String observacoes) { this.observacoes = observacoes; return this; }
+        
         public Pista build() {
-            return new Pista(this);
+            return new Pista(
+                designacao, comprimentoMetros, larguraMetros, superficie, resistenciaPcn,
+                classificacaoPcn, tora, toda, asda, lda, ils, categoriaIls, papi,
+                luzesBorda, luzesCentro, observacoes
+            );
         }
+    }
+    
+    // Fields with JavaDoc
+    private final String designacao;          // Ex: 10/28, 15/33
+    private final Double comprimentoMetros;   // Comprimento em metros
+    private final Double larguraMetros;       // Largura em metros
+    private final String superficie;          // Tipo de superfÃƒÂ­cie (ASPH, CONC, GRVL, etc)
+    private final Integer resistenciaPcn;     // NÃƒÂºmero PCN da pista
+    private final String classificacaoPcn;    // ClassificaÃƒÂ§ÃƒÂ£o PCN (A/B/C/D, Alto/Baixo, etc)
+    private final Integer tora;               // TORA - Take-Off Run Available
+    private final Integer toda;               // TODA - Take-Off Distance Available
+    private final Integer asda;               // ASDA - Accelerate-Stop Distance Available
+    private final Integer lda;                // LDA - Landing Distance Available
+    private final boolean ils;                // Se possui ILS
+    private final String categoriaIls;        // Categoria do ILS (I, II, III)
+    private final String papi;                // Tipo de PAPI (PAPI, APAPI, etc)
+    private final String luzesBorda;          // Tipo de iluminaÃƒÂ§ÃƒÂ£o de borda
+    private final String luzesCentro;         // Tipo de iluminaÃƒÂ§ÃƒÂ£o de centro
+    private String observacoes;               // ObservaÃƒÂ§ÃƒÂµes adicionais
+    
+    // Constructor
+    public Pista(
+        String designacao, Double comprimentoMetros, Double larguraMetros, 
+        String superficie, Integer resistenciaPcn, String classificacaoPcn,
+        Integer tora, Integer toda, Integer asda, Integer lda, boolean ils,
+        String categoriaIls, String papi, String luzesBorda, String luzesCentro,
+        String observacoes
+    ) {
+        this.designacao = designacao;
+        this.comprimentoMetros = comprimentoMetros;
+        this.larguraMetros = larguraMetros;
+        this.superficie = superficie;
+        this.resistenciaPcn = resistenciaPcn;
+        this.classificacaoPcn = classificacaoPcn;
+        this.tora = tora;
+        this.toda = toda;
+        this.asda = asda;
+        this.lda = lda;
+        this.ils = ils;
+        this.categoriaIls = categoriaIls;
+        this.papi = papi;
+        this.luzesBorda = luzesBorda;
+        this.luzesCentro = luzesCentro;
+        this.observacoes = observacoes;
+    }
+    
+    // No-args constructor for frameworks
+    protected Pista() {
+        this.designacao = null;
+        this.comprimentoMetros = null;
+        this.larguraMetros = null;
+        this.superficie = null;
+        this.resistenciaPcn = null;
+        this.classificacaoPcn = null;
+        this.tora = null;
+        this.toda = null;
+        this.asda = null;
+        this.lda = null;
+        this.ils = false;
+        this.categoriaIls = null;
+        this.papi = null;
+        this.luzesBorda = null;
+        this.luzesCentro = null;
+        this.observacoes = null;
+    }
+    // toBuilder method
+    public PistaBuilder toBuilder() {
+        return new PistaBuilder()
+            .designacao(this.designacao)
+            .comprimentoMetros(this.comprimentoMetros)
+            .larguraMetros(this.larguraMetros)
+            .superficie(this.superficie)
+            .resistenciaPcn(this.resistenciaPcn)
+            .classificacaoPcn(this.classificacaoPcn)
+            .tora(this.tora)
+            .toda(this.toda)
+            .asda(this.asda)
+            .lda(this.lda)
+            .ils(this.ils)
+            .categoriaIls(this.categoriaIls)
+            .papi(this.papi)
+            .luzesBorda(this.luzesBorda)
+            .luzesCentro(this.luzesCentro)
+            .observacoes(this.observacoes);
+    }
+    
+    // Getters
+    public String getDesignacao() { return designacao; }
+    public Double getComprimentoMetros() { return comprimentoMetros; }
+    public Double getLarguraMetros() { return larguraMetros; }
+    public String getSuperficie() { return superficie; }
+    public Integer getResistenciaPcn() { return resistenciaPcn; }
+    public String getClassificacaoPcn() { return classificacaoPcn; }
+    public Integer getTora() { return tora; }
+    public Integer getToda() { return toda; }
+    public Integer getAsda() { return asda; }
+    public Integer getLda() { return lda; }
+    public boolean isIls() { return ils; }
+    public String getCategoriaIls() { return categoriaIls; }
+    public String getPapi() { return papi; }
+    public String getLuzesBorda() { return luzesBorda; }
+    public String getLuzesCentro() { return luzesCentro; }
+    public String getObservacoes() { return observacoes; }
+    
+    // Setters for mutable fields
+    public void setObservacoes(String observacoes) { 
+        this.observacoes = observacoes; 
     }
 
     @Override
@@ -99,7 +167,8 @@ public class Pista {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Pista pista = (Pista) o;
-        return Objects.equals(designacao, pista.designacao) &&
+        return ils == pista.ils &&
+                Objects.equals(designacao, pista.designacao) &&
                 Objects.equals(comprimentoMetros, pista.comprimentoMetros) &&
                 Objects.equals(larguraMetros, pista.larguraMetros) &&
                 Objects.equals(superficie, pista.superficie) &&
@@ -109,7 +178,6 @@ public class Pista {
                 Objects.equals(toda, pista.toda) &&
                 Objects.equals(asda, pista.asda) &&
                 Objects.equals(lda, pista.lda) &&
-                Objects.equals(ils, pista.ils) &&
                 Objects.equals(categoriaIls, pista.categoriaIls) &&
                 Objects.equals(papi, pista.papi) &&
                 Objects.equals(luzesBorda, pista.luzesBorda) &&
@@ -119,136 +187,30 @@ public class Pista {
 
     @Override
     public int hashCode() {
-        return Objects.hash(designacao, comprimentoMetros, larguraMetros, superficie, resistenciaPcn, 
-                classificacaoPcn, tora, toda, asda, lda, ils, categoriaIls, papi, luzesBorda, luzesCentro, observacoes);
+        return Objects.hash(designacao, comprimentoMetros, larguraMetros, superficie,
+                resistenciaPcn, classificacaoPcn, tora, toda, asda, lda, ils,
+                categoriaIls, papi, luzesBorda, luzesCentro, observacoes);
     }
 
-    // Getters and Setters
-    public String getDesignacao() {
-        return designacao;
-    }
-
-    public void setDesignacao(String designacao) {
-        this.designacao = designacao;
-    }
-
-    public Double getComprimentoMetros() {
-        return comprimentoMetros;
-    }
-
-    public void setComprimentoMetros(Double comprimentoMetros) {
-        this.comprimentoMetros = comprimentoMetros;
-    }
-
-    public Double getLarguraMetros() {
-        return larguraMetros;
-    }
-
-    public void setLarguraMetros(Double larguraMetros) {
-        this.larguraMetros = larguraMetros;
-    }
-
-    public String getSuperficie() {
-        return superficie;
-    }
-
-    public void setSuperficie(String superficie) {
-        this.superficie = superficie;
-    }
-
-    public Integer getResistenciaPcn() {
-        return resistenciaPcn;
-    }
-
-    public void setResistenciaPcn(Integer resistenciaPcn) {
-        this.resistenciaPcn = resistenciaPcn;
-    }
-
-    public String getClassificacaoPcn() {
-        return classificacaoPcn;
-    }
-
-    public void setClassificacaoPcn(String classificacaoPcn) {
-        this.classificacaoPcn = classificacaoPcn;
-    }
-
-    public Integer getTora() {
-        return tora;
-    }
-
-    public void setTora(Integer tora) {
-        this.tora = tora;
-    }
-
-    public Integer getToda() {
-        return toda;
-    }
-
-    public void setToda(Integer toda) {
-        this.toda = toda;
-    }
-
-    public Integer getAsda() {
-        return asda;
-    }
-
-    public void setAsda(Integer asda) {
-        this.asda = asda;
-    }
-
-    public Integer getLda() {
-        return lda;
-    }
-
-    public void setLda(Integer lda) {
-        this.lda = lda;
-    }
-
-    public boolean isIls() {
-        return ils;
-    }
-
-    public void setIls(boolean ils) {
-        this.ils = ils;
-    }
-
-    public String getCategoriaIls() {
-        return categoriaIls;
-    }
-
-    public void setCategoriaIls(String categoriaIls) {
-        this.categoriaIls = categoriaIls;
-    }
-
-    public String getPapi() {
-        return papi;
-    }
-
-    public void setPapi(String papi) {
-        this.papi = papi;
-    }
-
-    public String getLuzesBorda() {
-        return luzesBorda;
-    }
-
-    public void setLuzesBorda(String luzesBorda) {
-        this.luzesBorda = luzesBorda;
-    }
-
-    public String getLuzesCentro() {
-        return luzesCentro;
-    }
-
-    public void setLuzesCentro(String luzesCentro) {
-        this.luzesCentro = luzesCentro;
-    }
-
-    public String getObservacoes() {
-        return observacoes;
-    }
-
-    public void setObservacoes(String observacoes) {
-        this.observacoes = observacoes;
+    @Override
+    public String toString() {
+        return "Pista{" +
+                "designacao='" + designacao + '\'' +
+                ", comprimentoMetros=" + comprimentoMetros +
+                ", larguraMetros=" + larguraMetros +
+                ", superficie='" + superficie + '\'' +
+                ", resistenciaPcn=" + resistenciaPcn +
+                ", classificacaoPcn='" + classificacaoPcn + '\'' +
+                ", tora=" + tora +
+                ", toda=" + toda +
+                ", asda=" + asda +
+                ", lda=" + lda +
+                ", ils=" + ils +
+                ", categoriaIls='" + categoriaIls + '\'' +
+                ", papi='" + papi + '\'' +
+                ", luzesBorda='" + luzesBorda + '\'' +
+                ", luzesCentro='" + luzesCentro + '\'' +
+                ", observacoes='" + observacoes + '\'' +
+                '}';
     }
 }

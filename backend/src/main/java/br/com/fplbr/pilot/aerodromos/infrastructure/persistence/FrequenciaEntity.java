@@ -1,21 +1,28 @@
-package br.com.fplbr.pilot.aerodromos.infrastructure.persistence;
+﻿package br.com.fplbr.pilot.aerodromos.infrastructure.persistence;
 
 import br.com.fplbr.pilot.aerodromos.domain.model.Frequencia;
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 /**
- * Entidade JPA que representa uma frequência de rádio de aeródromo no banco de dados.
+ * Entidade JPA que representa uma frequÃƒÂªncia de rÃƒÂ¡dio de aerÃƒÂ³dromo no banco de dados.
  */
 @Entity
 @Table(name = "frequencias")
-@Data
+@Getter
+@Setter
+@ToString
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(callSuper = false)
 public class FrequenciaEntity extends PanacheEntityBase {
 
     @Id
@@ -43,24 +50,24 @@ public class FrequenciaEntity extends PanacheEntityBase {
     private String observacoes;
 
     /**
-     * Enumeração para os tipos de frequência.
-     * Mantido aqui para mapeamento JPA, já que não podemos usar diretamente o enum do domínio.
+     * EnumeraÃƒÂ§ÃƒÂ£o para os tipos de frequÃƒÂªncia.
+     * Mantido aqui para mapeamento JPA, jÃƒÂ¡ que nÃƒÂ£o podemos usar diretamente o enum do domÃƒÂ­nio.
      */
     public enum TipoFrequencia {
         TWR,    // Torre de Controle
         GND,    // Solo
         ATIS,   // ATIS
-        APCH,   // Aproximação
+        APCH,   // AproximaÃƒÂ§ÃƒÂ£o
         DEP,    // Partida
-        RADIO,  // Rádio
+        RADIO,  // RÃƒÂ¡dio
         OPR,    // Operadora
         RMP,    // Rampa
-        TMA,    // Área Terminal
-        INFO    // Informações
+        TMA,    // ÃƒÂrea Terminal
+        INFO    // InformaÃƒÂ§ÃƒÂµes
     }
 
     /**
-     * Converte esta entidade para o domínio Frequencia.
+     * Converte esta entidade para o domÃƒÂ­nio Frequencia.
      */
     public Frequencia toDomain() {
         Frequencia.TipoFrequencia tipoFrequencia = null;
@@ -68,7 +75,7 @@ public class FrequenciaEntity extends PanacheEntityBase {
             try {
                 tipoFrequencia = Frequencia.TipoFrequencia.valueOf(this.tipo.name());
             } catch (IllegalArgumentException e) {
-                // Se o tipo não for encontrado, mantém como null
+                // Se o tipo nÃƒÂ£o for encontrado, mantÃƒÂ©m como null
             }
         }
         
@@ -82,11 +89,11 @@ public class FrequenciaEntity extends PanacheEntityBase {
     }
 
     /**
-     * Cria uma nova entidade a partir de um domínio Frequencia.
+     * Cria uma nova entidade a partir de um domÃƒÂ­nio Frequencia.
      *
-     * @param frequencia O objeto de domínio Frequencia
+     * @param frequencia O objeto de domÃƒÂ­nio Frequencia
      * @param aerodromo A entidade AerodromoEntity relacionada
-     * @return Uma nova instância de FrequenciaEntity
+     * @return Uma nova instÃƒÂ¢ncia de FrequenciaEntity
      */
     public static FrequenciaEntity fromDomain(Frequencia frequencia, AerodromoEntity aerodromo) {
         if (frequencia == null) {
@@ -98,7 +105,7 @@ public class FrequenciaEntity extends PanacheEntityBase {
             try {
                 tipo = TipoFrequencia.valueOf(frequencia.getTipo().name());
             } catch (IllegalArgumentException e) {
-                // Se o tipo não for encontrado, mantém como null
+                // Se o tipo nÃƒÂ£o for encontrado, mantÃƒÂ©m como null
             }
         }
 

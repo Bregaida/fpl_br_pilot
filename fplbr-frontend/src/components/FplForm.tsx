@@ -1,60 +1,60 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
+﻿import { useState, useCallback, useRef } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import { FplForm, FplMode } from '@/types';
-import { composeFpl } from '@/services/fpl';
+import type { FplForm, FplMode } from '@/types';
+// import { composeFpl } from '@/services/fpl'; // Temporarily commented out as it's not being used
 
 // Validation schema for the form
 const formSchema = yup.object().shape({
-  modo: yup.mixed<FplMode>().oneOf(['PVC', 'PVS']).required('Modo é obrigatório'),
+  modo: yup.mixed<FplMode>().oneOf(['PVC', 'PVS']).required('Modo Ã© obrigatÃ³rio'),
   item7: yup.object().shape({
-    identificacaoAeronave: yup.string().required('Identificação da aeronave é obrigatória'),
+    identificacaoAeronave: yup.string().required('IdentificaÃ§Ã£o da aeronave Ã© obrigatÃ³ria'),
     indicativoChamada: yup.boolean(),
   }),
   item8: yup.object().shape({
-    regrasVoo: yup.string().oneOf(['IFR', 'VFR', 'Y', 'Z']).required('Regra de voo é obrigatória'),
-    tipoVoo: yup.string().oneOf(['G', 'S', 'N', 'M', 'X']).required('Tipo de voo é obrigatório'),
+    regrasVoo: yup.string().oneOf(['IFR', 'VFR', 'Y', 'Z']).required('Regra de voo Ã© obrigatÃ³ria'),
+    tipoVoo: yup.string().oneOf(['G', 'S', 'N', 'M', 'X']).required('Tipo de voo Ã© obrigatÃ³rio'),
   }),
   item9: yup.object().shape({
-    numero: yup.number().positive('Número deve ser positivo').integer('Número deve ser inteiro'),
-    tipoAeronave: yup.string().required('Tipo de aeronave é obrigatório'),
-    catTurbulencia: yup.string().oneOf(['L', 'M', 'H', 'J']).required('Categoria de turbulência é obrigatória'),
+    numero: yup.number().positive('NÃºmero deve ser positivo').integer('NÃºmero deve ser inteiro'),
+    tipoAeronave: yup.string().required('Tipo de aeronave Ã© obrigatÃ³rio'),
+    catTurbulencia: yup.string().oneOf(['L', 'M', 'H', 'J']).required('Categoria de turbulÃªncia Ã© obrigatÃ³ria'),
   }),
   item10A: yup.object(),
   item10B: yup.object(),
   item13: yup.object().shape({
-    aerodromoPartida: yup.string().matches(/^[A-Z]{4}$/, 'Código ICAO inválido').required('Aeródromo de partida é obrigatório'),
-    hora: yup.string().matches(/^\d{4}$/, 'Hora inválida (HHMM)').required('Hora é obrigatória'),
+    aerodromoPartida: yup.string().matches(/^[A-Z]{4}$/, 'CÃ³digo ICAO invÃ¡lido').required('AerÃ³dromo de partida Ã© obrigatÃ³rio'),
+    hora: yup.string().matches(/^\d{4}$/, 'Hora invÃ¡lida (HHMM)').required('Hora Ã© obrigatÃ³ria'),
   }),
   item15: yup.object().shape({
-    velocidadeCruzeiro: yup.string().matches(/^N\d{4}$/, 'Formato inválido (ex: N0120)').required('Velocidade é obrigatória'),
-    nivel: yup.string().matches(/^F\d{3}$/, 'Nível inválido (ex: F080)').required('Nível é obrigatório'),
-    rota: yup.string().required('Rota é obrigatória'),
+    velocidadeCruzeiro: yup.string().matches(/^N\d{4}$/, 'Formato invÃ¡lido (ex: N0120)').required('Velocidade Ã© obrigatÃ³ria'),
+    nivel: yup.string().matches(/^F\d{3}$/, 'NÃ­vel invÃ¡lido (ex: F080)').required('NÃ­vel Ã© obrigatÃ³rio'),
+    rota: yup.string().required('Rota Ã© obrigatÃ³ria'),
   }),
   item16: yup.object().shape({
-    aerodromoDestino: yup.string().matches(/^[A-Z]{4}$/, 'Código ICAO inválido').required('Aeródromo de destino é obrigatório'),
-    eetTotal: yup.string().matches(/^\d{4}$/, 'Tempo total inválido (HHMM)').required('Tempo total é obrigatório'),
-    alternado1: yup.string().matches(/^[A-Z]{4}$|^$/, 'Código ICAO inválido'),
-    alternado2: yup.string().matches(/^[A-Z]{4}$|^$/, 'Código ICAO inválido'),
+    aerodromoDestino: yup.string().matches(/^[A-Z]{4}$/, 'CÃ³digo ICAO invÃ¡lido').required('AerÃ³dromo de destino Ã© obrigatÃ³rio'),
+    eetTotal: yup.string().matches(/^\d{4}$/, 'Tempo total invÃ¡lido (HHMM)').required('Tempo total Ã© obrigatÃ³rio'),
+    alternado1: yup.string().matches(/^[A-Z]{4}$|^$/, 'CÃ³digo ICAO invÃ¡lido'),
+    alternado2: yup.string().matches(/^[A-Z]{4}$|^$/, 'CÃ³digo ICAO invÃ¡lido'),
   }),
   item18: yup.object().shape({
-    dof: yup.string().matches(/^\d{8}$/, 'Data inválida (YYYYMMDD)').required('Data do voo é obrigatória'),
+    dof: yup.string().matches(/^\d{8}$/, 'Data invÃ¡lida (YYYYMMDD)').required('Data do voo Ã© obrigatÃ³ria'),
     rmk: yup.string(),
   }),
   item19: yup.object().shape({
-    autonomia: yup.string().required('Autonomia é obrigatória'),
-    pob: yup.number().required('POB é obrigatório'),
+    autonomia: yup.string().required('Autonomia Ã© obrigatÃ³ria'),
+    pob: yup.number().required('POB Ã© obrigatÃ³rio'),
     radioEmergencia: yup.object(),
     sobrevivencia: yup.object(),
     coletes: yup.object(),
     botes: yup.object(),
     infoAdicionais: yup.object({
-      corMarcaANV: yup.string().required('Cor/marcação é obrigatória'),
-      pilotoEmComando: yup.string().required('Piloto em comando é obrigatório'),
-      codAnac1: yup.string().required('Código ANAC 1 é obrigatório'),
+      corMarcaANV: yup.string().required('Cor/marcaÃ§Ã£o Ã© obrigatÃ³ria'),
+      pilotoEmComando: yup.string().required('Piloto em comando Ã© obrigatÃ³rio'),
+      codAnac1: yup.string().required('CÃ³digo ANAC 1 Ã© obrigatÃ³rio'),
       codAnac2: yup.string(),
-      telefone: yup.string().required('Telefone é obrigatório'),
+      telefone: yup.string().required('Telefone Ã© obrigatÃ³rio'),
     }),
   }),
 });
@@ -66,15 +66,16 @@ interface FplFormProps {
 
 export default function FplForm({ onCompose, isComposing }: FplFormProps) {
   const [mode, setMode] = useState<FplMode>('PVC');
-  const [showSobrevivencia, setShowSobrevivencia] = useState(false);
-  const [showColetes, setShowColetes] = useState(false);
-  const [showBotes, setShowBotes] = useState(false);
+  // State variables removed as they were not being used
   
   const { control, handleSubmit, watch, setValue, formState: { errors } } = useForm<FplForm>({
     resolver: yupResolver(formSchema),
     defaultValues: {
       modo: 'PVC',
-      item7: { identificacaoAeronave: '', indicativoChamada: false },
+      item7: {
+        identificacaoAeronave: '',
+        indicativoChamada: false,
+      },
       item8: { regrasVoo: 'IFR', tipoVoo: 'N' },
       item9: { tipoAeronave: '', catTurbulencia: 'L' },
       item10A: {},
@@ -100,23 +101,7 @@ export default function FplForm({ onCompose, isComposing }: FplFormProps) {
     },
   });
 
-  // Watch for changes in specific fields to update UI state
-  const sobrevivenciaS = watch('item19.sobrevivencia.S');
-  const sobrevivenciaJ = watch('item19.sobrevivencia.J');
-  const botesD = watch('item19.botes.D');
-
-  // Update UI state when watched fields change
-  useEffect(() => {
-    setShowSobrevivencia(!!sobrevivenciaS);
-  }, [sobrevivenciaS]);
-
-  useEffect(() => {
-    setShowColetes(!!sobrevivenciaJ);
-  }, [sobrevivenciaJ]);
-
-  useEffect(() => {
-    setShowBotes(!!botesD);
-  }, [botesD]);
+  // Watched fields removed as they were not being used
 
   // Handle form submission with debounce
   const debounceTimeout = useRef<ReturnType<typeof setTimeout>>();
@@ -157,13 +142,13 @@ export default function FplForm({ onCompose, isComposing }: FplFormProps) {
       </div>
 
       <form onChange={handleFormChange} className="space-y-6">
-        {/* Item 7: Identificação da Aeronave */}
+        {/* Item 7: IdentificaÃ§Ã£o da Aeronave */}
         <div className="bg-white p-4 rounded-lg shadow">
-          <h3 className="text-lg font-semibold mb-4">7. Identificação da Aeronave</h3>
+          <h3 className="text-lg font-semibold mb-4">7. IdentificaÃ§Ã£o da Aeronave</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700">
-                Marcação/Matrícula
+                MarcaÃ§Ã£o/MatrÃ­cula
               </label>
               <Controller
                 name="item7.identificacaoAeronave"
@@ -187,14 +172,14 @@ export default function FplForm({ onCompose, isComposing }: FplFormProps) {
               <Controller
                 name="item7.indicativoChamada"
                 control={control}
-                render={({ field }) => (
+                render={({ field: { value, ...field } }) => (
                   <div className="flex items-center">
                     <input
                       {...field}
                       type="checkbox"
                       id="indicativoChamada"
                       className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-                      checked={!!field.value}
+                      checked={!!value}
                       onChange={(e) => field.onChange(e.target.checked)}
                     />
                     <label htmlFor="indicativoChamada" className="ml-2 block text-sm text-gray-700">

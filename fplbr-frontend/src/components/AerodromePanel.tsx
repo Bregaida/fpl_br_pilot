@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { SunIcon, MapIcon, ClockIcon as ClockIconOutline } from '@heroicons/react/24/outline';
+﻿import { useState } from 'react';
+import { SunIcon } from '@heroicons/react/24/outline';
 import type { AerodromoInfo } from '@/types';
 
 type ChartType = 'TODAS' | 'VAC' | 'IAC' | 'SID' | 'STAR' | 'ROTA';
@@ -31,7 +31,7 @@ export default function AerodromePanel({ aerodrome, title, isLoading = false }: 
       <div className="bg-white rounded-lg shadow p-4">
         <h3 className="text-lg font-semibold mb-4">{title}</h3>
         <div className="text-gray-500 text-center py-8">
-          <p>Nenhum aeródromo selecionado</p>
+          <p>Nenhum aerÃ³dromo selecionado</p>
         </div>
       </div>
     );
@@ -53,9 +53,9 @@ export default function AerodromePanel({ aerodrome, title, isLoading = false }: 
           </h3>
           {coord && (
             <span className="text-sm text-gray-500">
-              {coord.lat > 0 ? 'N' : 'S'} {Math.abs(coord.lat).toFixed(4)}° 
-              {coord.lon > 0 ? 'E' : 'W'} {Math.abs(coord.lon).toFixed(4)}°
-              {elev !== undefined && ` • ${elev}ft`}
+              {coord.lat > 0 ? 'N' : 'S'} {Math.abs(coord.lat).toFixed(4)}Â° 
+              {coord.lon > 0 ? 'E' : 'W'} {Math.abs(coord.lon).toFixed(4)}Â°
+              {elev !== undefined && ` â€¢ ${elev}ft`}
             </span>
           )}
         </div>
@@ -64,22 +64,13 @@ export default function AerodromePanel({ aerodrome, title, isLoading = false }: 
       {/* Sunrise/Sunset Information */}
       {sun && (
         <div className="p-4 border-b border-gray-100 bg-blue-50">
-          <div className="flex items-center space-x-2 text-sm">
-            <SunIcon className="h-5 w-5 text-yellow-500" />
-            <div className="flex-1">
-              <div className="flex justify-between">
-                <span className="text-gray-600">Nascer do sol:</span>
-                <span className="font-medium">{sun.sunrise}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-600">Pôr do sol:</span>
-                <span className="font-medium">{sun.sunset}</span>
-              </div>
-            </div>
-            {sun.fonte && (
-              <span className="text-xs text-gray-400">Fonte: {sun.fonte}</span>
-            )}
+          <div className="flex items-center text-sm text-gray-500">
+            <SunIcon className="h-4 w-4 mr-1 text-gray-400" />
+            {sun.sunset}
           </div>
+          {sun.fonte && (
+            <div className="mt-1 text-xs text-gray-400">Fonte: {sun.fonte}</div>
+          )}
         </div>
       )}
       
@@ -116,7 +107,7 @@ export default function AerodromePanel({ aerodrome, title, isLoading = false }: 
                       {carta.tipo}
                     </span>
                     {carta.versao && (
-                      <span className="ml-2">Versão: {carta.versao}</span>
+                      <span className="ml-2">VersÃ£o: {carta.versao}</span>
                     )}
                   </div>
                 </div>
@@ -126,7 +117,7 @@ export default function AerodromePanel({ aerodrome, title, isLoading = false }: 
                   rel="noopener noreferrer"
                   className="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md text-blue-700 bg-blue-100 hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                 >
-                  <MapIcon className="h-4 w-4 mr-1" />
+                  <SunIcon className="h-4 w-4 mr-1 text-gray-400" />
                   Abrir Carta
                 </a>
               </div>

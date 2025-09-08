@@ -1,4 +1,4 @@
-{
+﻿{
   "name": "fplbr-frontend",
   "private": true,
   "version": "0.1.0",
@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0"
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "test": "vitest run --coverage"
   },
   "dependencies": {
     "@heroicons/react": "^2.1.1",
@@ -33,6 +34,12 @@
     "tailwindcss": "^3.4.1",
     "typescript": "^5.3.3",
     "typescript-eslint": "^8.39.1",
-    "vite": "^5.1.4"
+    "vite": "^5.1.4",
+    "vitest": "^1.6.0",
+    "@testing-library/react": "^14.3.1",
+    "@testing-library/user-event": "^14.5.2",
+    "@testing-library/jest-dom": "^6.4.8",
+    "jsdom": "^24.0.0",
+    "c8": "^9.1.0"
   }
 }

@@ -1,0 +1,35 @@
+﻿version: '3.8'
+
+services:
+  bff:
+    build: 
+      context: ./bff
+      dockerfile: Dockerfile
+    ports:
+      - "3001:3001"
+    environment:
+      - PORT=3001
+      - NODE_ENV=development
+      - MOCK_MODE=true
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3001/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+  web:
+    build:
+      context: ./fplbr-frontend
+      dockerfile: Dockerfile
+      args:
+        - VITE_BFF_URL=/api
+    container_name: fplbr-web
+    ports:
+      - "8088:80"
+    environment:
+      - VITE_BFF_URL=/api
+    depends_on:
+      - bff
+    restart: unless-stopped
