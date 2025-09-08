@@ -1,4 +1,4 @@
-﻿package br.com.fplbr.pilot.aerodromos.domain.model;
+package br.com.fplbr.pilot.aerodromos.domain.model;
 
 import java.util.Objects;
 

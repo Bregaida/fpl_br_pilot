@@ -1,4 +1,4 @@
-﻿package br.com.fplbr.pilot.aerodromos.application.dto;
+package br.com.fplbr.pilot.aerodromos.application.dto;
 
 import java.time.LocalDate;
 import lombok.AllArgsConstructor;

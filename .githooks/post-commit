@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+set -euo pipefail
+branch="$(git rev-parse --abbrev-ref HEAD)"
+echo "[post-commit] push automático -> origin/${branch}"
+git push -u origin "${branch}" || true
+
+

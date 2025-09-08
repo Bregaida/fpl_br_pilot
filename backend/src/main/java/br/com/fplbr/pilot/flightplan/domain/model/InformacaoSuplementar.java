@@ -1,4 +1,4 @@
-﻿package br.com.fplbr.pilot.flightplan.domain.model;
+package br.com.fplbr.pilot.flightplan.domain.model;
 
 import jakarta.persistence.Embeddable;
 
@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 
 @Embeddable
 public class InformacaoSuplementar {
-    private LocalDateTime autonimia; //Aqui devo colocar HH:mm
+    private LocalDateTime autonomia; //HH:mm
     private Long pessoasABordo;
     private EquipamentoEmergeciaSobrevivencia equipamentoEmergeciaSobrevivencia;
     private String corMarcaAeronave;
@@ -18,11 +18,11 @@ public class InformacaoSuplementar {
     private Long telefone;
 
     /**
-     * Verifica se todas as informaÃƒÂ§ÃƒÂµes suplementares estÃƒÂ£o em branco (nulas ou vazias).
-     * @return true se todas as informaÃƒÂ§ÃƒÂµes estiverem em branco, false caso contrÃƒÂ¡rio
+     * Verifica se todas as informações suplementares estão em branco (nulas ou vazias).
+     * @return true se todas as informações estiverem em branco, false caso contrário
      */
     public boolean isBlank() {
-        return autonimia == null &&
+        return autonomia == null &&
                pessoasABordo == null &&
                equipamentoEmergeciaSobrevivencia == null &&
                (corMarcaAeronave == null || corMarcaAeronave.trim().isEmpty()) &&

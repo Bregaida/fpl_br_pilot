@@ -1,3 +1,27 @@
+## Objetivo
+Descreva o que este PR entrega.
+
+## Mudanças
+- [ ] Backend
+- [ ] Frontend
+- [ ] Infra/Docs
+
+## Testes
+- [ ] Unit
+- [ ] Integration
+- [ ] Cobertura atualizada
+
+## Como validar
+Passos curtos e objetivos para QA.
+
+## Checklist
+- [ ] Build verde (GH Actions)
+- [ ] Make targets rodam (init/fmt/lint/test)
+- [ ] URLs testadas (back e front)
+
+## Screenshots/Logs
+(opcional)
+
 ## Descrição
 Explique o que foi feito e por quê. Contexto, motivação e escopo.
 
