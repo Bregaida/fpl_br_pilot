@@ -1,4 +1,4 @@
-﻿package br.com.fplbr.pilot.aerodromos.ports.out;
+package br.com.fplbr.pilot.aerodromos.ports.out;
 
 import br.com.fplbr.pilot.aerodromos.application.dto.CartaAerodromoDTO;
 import java.util.List;

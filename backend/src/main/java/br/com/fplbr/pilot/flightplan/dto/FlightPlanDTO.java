@@ -1,4 +1,4 @@
-﻿package br.com.fplbr.pilot.flightplan.infrastructure.web.dto;
+package br.com.fplbr.pilot.flightplan.infrastructure.web.dto;
 
 import br.com.fplbr.pilot.flightplan.domain.model.*;
 import jakarta.validation.Valid;

@@ -1,4 +1,4 @@
-﻿package br.com.fplbr.pilot.flightplan.domain.model;
+package br.com.fplbr.pilot.flightplan.domain.model;
 
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import br.com.fplbr.pilot.flightplan.validation.ValidFlightPlan;

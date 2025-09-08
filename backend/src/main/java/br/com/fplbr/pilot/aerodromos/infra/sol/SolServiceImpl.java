@@ -1,4 +1,4 @@
-﻿package br.com.fplbr.pilot.aerodromos.infra.sol;
+package br.com.fplbr.pilot.aerodromos.infra.sol;
 
 import br.com.fplbr.pilot.aerodromos.ports.in.SolServicePort;
 import jakarta.enterprise.context.ApplicationScoped;

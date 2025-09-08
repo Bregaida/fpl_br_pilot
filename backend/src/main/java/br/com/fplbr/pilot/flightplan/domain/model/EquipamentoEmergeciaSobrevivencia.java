@@ -1,4 +1,4 @@
-﻿package br.com.fplbr.pilot.flightplan.domain.model;
+package br.com.fplbr.pilot.flightplan.domain.model;
 
 import br.com.fplbr.pilot.flightplan.domain.model.Coletes19JSubEnum;
 import br.com.fplbr.pilot.flightplan.domain.model.EmergenciaRadio19Enum;
