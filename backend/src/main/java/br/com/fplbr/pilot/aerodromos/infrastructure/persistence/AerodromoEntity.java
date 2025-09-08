@@ -1,4 +1,4 @@
-﻿package br.com.fplbr.pilot.aerodromos.infrastructure.persistence;
+package br.com.fplbr.pilot.aerodromos.infrastructure.persistence;
 
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import jakarta.persistence.*;

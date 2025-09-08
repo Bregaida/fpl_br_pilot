@@ -1,4 +1,4 @@
-﻿package br.com.fplbr.pilot.aerodromos.util;
+package br.com.fplbr.pilot.aerodromos.util;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import java.util.Arrays;

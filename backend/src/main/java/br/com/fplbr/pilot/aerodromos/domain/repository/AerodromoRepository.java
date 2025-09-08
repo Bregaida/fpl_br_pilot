@@ -1,4 +1,4 @@
-﻿package br.com.fplbr.pilot.aerodromos.domain.repository;
+package br.com.fplbr.pilot.aerodromos.domain.repository;
 
 import br.com.fplbr.pilot.aerodromos.domain.model.Aerodromo;
 

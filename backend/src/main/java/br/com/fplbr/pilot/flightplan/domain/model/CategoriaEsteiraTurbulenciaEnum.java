@@ -1,4 +1,4 @@
-﻿package br.com.fplbr.pilot.flightplan.domain.model;
+package br.com.fplbr.pilot.flightplan.domain.model;
 
 public enum CategoriaEsteiraTurbulenciaEnum {
     LEVE(1, "L", "Leve"),

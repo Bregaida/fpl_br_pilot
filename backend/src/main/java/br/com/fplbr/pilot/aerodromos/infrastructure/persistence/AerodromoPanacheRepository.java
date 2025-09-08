@@ -1,4 +1,4 @@
-﻿package br.com.fplbr.pilot.aerodromos.infrastructure.persistence;
+package br.com.fplbr.pilot.aerodromos.infrastructure.persistence;
 
 import br.com.fplbr.pilot.aerodromos.domain.model.Aerodromo;
 import br.com.fplbr.pilot.aerodromos.domain.model.Pista;

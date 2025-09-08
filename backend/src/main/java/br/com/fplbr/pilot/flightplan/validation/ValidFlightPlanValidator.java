@@ -1,4 +1,4 @@
-﻿package br.com.fplbr.pilot.flightplan.validation;
+package br.com.fplbr.pilot.flightplan.validation;
 
 import br.com.fplbr.pilot.flightplan.domain.model.FlightPlan;
 import br.com.fplbr.pilot.aerodromos.util.AerodromoUtil;

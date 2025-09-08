@@ -1,4 +1,4 @@
-﻿package br.com.fplbr.pilot.flightplan.domain.model;
+package br.com.fplbr.pilot.flightplan.domain.model;
 public enum TipoDeVooEnum {
     GERAL(1, "G", "Geral"),
     SERVICOS_REGULARES(2, "S", "ServiÃƒÂ§os regulares"),

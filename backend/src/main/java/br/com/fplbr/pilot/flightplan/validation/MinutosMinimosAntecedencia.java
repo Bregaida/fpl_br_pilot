@@ -1,4 +1,4 @@
-﻿package br.com.fplbr.pilot.flightplan.validation;
+package br.com.fplbr.pilot.flightplan.validation;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;

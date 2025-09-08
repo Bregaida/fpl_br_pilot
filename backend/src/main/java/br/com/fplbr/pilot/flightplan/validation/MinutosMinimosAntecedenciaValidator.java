@@ -1,4 +1,4 @@
-﻿package br.com.fplbr.pilot.flightplan.validation;
+package br.com.fplbr.pilot.flightplan.validation;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.validation.ConstraintValidator;

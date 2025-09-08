@@ -1,4 +1,4 @@
-﻿package br.com.fplbr.pilot.aerodromos.application.dto;
+package br.com.fplbr.pilot.aerodromos.application.dto;
 
 import io.quarkus.runtime.annotations.RegisterForReflection;
 import java.util.Objects;

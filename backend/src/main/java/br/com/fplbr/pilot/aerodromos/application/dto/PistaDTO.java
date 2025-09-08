@@ -1,4 +1,4 @@
-﻿package br.com.fplbr.pilot.aerodromos.application.dto;
+package br.com.fplbr.pilot.aerodromos.application.dto;
 
 import br.com.fplbr.pilot.aerodromos.domain.model.Pista;
 import java.util.Objects;
