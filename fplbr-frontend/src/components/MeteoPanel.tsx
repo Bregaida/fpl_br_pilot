@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { CloudIcon, SunIcon, ArrowPathIcon, ExclamationTriangleIcon } from '@heroicons/react/24/outline';
+﻿import { useState } from 'react';
+import { CloudIcon, ExclamationTriangleIcon } from '@heroicons/react/24/outline'; // Removed unused SunIcon and ArrowPathIcon
 
 type MeteoData = {
   raw: {
@@ -24,8 +24,6 @@ export default function MeteoPanel({ meteoData, aerodromes, isLoading = false }:
     aerodromes.length > 0 ? aerodromes[0].icao : ''
   );
   const [activeTab, setActiveTab] = useState<'raw' | 'decoded'>('raw');
-  const [isRefreshing] = useState(false);
-  const [showSunTimes] = useState(false);
 
   if (isLoading) {
     return (
@@ -43,7 +41,7 @@ export default function MeteoPanel({ meteoData, aerodromes, isLoading = false }:
     return (
       <div className="bg-white rounded-lg shadow p-4">
         <div className="text-center py-4 text-gray-500">
-          <p>Nenhum aeródromo selecionado</p>
+          <p>Nenhum aerÃ³dromo selecionado</p>
         </div>
       </div>
     );
@@ -54,7 +52,7 @@ export default function MeteoPanel({ meteoData, aerodromes, isLoading = false }:
   const updatedAt = data?.raw?.updatedAt ? new Date(data.raw.updatedAt) : null;
 
   const renderMetar = () => {
-    if (!data) return <p className="text-gray-500 italic">Dados meteorológicos não disponíveis</p>;
+    if (!data) return <p className="text-gray-500 italic">Dados meteorolÃ³gicos nÃ£o disponÃ­veis</p>;
     
     if (activeTab === 'raw') {
       return (
@@ -62,13 +60,13 @@ export default function MeteoPanel({ meteoData, aerodromes, isLoading = false }:
           <div>
             <h4 className="font-medium text-gray-700 mb-1">METAR</h4>
             <pre className="bg-gray-50 p-3 rounded text-sm font-mono whitespace-pre-wrap">
-              {data.raw.metar || 'Nenhum METAR disponível'}
+              {data.raw.metar || 'Nenhum METAR disponÃ­vel'}
             </pre>
           </div>
           <div>
             <h4 className="font-medium text-gray-700 mb-1">TAF</h4>
             <pre className="bg-gray-50 p-3 rounded text-sm font-mono whitespace-pre-wrap">
-              {data.raw.taf || 'Nenhum TAF disponível'}
+              {data.raw.taf || 'Nenhum TAF disponÃ­vel'}
             </pre>
           </div>
         </div>
@@ -85,7 +83,7 @@ export default function MeteoPanel({ meteoData, aerodromes, isLoading = false }:
                 </pre>
               </div>
             ) : (
-              <p className="text-gray-500 italic">Não foi possível decodificar o METAR</p>
+              <p className="text-gray-500 italic">NÃ£o foi possÃ­vel decodificar o METAR</p>
             )}
           </div>
           <div>
@@ -97,7 +95,7 @@ export default function MeteoPanel({ meteoData, aerodromes, isLoading = false }:
                 </pre>
               </div>
             ) : (
-              <p className="text-gray-500 italic">Não foi possível decodificar o TAF</p>
+              <p className="text-gray-500 italic">NÃ£o foi possÃ­vel decodificar o TAF</p>
             )}
           </div>
         </div>
@@ -112,7 +110,7 @@ export default function MeteoPanel({ meteoData, aerodromes, isLoading = false }:
           <h3 className="text-lg font-semibold">Meteorologia</h3>
           {updatedAt && (
             <div className="flex items-center text-sm text-gray-500">
-              <ClockIconOutline className="h-4 w-4 mr-1" />
+              <CloudIcon className="h-4 w-4 mr-1 text-yellow-400" />
               Atualizado: {updatedAt.toLocaleTimeString()}
             </div>
           )}
@@ -175,9 +173,9 @@ export default function MeteoPanel({ meteoData, aerodromes, isLoading = false }:
         ) : (
           <div className="text-center py-6">
             <ExclamationTriangleIcon className="mx-auto h-12 w-12 text-gray-400" />
-            <h3 className="mt-2 text-sm font-medium text-gray-900">Dados não disponíveis</h3>
+            <h3 className="mt-2 text-sm font-medium text-gray-900">Dados nÃ£o disponÃ­veis</h3>
             <p className="mt-1 text-sm text-gray-500">
-              Não foi possível carregar as informações meteorológicas para {selectedAerodrome}.
+              NÃ£o foi possÃ­vel carregar as informaÃ§Ãµes meteorolÃ³gicas para {selectedAerodrome}.
             </p>
           </div>
         )}

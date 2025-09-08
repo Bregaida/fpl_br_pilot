@@ -1,4 +1,4 @@
-package br.com.fplbr.pilot.aerodromos.application.service;
+﻿package br.com.fplbr.pilot.aerodromos.application.service;
 
 import br.com.fplbr.pilot.aerodromos.application.dto.AerodromoBuscaDTO;
 import br.com.fplbr.pilot.aerodromos.application.dto.AerodromoDTO;
@@ -12,8 +12,8 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
- * Serviço de aplicação para operações relacionadas a aeródromos.
- * Coordena as operações de negócio e delega a persistência para o repositório.
+ * ServiÃƒÂ§o de aplicaÃƒÂ§ÃƒÂ£o para operaÃƒÂ§ÃƒÂµes relacionadas a aerÃƒÂ³dromos.
+ * Coordena as operaÃƒÂ§ÃƒÂµes de negÃƒÂ³cio e delega a persistÃƒÂªncia para o repositÃƒÂ³rio.
  */
 @ApplicationScoped
 public class AerodromoService {
@@ -22,23 +22,23 @@ public class AerodromoService {
     AerodromoRepository aerodromoRepository;
 
     /**
-     * Busca um aeródromo pelo seu código ICAO.
+     * Busca um aerÃƒÂ³dromo pelo seu cÃƒÂ³digo ICAO.
      *
-     * @param icao Código ICAO do aeródromo (4 letras)
-     * @return Um Optional contendo o aeródromo, se encontrado
+     * @param icao CÃƒÂ³digo ICAO do aerÃƒÂ³dromo (4 letras)
+     * @return Um Optional contendo o aerÃƒÂ³dromo, se encontrado
      */
     public Optional<Aerodromo> buscarPorIcao(String icao) {
         return aerodromoRepository.buscarPorIcao(icao.toUpperCase());
     }
 
     /**
-     * Busca aeródromos por termo de busca, que pode ser parte do nome, código ICAO, cidade ou estado.
+     * Busca aerÃƒÂ³dromos por termo de busca, que pode ser parte do nome, cÃƒÂ³digo ICAO, cidade ou estado.
      *
      * @param termo Termo de busca
      * @param uf Filtro opcional por UF
-     * @param pagina Número da página (começando em 0)
-     * @param tamanhoPagina Quantidade de itens por página
-     * @return Lista de aeródromos que correspondem aos critérios de busca
+     * @param pagina NÃƒÂºmero da pÃƒÂ¡gina (comeÃƒÂ§ando em 0)
+     * @param tamanhoPagina Quantidade de itens por pÃƒÂ¡gina
+     * @return Lista de aerÃƒÂ³dromos que correspondem aos critÃƒÂ©rios de busca
      */
     public List<AerodromoDTO> buscarAerodromos(String termo, String uf, int pagina, int tamanhoPagina) {
         List<Aerodromo> aerodromos = aerodromoRepository.buscar(
@@ -53,11 +53,11 @@ public class AerodromoService {
     }
 
     /**
-     * Conta quantos aeródromos correspondem aos critérios de busca.
+     * Conta quantos aerÃƒÂ³dromos correspondem aos critÃƒÂ©rios de busca.
      *
      * @param termo Termo de busca
      * @param uf Filtro opcional por UF
-     * @return Total de aeródromos encontrados
+     * @return Total de aerÃƒÂ³dromos encontrados
      */
     public long contarAerodromos(String termo, String uf) {
         return aerodromoRepository.contar(
@@ -67,13 +67,13 @@ public class AerodromoService {
     }
 
     /**
-     * Busca aeródromos para sugestões no formulário de plano de voo.
-     * @param termo Termo de busca (pode ser código ICAO, IATA, nome da cidade ou UF)
-     * @param limite Número máximo de resultados a retornar
-     * @return Lista de DTOs de aeródromos que correspondem ao critério de busca
+     * Busca aerÃƒÂ³dromos para sugestÃƒÂµes no formulÃƒÂ¡rio de plano de voo.
+     * @param termo Termo de busca (pode ser cÃƒÂ³digo ICAO, IATA, nome da cidade ou UF)
+     * @param limite NÃƒÂºmero mÃƒÂ¡ximo de resultados a retornar
+     * @return Lista de DTOs de aerÃƒÂ³dromos que correspondem ao critÃƒÂ©rio de busca
      */
     public List<AerodromoDTO> buscarSugestoesAerodromos(String termo, int limite) {
-        // Se o termo tem 3 ou 4 letras, pode ser um código ICAO ou IATA
+        // Se o termo tem 3 ou 4 letras, pode ser um cÃƒÂ³digo ICAO ou IATA
         if (termo != null && (termo.length() == 3 || termo.length() == 4)) {
             // Tenta buscar por ICAO exato
             if (termo.length() == 4) {
@@ -96,38 +96,41 @@ public class AerodromoService {
             }
         }
         
-        // Busca genérica por nome, cidade ou UF
+        // Busca genÃƒÂ©rica por nome, cidade ou UF
         return buscarAerodromos(termo, null, 0, limite);
     }
 
     /**
-     * Salva um novo aeródromo ou atualiza um existente.
+     * Salva um novo aerÃƒÂ³dromo ou atualiza um existente.
      *
-     * @param aerodromo Aeródromo a ser salvo/atualizado
-     * @return O aeródromo salvo/atualizado
-     * @throws IllegalArgumentException Se o aeródromo for nulo ou o código ICAO for inválido
+     * @param aerodromo AerÃƒÂ³dromo a ser salvo/atualizado
+     * @return O aerÃƒÂ³dromo salvo/atualizado
+     * @throws IllegalArgumentException Se o aerÃƒÂ³dromo for nulo ou o cÃƒÂ³digo ICAO for invÃƒÂ¡lido
      */
     @Transactional
     public Aerodromo salvarAerodromo(Aerodromo aerodromo) {
         if (aerodromo == null) {
-            throw new IllegalArgumentException("Aeródromo não pode ser nulo");
+            throw new IllegalArgumentException("AerÃƒÂ³dromo nÃƒÂ£o pode ser nulo");
         }
         
         if (aerodromo.getIcao() == null || aerodromo.getIcao().trim().length() != 4) {
-            throw new IllegalArgumentException("Código ICAO inválido. Deve conter 4 caracteres");
+            throw new IllegalArgumentException("CÃƒÂ³digo ICAO invÃƒÂ¡lido. Deve conter 4 caracteres");
         }
         
-        // Garante que o código ICAO esteja em maiúsculas
-        aerodromo.setIcao(aerodromo.getIcao().toUpperCase().trim());
+        // Garante que o cÃƒÂ³digo ICAO esteja em maiÃƒÂºsculas
+        // Ajuste: domÃƒÂ­nio usa campos imutÃƒÂ¡veis; recria com builder
+        aerodromo = aerodromo.toBuilder()
+                .icao(aerodromo.getIcao().toUpperCase().trim())
+                .build();
         
         return aerodromoRepository.salvar(aerodromo);
     }
 
     /**
-     * Remove um aeródromo pelo seu código ICAO.
+     * Remove um aerÃƒÂ³dromo pelo seu cÃƒÂ³digo ICAO.
      *
-     * @param icao Código ICAO do aeródromo a ser removido
-     * @return true se o aeródromo foi removido, false se não foi encontrado
+     * @param icao CÃƒÂ³digo ICAO do aerÃƒÂ³dromo a ser removido
+     * @return true se o aerÃƒÂ³dromo foi removido, false se nÃƒÂ£o foi encontrado
      */
     @Transactional
     public boolean removerAerodromo(String icao) {
@@ -143,10 +146,10 @@ public class AerodromoService {
     }
 
     /**
-     * Verifica se um aeródromo é terminal com base no código ICAO.
+     * Verifica se um aerÃƒÂ³dromo ÃƒÂ© terminal com base no cÃƒÂ³digo ICAO.
      *
-     * @param icao Código ICAO do aeródromo
-     * @return true se for um aeródromo terminal, false caso contrário
+     * @param icao CÃƒÂ³digo ICAO do aerÃƒÂ³dromo
+     * @return true se for um aerÃƒÂ³dromo terminal, false caso contrÃƒÂ¡rio
      */
     public boolean isAerodromoTerminal(String icao) {
         if (icao == null || icao.trim().length() != 4) {
@@ -159,12 +162,12 @@ public class AerodromoService {
     }
 
     /**
-     * Busca aeródromos que atendam a critérios específicos de pista.
+     * Busca aerÃƒÂ³dromos que atendam a critÃƒÂ©rios especÃƒÂ­ficos de pista.
      *
-     * @param comprimentoMinimo Comprimento mínimo da pista em metros
-     * @param superficie Tipo de superfície da pista (opcional)
+     * @param comprimentoMinimo Comprimento mÃƒÂ­nimo da pista em metros
+     * @param superficie Tipo de superfÃƒÂ­cie da pista (opcional)
      * @param possuiIls Se a pista deve ter ILS
-     * @return Lista de aeródromos que atendem aos critérios
+     * @return Lista de aerÃƒÂ³dromos que atendem aos critÃƒÂ©rios
      */
     public List<Aerodromo> buscarPorCaracteristicasPista(Double comprimentoMinimo, String superficie, Boolean possuiIls) {
         return aerodromoRepository.buscarPorCaracteristicasPista(comprimentoMinimo, superficie, possuiIls);

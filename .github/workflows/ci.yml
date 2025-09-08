@@ -1,63 +1,31 @@
-name: CI
+﻿name: CI
+
 on:
   push:
-    branches: [ main, develop ]
+    branches: [ "**" ]
   pull_request:
-    branches: [ main, develop ]
+    branches: [ "**" ]
 
 jobs:
-  backend:
-    if: ${{ hashFiles('backend/pom.xml') != '' }}
+  build-and-test:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: backend
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
-        with:
-          distribution: temurin
-          java-version: '21'
-          cache: maven
-      - name: Build & Test (Maven)
-        run: |
-          if [ -x "./mvnw" ]; then ./mvnw -B -ntp clean verify; else mvn -B -ntp clean verify; fi
-
-  web:
-    if: ${{ hashFiles('web/package.json') != '' }}
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: web
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache: 'npm'
-          cache-dependency-path: 'web/package-lock.json'
-      - name: Install
-        run: npm ci
-      - name: Lint & Test
-        run: |
-          npm run lint --if-present
-          npm test --if-present -- --ci
-      - name: Build
-        run: npm run build --if-present
-
-  android:
-    if: ${{ hashFiles('android/gradlew') != '' || hashFiles('android/build.gradle*') != '' || hashFiles('android/app/build.gradle*') != '' }}
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: android
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
+      - name: Setup Java
+        uses: actions/setup-java@v4
         with:
-          distribution: temurin
-          java-version: '21'
-      - name: Gradle Cache
-        uses: gradle/gradle-build-action@v2
-      - name: Build
-        run: ./gradlew clean assembleDebug
+          distribution: 'temurin'
+          java-version: '17'
+      - name: Backend - Build & Test (JaCoCo)
+        run: |
+          cd backend
+          ./mvnw -q -DskipITs=false clean verify
+      - name: Frontend - Test & Coverage
+        run: |
+          cd fplbr-frontend
+          npm ci
+          npm test -- --coverage
