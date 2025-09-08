@@ -11,7 +11,7 @@ type FakeFPL = {
 const MOCK: FakeFPL[] = [
   { id: 'FPL-0001', depAd: 'SBSP', destAd: 'SBJD', depTime: '1230', status: 'rascunho' },
   { id: 'FPL-0002', depAd: 'SBMT', destAd: 'SBJD', depTime: '1400', status: 'enviado' },
-]
+];
 
 export function FlightPlanList() {
   const [rows] = React.useState<FakeFPL[]>(MOCK)

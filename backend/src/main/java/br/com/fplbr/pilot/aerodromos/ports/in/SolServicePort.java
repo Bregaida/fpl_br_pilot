@@ -1,4 +1,4 @@
-﻿package br.com.fplbr.pilot.aerodromos.ports.in;
+package br.com.fplbr.pilot.aerodromos.ports.in;
 
 import java.time.LocalDate;
 

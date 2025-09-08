@@ -1,4 +1,4 @@
-﻿package br.com.fplbr.pilot.smoke;
+package br.com.fplbr.pilot.smoke;
 
 import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Test;

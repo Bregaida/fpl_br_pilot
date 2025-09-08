@@ -1,4 +1,4 @@
-﻿package br.com.fplbr.pilot.flightplan.domain.model;
+package br.com.fplbr.pilot.flightplan.domain.model;
 
 import jakarta.persistence.Embeddable;
 
@@ -19,7 +19,7 @@ public class EquipamentoCapacidadeDaAeronave {
     public static EquipamentoCapacidadeDaAeronaveBuilder builder() {
         return new EquipamentoCapacidadeDaAeronaveBuilder();
     }
-    
+
     public static class EquipamentoCapacidadeDaAeronaveBuilder {
         private boolean n;
         private boolean s;
@@ -64,7 +64,7 @@ public class EquipamentoCapacidadeDaAeronave {
         private boolean x;
         private boolean y;
         private boolean z;
-        
+
         // Builder methods for each field
         public EquipamentoCapacidadeDaAeronaveBuilder n(boolean n) { this.n = n; return this; }
         public EquipamentoCapacidadeDaAeronaveBuilder s(boolean s) { this.s = s; return this; }
@@ -109,15 +109,15 @@ public class EquipamentoCapacidadeDaAeronave {
         public EquipamentoCapacidadeDaAeronaveBuilder x(boolean x) { this.x = x; return this; }
         public EquipamentoCapacidadeDaAeronaveBuilder y(boolean y) { this.y = y; return this; }
         public EquipamentoCapacidadeDaAeronaveBuilder z(boolean z) { this.z = z; return this; }
-        
+
         public EquipamentoCapacidadeDaAeronave build() {
             return new EquipamentoCapacidadeDaAeronave(
-                n, s, a, b, c, d, e1, e2, e3, f, g, h, i, j1, j2, j3, j4, j5, j6, j7, 
+                n, s, a, b, c, d, e1, e2, e3, f, g, h, i, j1, j2, j3, j4, j5, j6, j7,
                 k, l, m1, m2, m3, o, p1, p2, p3, p4, p5, p6, p7, p8, p9, r, t, u, v, w, x, y, z
             );
         }
     }
-    
+
     // Fields for each equipment/capability indicator in Item 10a
     private boolean n;
     private boolean s;
@@ -162,14 +162,14 @@ public class EquipamentoCapacidadeDaAeronave {
     private boolean x;
     private boolean y;
     private boolean z;
-    
+
     // All-args constructor for builder
     public EquipamentoCapacidadeDaAeronave(
-        boolean n, boolean s, boolean a, boolean b, boolean c, boolean d, 
-        boolean e1, boolean e2, boolean e3, boolean f, boolean g, boolean h, boolean i, 
-        boolean j1, boolean j2, boolean j3, boolean j4, boolean j5, boolean j6, boolean j7, 
-        boolean k, boolean l, boolean m1, boolean m2, boolean m3, boolean o, 
-        boolean p1, boolean p2, boolean p3, boolean p4, boolean p5, boolean p6, boolean p7, boolean p8, boolean p9, 
+        boolean n, boolean s, boolean a, boolean b, boolean c, boolean d,
+        boolean e1, boolean e2, boolean e3, boolean f, boolean g, boolean h, boolean i,
+        boolean j1, boolean j2, boolean j3, boolean j4, boolean j5, boolean j6, boolean j7,
+        boolean k, boolean l, boolean m1, boolean m2, boolean m3, boolean o,
+        boolean p1, boolean p2, boolean p3, boolean p4, boolean p5, boolean p6, boolean p7, boolean p8, boolean p9,
         boolean r, boolean t, boolean u, boolean v, boolean w, boolean x, boolean y, boolean z
     ) {
         this.n = n;
@@ -216,7 +216,7 @@ public class EquipamentoCapacidadeDaAeronave {
         this.y = y;
         this.z = z;
     }
-    
+
     // No-args constructor for frameworks
     protected EquipamentoCapacidadeDaAeronave() {
         this.n = false;
@@ -273,15 +273,15 @@ public class EquipamentoCapacidadeDaAeronave {
         EquipamentoCampo10AEnum.A, EquipamentoCampo10AEnum.B, EquipamentoCampo10AEnum.C, EquipamentoCampo10AEnum.D,
         EquipamentoCampo10AEnum.E1, EquipamentoCampo10AEnum.E2, EquipamentoCampo10AEnum.E3,
         EquipamentoCampo10AEnum.F, EquipamentoCampo10AEnum.G, EquipamentoCampo10AEnum.H, EquipamentoCampo10AEnum.I,
-        EquipamentoCampo10AEnum.J1, EquipamentoCampo10AEnum.J2, EquipamentoCampo10AEnum.J3, EquipamentoCampo10AEnum.J4, 
+        EquipamentoCampo10AEnum.J1, EquipamentoCampo10AEnum.J2, EquipamentoCampo10AEnum.J3, EquipamentoCampo10AEnum.J4,
         EquipamentoCampo10AEnum.J5, EquipamentoCampo10AEnum.J6, EquipamentoCampo10AEnum.J7,
         EquipamentoCampo10AEnum.K, EquipamentoCampo10AEnum.L,
         EquipamentoCampo10AEnum.M1, EquipamentoCampo10AEnum.M2, EquipamentoCampo10AEnum.M3,
         EquipamentoCampo10AEnum.O,
-        EquipamentoCampo10AEnum.P1, EquipamentoCampo10AEnum.P2, EquipamentoCampo10AEnum.P3, EquipamentoCampo10AEnum.P4, 
-        EquipamentoCampo10AEnum.P5, EquipamentoCampo10AEnum.P6, EquipamentoCampo10AEnum.P7, EquipamentoCampo10AEnum.P8, 
-        EquipamentoCampo10AEnum.P9, EquipamentoCampo10AEnum.R, EquipamentoCampo10AEnum.T, EquipamentoCampo10AEnum.U, 
-        EquipamentoCampo10AEnum.V, EquipamentoCampo10AEnum.W, EquipamentoCampo10AEnum.X, EquipamentoCampo10AEnum.Y, 
+        EquipamentoCampo10AEnum.P1, EquipamentoCampo10AEnum.P2, EquipamentoCampo10AEnum.P3, EquipamentoCampo10AEnum.P4,
+        EquipamentoCampo10AEnum.P5, EquipamentoCampo10AEnum.P6, EquipamentoCampo10AEnum.P7, EquipamentoCampo10AEnum.P8,
+        EquipamentoCampo10AEnum.P9, EquipamentoCampo10AEnum.R, EquipamentoCampo10AEnum.T, EquipamentoCampo10AEnum.U,
+        EquipamentoCampo10AEnum.V, EquipamentoCampo10AEnum.W, EquipamentoCampo10AEnum.X, EquipamentoCampo10AEnum.Y,
         EquipamentoCampo10AEnum.Z
     );
 
@@ -372,7 +372,7 @@ public class EquipamentoCapacidadeDaAeronave {
     public void setY(boolean y) { this.y = y; }
     public boolean isZ() { return z; }
     public void setZ(boolean z) { this.z = z; }
-    
+
     // toBuilder method for immutability pattern
     public EquipamentoCapacidadeDaAeronaveBuilder toBuilder() {
         return new EquipamentoCapacidadeDaAeronaveBuilder()
@@ -383,63 +383,63 @@ public class EquipamentoCapacidadeDaAeronave {
             .p1(p1).p2(p2).p3(p3).p4(p4).p5(p5).p6(p6).p7(p7).p8(p8).p9(p9)
             .r(r).t(t).u(u).v(v).w(w).x(x).y(y).z(z);
     }
-    
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         EquipamentoCapacidadeDaAeronave that = (EquipamentoCapacidadeDaAeronave) o;
-        
+
         // Compare all boolean fields
-        return this.n == that.n && this.s == that.s && this.a == that.a && 
-               this.b == that.b && this.c == that.c && this.d == that.d && 
-               this.e1 == that.e1 && this.e2 == that.e2 && this.e3 == that.e3 && 
-               this.f == that.f && this.g == that.g && this.h == that.h && 
-               this.i == that.i && this.j1 == that.j1 && this.j2 == that.j2 && 
-               this.j3 == that.j3 && this.j4 == that.j4 && this.j5 == that.j5 && 
-               this.j6 == that.j6 && this.j7 == that.j7 && this.k == that.k && 
-               this.l == that.l && this.m1 == that.m1 && this.m2 == that.m2 && 
-               this.m3 == that.m3 && this.o == that.o && this.p1 == that.p1 && 
-               this.p2 == that.p2 && this.p3 == that.p3 && this.p4 == that.p4 && 
-               this.p5 == that.p5 && this.p6 == that.p6 && this.p7 == that.p7 && 
-               this.p8 == that.p8 && this.p9 == that.p9 && this.r == that.r && 
-               this.t == that.t && this.u == that.u && this.v == that.v && 
-               this.w == that.w && this.x == that.x && this.y == that.y && 
+        return this.n == that.n && this.s == that.s && this.a == that.a &&
+               this.b == that.b && this.c == that.c && this.d == that.d &&
+               this.e1 == that.e1 && this.e2 == that.e2 && this.e3 == that.e3 &&
+               this.f == that.f && this.g == that.g && this.h == that.h &&
+               this.i == that.i && this.j1 == that.j1 && this.j2 == that.j2 &&
+               this.j3 == that.j3 && this.j4 == that.j4 && this.j5 == that.j5 &&
+               this.j6 == that.j6 && this.j7 == that.j7 && this.k == that.k &&
+               this.l == that.l && this.m1 == that.m1 && this.m2 == that.m2 &&
+               this.m3 == that.m3 && this.o == that.o && this.p1 == that.p1 &&
+               this.p2 == that.p2 && this.p3 == that.p3 && this.p4 == that.p4 &&
+               this.p5 == that.p5 && this.p6 == that.p6 && this.p7 == that.p7 &&
+               this.p8 == that.p8 && this.p9 == that.p9 && this.r == that.r &&
+               this.t == that.t && this.u == that.u && this.v == that.v &&
+               this.w == that.w && this.x == that.x && this.y == that.y &&
                this.z == that.z;
     }
-    
+
     @Override
     public int hashCode() {
-        return Objects.hash(n, s, a, b, c, d, e1, e2, e3, f, g, h, i, j1, j2, j3, j4, j5, j6, j7, 
+        return Objects.hash(n, s, a, b, c, d, e1, e2, e3, f, g, h, i, j1, j2, j3, j4, j5, j6, j7,
                            k, l, m1, m2, m3, o, p1, p2, p3, p4, p5, p6, p7, p8, p9, r, t, u, v, w, x, y, z);
     }
-    
+
     @Override
     public String toString() {
         return "EquipamentoCapacidadeDaAeronave{" +
-               "n=" + n + ", s=" + s + ", a=" + a + ", b=" + b + ", c=" + c + ", d=" + d + 
-               ", e1=" + e1 + ", e2=" + e2 + ", e3=" + e3 + ", f=" + f + ", g=" + g + ", h=" + h + ", i=" + i + 
-               ", j1=" + j1 + ", j2=" + j2 + ", j3=" + j3 + ", j4=" + j4 + ", j5=" + j5 + ", j6=" + j6 + ", j7=" + j7 + 
-               ", k=" + k + ", l=" + l + ", m1=" + m1 + ", m2=" + m2 + ", m3=" + m3 + ", o=" + o + 
-               ", p1=" + p1 + ", p2=" + p2 + ", p3=" + p3 + ", p4=" + p4 + ", p5=" + p5 + ", p6=" + p6 + 
-               ", p7=" + p7 + ", p8=" + p8 + ", p9=" + p9 + ", r=" + r + ", t=" + t + ", u=" + u + ", v=" + v + 
+               "n=" + n + ", s=" + s + ", a=" + a + ", b=" + b + ", c=" + c + ", d=" + d +
+               ", e1=" + e1 + ", e2=" + e2 + ", e3=" + e3 + ", f=" + f + ", g=" + g + ", h=" + h + ", i=" + i +
+               ", j1=" + j1 + ", j2=" + j2 + ", j3=" + j3 + ", j4=" + j4 + ", j5=" + j5 + ", j6=" + j6 + ", j7=" + j7 +
+               ", k=" + k + ", l=" + l + ", m1=" + m1 + ", m2=" + m2 + ", m3=" + m3 + ", o=" + o +
+               ", p1=" + p1 + ", p2=" + p2 + ", p3=" + p3 + ", p4=" + p4 + ", p5=" + p5 + ", p6=" + p6 +
+               ", p7=" + p7 + ", p8=" + p8 + ", p9=" + p9 + ", r=" + r + ", t=" + t + ", u=" + u + ", v=" + v +
                ", w=" + w + ", x=" + x + ", y=" + y + ", z=" + z + '}';
     }
-    
+
     /**
      * Returns a list of selected enums with applied rules (e.g., 'N' overrides others)
-     * 
+     *
      * @return List of selected equipment enums in the correct order, or just N if N is selected
      */
     public List<EquipamentoCampo10AEnum> selecionados() {
         List<EquipamentoCampo10AEnum> list = new ArrayList<>();
-        
+
         // If N is selected, only return N (as per ICAO rules)
         if (n) {
             list.add(EquipamentoCampo10AEnum.N);
             return list;
         }
-        
+
         // Add all selected equipment in the predefined order
         if (s) list.add(EquipamentoCampo10AEnum.S);
         if (a) list.add(EquipamentoCampo10AEnum.A);
@@ -483,7 +483,7 @@ public class EquipamentoCapacidadeDaAeronave {
         if (x) list.add(EquipamentoCampo10AEnum.X);
         if (y) list.add(EquipamentoCampo10AEnum.Y);
         if (z) list.add(EquipamentoCampo10AEnum.Z);
-        
+
         // Return the list in the predefined order, filtering out any nulls
         return list.stream()
             .filter(Objects::nonNull)
@@ -493,7 +493,7 @@ public class EquipamentoCapacidadeDaAeronave {
     }
 
     /**
-     * Ex.: "SDGRY" (multi-letras como E1/J1 etc. entram como estÃƒÂ£o, sem separador)
+     * Ex.: "SDGRY" (multi-letras como E1/J1 etc. entram como estão, sem separador)
      */
     public String siglasConcatenadas() {
         return selecionados().stream()
@@ -502,14 +502,14 @@ public class EquipamentoCapacidadeDaAeronave {
     }
 
     /**
-     * Lista sÃƒÂ³ das siglas, ex.: ["S","D","G","R","Y"]
+     * Lista das siglas, ex.: ["S","D","G","R","Y"]
      */
     public List<String> siglasLista() {
         return selecionados().stream().map(EquipamentoCampo10AEnum::getSigla).toList();
     }
 
     /**
-     * "S - equipamento padrÃƒÂ£o; D - DME; G - GNSS" (customize o separador)
+     * "S - equipamento padrão; D - DME; G - GNSS" (customize o separador)
      */
     public String siglaMaisDescricao(String separador) {
         return selecionados().stream()
@@ -518,7 +518,7 @@ public class EquipamentoCapacidadeDaAeronave {
     }
 
     /**
-     * Lista com "sigla - descriÃƒÂ§ÃƒÂ£o"
+     * Lista com "sigla - descrição"
      */
     public List<String> siglaMaisDescricaoLista() {
         return selecionados().stream()
@@ -534,7 +534,7 @@ public class EquipamentoCapacidadeDaAeronave {
     }
 
     /**
-     * FabricaÃƒÂ§ÃƒÂ£o a partir de um conjunto de enums (se preferir nÃƒÂ£o usar booleans)
+     * Fabricação a partir de um conjunto de enums
      */
     public static EquipamentoCapacidadeDaAeronave fromSet(Set<EquipamentoCampo10AEnum> set) {
         EquipamentoCapacidadeDaAeronave c = new EquipamentoCapacidadeDaAeronave();

@@ -1,25 +1,25 @@
-﻿package br.com.fplbr.pilot.flightplan.domain.model;
+package br.com.fplbr.pilot.flightplan.domain.model;
 
 public enum VigilanciaCampo10BEnum {
     // Regra geral
     N("N",  "Sem equipamentos"),
 
     // SSR Modos A/C
-    A("A",  "Transponder Modo A (4 dÃƒÂ­gitos - 4096)"),
-    C("C",  "Transponder Modo A (4 dÃƒÂ­gitos - 4096) e Modo C"),
+    A("A",  "Transponder Modo A (4 dígitos - 4096)"),
+    C("C",  "Transponder Modo A (4 dígitos - 4096) e Modo C"),
 
     // ADS-C
     D1("D1","ADS-C com capacidades FANS 1/A"),
     G1("G1","ADS-C com capacidades ATN"),
 
     // SSR Modo S
-    E("E",  "Modo S: ID aeronave + altitude de pressÃƒÂ£o + ADS-B (ES)"),
-    H("H",  "Modo S: ID aeronave + altitude de pressÃƒÂ£o + vigilÃƒÂ¢ncia melhorada"),
-    I("I",  "Modo S: ID aeronave, sem altitude de pressÃƒÂ£o"),
-    L("L",  "Modo S: ID aeronave + altitude de pressÃƒÂ£o + ADS-B (ES) + vigilÃƒÂ¢ncia melhorada"),
+    E("E",  "Modo S: ID aeronave + altitude de pressão + ADS-B (ES)"),
+    H("H",  "Modo S: ID aeronave + altitude de pressão + vigilância melhorada"),
+    I("I",  "Modo S: ID aeronave, sem altitude de pressão"),
+    L("L",  "Modo S: ID aeronave + altitude de pressão + ADS-B (ES) + vigilância melhorada"),
     P("P",  "Modo S: sem ID da aeronave"),
-    S("S",  "Modo S: ID aeronave + altitude de pressÃƒÂ£o"),
-    X("X",  "Modo S: sem altitude de pressÃƒÂ£o e sem ID da aeronave"),
+    S("S",  "Modo S: ID aeronave + altitude de pressão"),
+    X("X",  "Modo S: sem altitude de pressão e sem ID da aeronave"),
 
     // ADS-B
     B1("B1","ADS-B out 1090 MHz (especializada)"),
@@ -31,16 +31,16 @@ public enum VigilanciaCampo10BEnum {
 
     private final String sigla;
     private final String descricao;
-    
+
     VigilanciaCampo10BEnum(String sigla, String descricao) {
         this.sigla = sigla;
         this.descricao = descricao;
     }
-    
+
     public String getSigla() {
         return sigla;
     }
-    
+
     public String getDescricao() {
         return descricao;
     }
