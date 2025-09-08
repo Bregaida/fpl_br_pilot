@@ -1,5 +1,5 @@
 ﻿import { apiRequest } from './api';
-import { FplForm, FplComposedResponse, AerodromoInfo } from '@/types';
+import { FplForm, FplComposedResponse, AerodromoInfo } from '../types';
 
 /**
  * Compose a flight plan with all related data
