@@ -43,7 +43,7 @@ public class Vigilancia {
     private boolean v1;
     private boolean v2;
 
-    // Ordem estÃƒÂ¡vel recomendada (N, SSR A/C, ADS-C, Modo S, ADS-B)
+    // Ordem estável recomendada (N, SSR A/C, ADS-C, Modo S, ADS-B)
     private static final List<VigilanciaCampo10BEnum> ORDEM = List.of(
         VigilanciaCampo10BEnum.N,
         VigilanciaCampo10BEnum.A, VigilanciaCampo10BEnum.C,
@@ -78,7 +78,7 @@ public class Vigilancia {
         if (v1) list.add(VigilanciaCampo10BEnum.V1);
         if (v2) list.add(VigilanciaCampo10BEnum.V2);
 
-        // Regra: se "N" estiver com outros, manter sÃƒÂ³ N
+        // Regra: se "N" estiver com outros, manter N
         if (list.contains(VigilanciaCampo10BEnum.N) && list.size() > 1) {
             return List.of(VigilanciaCampo10BEnum.N);
         }
@@ -88,7 +88,7 @@ public class Vigilancia {
             .collect(Collectors.toList());
     }
 
-    /** Ex.: "CSG1S" (cÃƒÂ³digos de mÃƒÂºltiplas letras entram como estÃƒÂ£o, sem separador) */
+    /** Ex.: "CSG1S" (códigos de múltiplas letras entram como estão, sem separador) */
     public String siglasConcatenadas() {
         StringBuilder sb = new StringBuilder();
         for (VigilanciaCampo10BEnum e : selecionados()) {
@@ -97,7 +97,7 @@ public class Vigilancia {
         return sb.toString();
     }
 
-    /** Lista sÃƒÂ³ das siglas, ex.: ["C","S","G1"] */
+    /** Lista só das siglas, ex.: ["C","S","G1"] */
     public List<String> siglasLista() {
         return selecionados().stream()
             .map(e -> e.getSigla())
@@ -111,7 +111,7 @@ public class Vigilancia {
             .collect(Collectors.joining(separador));
     }
 
-    /** Lista com "sigla - descriÃƒÂ§ÃƒÂ£o" */
+    /** Lista com "sigla - descrição" */
     public List<String> siglaMaisDescricaoLista() {
         List<String> result = new ArrayList<>();
         for (VigilanciaCampo10BEnum e : selecionados()) {
@@ -129,7 +129,7 @@ public class Vigilancia {
     public static Vigilancia fromSet(Set<VigilanciaCampo10BEnum> set) {
         Vigilancia v = new Vigilancia();
         if (set == null || set.isEmpty()) return v;
-        
+
         // Manually set the fields instead of using setter methods
         for (VigilanciaCampo10BEnum e : set) {
             switch (e) {

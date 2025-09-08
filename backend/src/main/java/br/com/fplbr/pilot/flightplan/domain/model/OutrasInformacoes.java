@@ -40,8 +40,8 @@ public class OutrasInformacoes {
     private String from;
 
     /**
-     * Verifica se todas as informaÃƒÂ§ÃƒÂµes estÃƒÂ£o em branco (nulas ou vazias).
-     * @return true se todas as informaÃƒÂ§ÃƒÂµes estiverem em branco, false caso contrÃƒÂ¡rio
+     * Verifica se todas as informações estão em branco (nulas ou vazias).
+     * @return true se todas as informações estiverem em branco, false caso contrário
      */
     public boolean isBlank() {
         return (sts == null || sts.trim().isEmpty()) &&
