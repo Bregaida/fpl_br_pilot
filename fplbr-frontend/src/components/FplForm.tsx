@@ -7,54 +7,54 @@ import type { FplForm, FplMode } from '@/types';
 
 // Validation schema for the form
 const formSchema = yup.object().shape({
-  modo: yup.mixed<FplMode>().oneOf(['PVC', 'PVS']).required('Modo Ã© obrigatÃ³rio'),
+  modo: yup.mixed<FplMode>().oneOf(['PVC', 'PVS']).required('Modo é obrigatório'),
   item7: yup.object().shape({
-    identificacaoAeronave: yup.string().required('IdentificaÃ§Ã£o da aeronave Ã© obrigatÃ³ria'),
+    identificacaoAeronave: yup.string().required('Identificação da aeronave é obrigatória'),
     indicativoChamada: yup.boolean(),
   }),
   item8: yup.object().shape({
-    regrasVoo: yup.string().oneOf(['IFR', 'VFR', 'Y', 'Z']).required('Regra de voo Ã© obrigatÃ³ria'),
-    tipoVoo: yup.string().oneOf(['G', 'S', 'N', 'M', 'X']).required('Tipo de voo Ã© obrigatÃ³rio'),
+    regrasVoo: yup.string().oneOf(['IFR', 'VFR', 'Y', 'Z']).required('Regra de voo é obrigatória'),
+    tipoVoo: yup.string().oneOf(['G', 'S', 'N', 'M', 'X']).required('Tipo de voo é obrigatório'),
   }),
   item9: yup.object().shape({
-    numero: yup.number().positive('NÃºmero deve ser positivo').integer('NÃºmero deve ser inteiro'),
-    tipoAeronave: yup.string().required('Tipo de aeronave Ã© obrigatÃ³rio'),
-    catTurbulencia: yup.string().oneOf(['L', 'M', 'H', 'J']).required('Categoria de turbulÃªncia Ã© obrigatÃ³ria'),
+    numero: yup.number().positive('Número deve ser positivo').integer('Número deve ser inteiro'),
+    tipoAeronave: yup.string().required('Tipo de aeronave é obrigatório'),
+    catTurbulencia: yup.string().oneOf(['L', 'M', 'H', 'J']).required('Categoria de turbulência é obrigatória'),
   }),
   item10A: yup.object(),
   item10B: yup.object(),
   item13: yup.object().shape({
-    aerodromoPartida: yup.string().matches(/^[A-Z]{4}$/, 'CÃ³digo ICAO invÃ¡lido').required('AerÃ³dromo de partida Ã© obrigatÃ³rio'),
-    hora: yup.string().matches(/^\d{4}$/, 'Hora invÃ¡lida (HHMM)').required('Hora Ã© obrigatÃ³ria'),
+    aerodromoPartida: yup.string().matches(/^[A-Z]{4}$/, 'Código ICAO inválido').required('Aeródromo de partida é obrigatório'),
+    hora: yup.string().matches(/^\d{4}$/, 'Hora inválida (HHMM)').required('Hora é obrigatória'),
   }),
   item15: yup.object().shape({
-    velocidadeCruzeiro: yup.string().matches(/^N\d{4}$/, 'Formato invÃ¡lido (ex: N0120)').required('Velocidade Ã© obrigatÃ³ria'),
-    nivel: yup.string().matches(/^F\d{3}$/, 'NÃ­vel invÃ¡lido (ex: F080)').required('NÃ­vel Ã© obrigatÃ³rio'),
-    rota: yup.string().required('Rota Ã© obrigatÃ³ria'),
+    velocidadeCruzeiro: yup.string().matches(/^N\d{4}$/, 'Formato inválido (ex: N0120)').required('Velocidade é obrigatória'),
+    nivel: yup.string().matches(/^F\d{3}$/, 'Ní­vel inválido (ex: F080)').required('Ní­vel é obrigatório'),
+    rota: yup.string().required('Rota é obrigatória'),
   }),
   item16: yup.object().shape({
-    aerodromoDestino: yup.string().matches(/^[A-Z]{4}$/, 'CÃ³digo ICAO invÃ¡lido').required('AerÃ³dromo de destino Ã© obrigatÃ³rio'),
-    eetTotal: yup.string().matches(/^\d{4}$/, 'Tempo total invÃ¡lido (HHMM)').required('Tempo total Ã© obrigatÃ³rio'),
-    alternado1: yup.string().matches(/^[A-Z]{4}$|^$/, 'CÃ³digo ICAO invÃ¡lido'),
-    alternado2: yup.string().matches(/^[A-Z]{4}$|^$/, 'CÃ³digo ICAO invÃ¡lido'),
+    aerodromoDestino: yup.string().matches(/^[A-Z]{4}$/, 'Código ICAO inválido').required('Aeródromo de destino é obrigatório'),
+    eetTotal: yup.string().matches(/^\d{4}$/, 'Tempo total inválido (HHMM)').required('Tempo total é obrigatório'),
+    alternado1: yup.string().matches(/^[A-Z]{4}$|^$/, 'Código ICAO inválido'),
+    alternado2: yup.string().matches(/^[A-Z]{4}$|^$/, 'Código ICAO inválido'),
   }),
   item18: yup.object().shape({
-    dof: yup.string().matches(/^\d{8}$/, 'Data invÃ¡lida (YYYYMMDD)').required('Data do voo Ã© obrigatÃ³ria'),
+    dof: yup.string().matches(/^\d{8}$/, 'Data inválida (YYYYMMDD)').required('Data do voo é obrigatória'),
     rmk: yup.string(),
   }),
   item19: yup.object().shape({
-    autonomia: yup.string().required('Autonomia Ã© obrigatÃ³ria'),
-    pob: yup.number().required('POB Ã© obrigatÃ³rio'),
+    autonomia: yup.string().required('Autonomia é obrigatória'),
+    pob: yup.number().required('POB é obrigatório'),
     radioEmergencia: yup.object(),
     sobrevivencia: yup.object(),
     coletes: yup.object(),
     botes: yup.object(),
     infoAdicionais: yup.object({
-      corMarcaANV: yup.string().required('Cor/marcaÃ§Ã£o Ã© obrigatÃ³ria'),
-      pilotoEmComando: yup.string().required('Piloto em comando Ã© obrigatÃ³rio'),
-      codAnac1: yup.string().required('CÃ³digo ANAC 1 Ã© obrigatÃ³rio'),
+      corMarcaANV: yup.string().required('Cor/marcação é obrigatória'),
+      pilotoEmComando: yup.string().required('Piloto em comando é obrigatório'),
+      codAnac1: yup.string().required('Código ANAC do 1º Piloto é obrigatório'),
       codAnac2: yup.string(),
-      telefone: yup.string().required('Telefone Ã© obrigatÃ³rio'),
+      telefone: yup.string().required('Telefone é obrigatório'),
     }),
   }),
 });
@@ -142,13 +142,13 @@ export default function FplForm({ onCompose, isComposing }: FplFormProps) {
       </div>
 
       <form onChange={handleFormChange} className="space-y-6">
-        {/* Item 7: IdentificaÃ§Ã£o da Aeronave */}
+        {/* Item 7: Identificação da Aeronave */}
         <div className="bg-white p-4 rounded-lg shadow">
-          <h3 className="text-lg font-semibold mb-4">7. IdentificaÃ§Ã£o da Aeronave</h3>
+          <h3 className="text-lg font-semibold mb-4">7. Identificação da Aeronave</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700">
-                MarcaÃ§Ã£o/MatrÃ­cula
+                Marcação/MatrÃ­cula
               </label>
               <Controller
                 name="item7.identificacaoAeronave"

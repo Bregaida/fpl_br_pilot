@@ -22,12 +22,12 @@ export default function AtsPreview({ content, isLoading = false }: AtsPreviewPro
   return (
     <div className="bg-white rounded-lg shadow p-4">
       <div className="flex justify-between items-center mb-2">
-        <h3 className="text-lg font-semibold">PrÃ©-visualizaÃ§Ã£o ATS</h3>
+        <h3 className="text-lg font-semibold">Pré-visualização ATS</h3>
         <button
           onClick={handleCopy}
           disabled={!content || isLoading}
           className="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
-          title="Copiar para a Ã¡rea de transferÃªncia"
+          title="Copiar para a área de transferÃªncia"
         >
           {copied ? (
             <>
@@ -45,7 +45,7 @@ export default function AtsPreview({ content, isLoading = false }: AtsPreviewPro
       
       {isLoading ? (
         <div className="animate-pulse bg-gray-100 rounded h-24 flex items-center justify-center">
-          <p className="text-gray-500">Gerando prÃ©-visualizaÃ§Ã£o...</p>
+          <p className="text-gray-500">Gerando pré-visualização...</p>
         </div>
       ) : content ? (
         <pre className="bg-gray-50 p-3 rounded text-sm font-mono whitespace-pre-wrap overflow-auto max-h-96">
@@ -53,7 +53,7 @@ export default function AtsPreview({ content, isLoading = false }: AtsPreviewPro
         </pre>
       ) : (
         <div className="bg-gray-50 p-4 rounded text-sm text-gray-500 italic">
-          Preencha o formulÃ¡rio para visualizar a mensagem ATS
+          Preencha o formulário para visualizar a mensagem ATS
         </div>
       )}
     </div>

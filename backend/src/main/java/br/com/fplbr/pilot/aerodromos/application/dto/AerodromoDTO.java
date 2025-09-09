@@ -33,7 +33,7 @@ public class AerodromoDTO {
             return null;
         }
         
-        return AerodromoDTO.builder()
+        AerodromoDTO dto = AerodromoDTO.builder()
                 .icao(aerodromo.getIcao())
                 .iata(aerodromo.getIata())
                 .nomeOficial(aerodromo.getNome())
@@ -55,6 +55,14 @@ public class AerodromoDTO {
                 .observacoes(aerodromo.getObservacoes())
                 .ativo(aerodromo.isAtivo())
                 .build();
+
+        // Mapear pistas do domínio para DTO
+        if (aerodromo.getPistas() != null) {
+            dto.setPistas(aerodromo.getPistas().stream()
+                    .map(PistaDTO::fromDomain)
+                    .collect(java.util.stream.Collectors.toList()));
+        }
+        return dto;
     }
     
     /**
@@ -117,6 +125,8 @@ public class AerodromoDTO {
     private List<CartaAerodromoDTO> cartas = new ArrayList<>();  // Cartas aeronÃƒÂ¡uticas disponÃƒÂ­veis
     private String nascerSol;              // HorÃƒÂ¡rio do nascer do sol
     private String porDoSol;               // HorÃƒÂ¡rio do pÃƒÂ´r do sol
+    @Builder.Default
+    private List<PistaDTO> pistas = new ArrayList<>(); // Pistas do aeródromo
     
     // Additional setter methods for the fields
     public void setCartas(List<CartaAerodromoDTO> cartas) {
@@ -129,5 +139,9 @@ public class AerodromoDTO {
     
     public void setPorDoSol(String porDoSol) {
         this.porDoSol = porDoSol;
+    }
+
+    public void setPistas(List<PistaDTO> pistas) {
+        this.pistas = pistas != null ? pistas : new ArrayList<>();
     }
 }

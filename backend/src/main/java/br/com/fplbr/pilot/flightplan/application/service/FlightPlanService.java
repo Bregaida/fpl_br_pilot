@@ -2,6 +2,7 @@ package br.com.fplbr.pilot.flightplan.application.service;
 
 import br.com.fplbr.pilot.flightplan.infrastructure.web.dto.FlightPlanDTO;
 import br.com.fplbr.pilot.flightplan.infrastructure.mapper.FlightPlanMapper;
+import org.mapstruct.factory.Mappers;
 import br.com.fplbr.pilot.flightplan.domain.model.FlightPlan;
 import br.com.fplbr.pilot.flightplan.infrastructure.persistence.FlightPlanRepository;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -19,9 +20,9 @@ public class FlightPlanService {
     private final FlightPlanMapper flightPlanMapper;
 
     @Inject
-    public FlightPlanService(FlightPlanRepository flightPlanRepository, FlightPlanMapper flightPlanMapper) {
+    public FlightPlanService(FlightPlanRepository flightPlanRepository) {
         this.flightPlanRepository = flightPlanRepository;
-        this.flightPlanMapper = flightPlanMapper;
+        this.flightPlanMapper = Mappers.getMapper(FlightPlanMapper.class);
     }
 
     @Transactional

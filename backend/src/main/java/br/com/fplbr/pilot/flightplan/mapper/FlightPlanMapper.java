@@ -2,10 +2,8 @@ package br.com.fplbr.pilot.flightplan.infrastructure.mapper;
 
 import br.com.fplbr.pilot.flightplan.infrastructure.web.dto.FlightPlanDTO;
 import br.com.fplbr.pilot.flightplan.domain.model.FlightPlan;
-import jakarta.enterprise.context.ApplicationScoped;
 import org.mapstruct.*;
 
-@ApplicationScoped
 @Mapper(
     componentModel = "cdi",
     nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE,

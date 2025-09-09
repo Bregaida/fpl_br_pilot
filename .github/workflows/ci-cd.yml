@@ -7,7 +7,7 @@ on:
     branches: [ main, develop ]
 
 defaults:
-  timeout-minutes: 20
+  timeout-minutes: 5
 
 jobs:
   test:

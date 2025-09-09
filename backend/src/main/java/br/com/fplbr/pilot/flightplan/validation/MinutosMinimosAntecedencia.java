@@ -14,15 +14,15 @@ import jakarta.validation.Payload;
 @Target({ElementType.FIELD, ElementType.METHOD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface MinutosMinimosAntecedencia {
-    String message() default "Hora de partida invÃƒÂ¡lida";
+    String message() default "Hora de partida inválida";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
     /**
-     * Minutos mÃƒÂ­nimos de antecedÃƒÂªncia para voos completos (45 minutos)
+     * Minutos mí­nimos de antecedência para voos completos (45 minutos)
      */
     int minutosCompleto() default 45;
     /**
-     * Minutos mÃƒÂ­nimos de antecedÃƒÂªncia para voos simplificados (15 minutos)
+     * Minutos mí­nimos de antecedência para voos simplificados (15 minutos)
      */
     int minutosSimplificado() default 15;
 }
