@@ -54,3 +54,4 @@ reports/
 # --- Docker ---
 *.pid
 docker/*.env
+NUL

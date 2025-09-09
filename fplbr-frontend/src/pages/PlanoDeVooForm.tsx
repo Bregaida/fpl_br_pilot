@@ -10,6 +10,7 @@ import { api } from '../services/api'
 
 const EQUIP_OPCOES = ['S','R','G','O','D','N','V','I']
 const VIG_OPCOES = ['A','C','S','X','B1']
+const OUTRAS_KEYS = ['STS','PBN','NAV','COM','DAT','SUR','DEP','DEST','REG','EET','SEL','TYP','CODE','DLE','OPR','ORGN','PER','ALTN','RALT','TALT','RIF','RMK','FROM','DOF'] as const
 
 export default function PlanoDeVooForm() {
   const [data, setData] = React.useState<PlanoDeVooDTO>({
@@ -31,15 +32,15 @@ export default function PlanoDeVooForm() {
     nivelDeVoo: 'VFR',
     rota: 'DCT',
     outrasInformacoes: {
-      opr: 'OPERADOR EXEMPLO',
+      opr: 'EDUARDO BREGAIDA',
       from: 'SBMT',
       dof: todayDdmmaaUtc(),
       rmk: ''
     },
     informacaoSuplementar: {
       autonomia: '0100',
-      corEMarcaAeronave: 'BRANCA/VERDE',
-      pilotoEmComando: 'NOME PILOTO',
+      corEMarcaAeronave: 'BRANCA/VERMELHA COM ESTRELAS BRANCAS',
+      pilotoEmComando: 'BREGAIDA',
       anacPrimeiroPiloto: '123456',
       telefone: '11985586633'
     },
@@ -52,6 +53,15 @@ export default function PlanoDeVooForm() {
   const [errors, setErrors] = React.useState<Record<string,string>>({})
   const [alertaNoturno, setAlertaNoturno] = React.useState<string>('')
   const [submitting, setSubmitting] = React.useState(false)
+  const [outrasSelecionadas, setOutrasSelecionadas] = React.useState<string[]>(['OPR','RMK','FROM','DOF'])
+
+  React.useEffect(() => {
+    if (data.modo === 'PVC') {
+      setOutrasSelecionadas(['EET','OPR','PER','RMK','FROM','DOF'])
+    } else {
+      setOutrasSelecionadas(['OPR','RMK','FROM','DOF'])
+    }
+  }, [data.modo])
 
   function set<K extends keyof PlanoDeVooDTO>(key: K, value: PlanoDeVooDTO[K]) {
     setData(prev => ({ ...prev, [key]: value }))
@@ -116,7 +126,7 @@ export default function PlanoDeVooForm() {
     if (!data.nivelDeVoo) e.nivelDeVoo = 'Informe o nível de voo (ex.: VFR, A045, F055)'
 
     if (!data.tempoDeVooPrevisto || isNaN(parseHHmmToMinutes(data.tempoDeVooPrevisto))) e.tempoDeVooPrevisto = 'Informe EET (HHmm)'
-    if (!data.informacaoSuplementar.autonomia || isNaN(parseHHmmToMinutes(data.informacaoSuplementar.autonomia))) e.autonomia = 'Informe autonomia (HHmm)'
+    if (!data.informacaoSuplementar.autonomia || isNaN(parseHHmmToMinutes(data.informacaoSuplementar.autonomia))) e.autonomia = 'Informe autonomia'
     const eetMin = parseHHmmToMinutes(data.tempoDeVooPrevisto)
     const autMin = parseHHmmToMinutes(data.informacaoSuplementar.autonomia)
     if (!isNaN(eetMin) && !isNaN(autMin) && eetMin > autMin) e.tempoDeVooPrevisto = 'EET não pode exceder a autonomia informada'
@@ -139,7 +149,9 @@ export default function PlanoDeVooForm() {
     if (!data.informacaoSuplementar.corEMarcaAeronave) e.corEMarcaAeronave = 'Cor e Marca da Aeronave é obrigatório'
     if (!data.informacaoSuplementar.pilotoEmComando) e.pilotoEmComando = 'Piloto em Comando é obrigatório'
     if (!data.informacaoSuplementar.anacPrimeiroPiloto) e.anacPrimeiroPiloto = 'Cód. ANAC 1º Piloto é obrigatório'
-    if (!/^\d{10,11}$/.test(data.informacaoSuplementar.telefone)) e.telefone = 'Telefone deve ter 10 a 11 dígitos (somente números)'
+    if (!data.informacaoSuplementar.anacSegundoPiloto) e.anacSegundoPiloto = 'Cód. ANAC 2º Piloto é obrigatório'
+    if (!/^\d{10,11}$/.test(data.informacaoSuplementar.telefone)) e.telefone = 'Informe um telefone válido (somente números)'
+    if (!data.informacaoSuplementar.radioEmergencia || (data.informacaoSuplementar.radioEmergencia.length === 0)) e.radioEmergencia = 'Selecione ao menos um equipamento de rádio de emergência'
     if (data.informacaoSuplementar.n && !(data.informacaoSuplementar.observacoes && data.informacaoSuplementar.observacoes.trim().length>0)) e.observacoes = 'Observações tornam-se obrigatórias quando N = sim'
 
     setErrors(e)
@@ -213,7 +225,7 @@ export default function PlanoDeVooForm() {
           </div>
         </div>
         <div className="grid gap-4 p-4 rounded-2xl bg-white border border-slate-200 shadow-sm">
-          <h2 className="text-lg font-semibold" id="bloco-identificacao">Identificação e Regras</h2>
+          <h2 className="text-lg font-semibold" id="bloco-identificacao">Campo 7 - Identificação da Aeronave</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="grid gap-1">
               <label className="font-medium">Identificação da Aeronave*</label>
@@ -227,12 +239,14 @@ export default function PlanoDeVooForm() {
               <label className="font-medium">Indicativo</label>
               <label className="inline-flex items-center gap-2">
                 <input type="checkbox" className="accent-indigo-600" checked={data.indicativoDeChamada} onChange={e => set('indicativoDeChamada', e.target.checked)} />
-                <span>{data.indicativoDeChamada ? 'Sim' : 'Não'}</span>
+                <span>{data.indicativoDeChamada ? 'Não' : 'Sim'}</span>
               </label>
             </div>
-            
           </div>
+        </div>
 
+        <div className="grid gap-4 p-4 rounded-2xl bg-white border border-slate-200 shadow-sm">
+          <h2 className="text-lg font-semibold" id="bloco-regras">Campo 8 - Regras de Voo e Tipo de Voo</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <RadioGroup name="regraDeVooEnum" label={<><span>Regra de Voo*</span></>} options={[
               {value:'I',label:'I',tooltip:'IFR'},
@@ -251,7 +265,7 @@ export default function PlanoDeVooForm() {
         </div>
 
         <div className="grid gap-4 p-4 rounded-2xl bg-white border border-slate-200 shadow-sm">
-          <h2 className="text-lg font-semibold" id="bloco-aeronave">Aeronave</h2>
+          <h2 className="text-lg font-semibold" id="bloco-aeronave">Campo 9 - Informações da Aeronave</h2>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div className="grid gap-1">
               <label className="font-medium">Número de Aeronaves{data.indicativoDeChamada ? '*' : ''}</label>
@@ -275,8 +289,11 @@ export default function PlanoDeVooForm() {
             ]} value={data.categoriaEsteiraTurbulenciaEnum} onChange={v => set('categoriaEsteiraTurbulenciaEnum', v as any)} error={errors.categoriaEsteiraTurbulenciaEnum} />
             <div />
           </div>
+        </div>
 
-          <CheckboxGroup name="equip" label={<><span>Equipamento/Capacidade*</span></>} options={EQUIP_OPCOES.map(v => ({
+        <div className="grid gap-4 p-4 rounded-2xl bg-white border border-slate-200 shadow-sm">
+          <h2 className="text-lg font-semibold" id="bloco-equip-vig">Campo 10 - Equipamentos e Vigilância</h2>
+          <CheckboxGroup name="equip" label={<><span>A*</span><sup title="Rádiocomunicações, Auxílio à Navegação e à Aproximação" className="text-slate-500 ml-1 font-bold">¹</sup></>} options={EQUIP_OPCOES.map(v => ({
             value:v,
             label:v,
             tooltip: (
@@ -290,11 +307,11 @@ export default function PlanoDeVooForm() {
               v==='I'?'Inercial':
               undefined)
           }))} values={data.equipamentoCapacidadeDaAeronave} onChange={vals => set('equipamentoCapacidadeDaAeronave', vals)} error={errors.equipamentoCapacidadeDaAeronave} />
-          <CheckboxGroup name="vigilancia" label={<><span>Vigilância*</span></>} options={VIG_OPCOES.map(v => ({value:v,label:v,tooltip:(v==='A'?'ADS-B':v==='S'?'SSR':v==='C'?'MLAT':v==='B1'?'RVSM':v==='X'?'Sem vigilância':undefined)}))} values={data.vigilancia} onChange={vals => set('vigilancia', vals)} error={errors.vigilancia} />
+          <CheckboxGroup name="vigilancia" label={<><span>B*</span><sup title="Vigilância" className="text-slate-500 ml-1 font-bold">¹</sup></>} options={VIG_OPCOES.map(v => ({value:v,label:v,tooltip:(v==='A'?'ADS-B':v==='S'?'SSR':v==='C'?'MLAT':v==='B1'?'RVSM':v==='X'?'Sem vigilância':undefined)}))} values={data.vigilancia} onChange={vals => set('vigilancia', vals)} error={errors.vigilancia} />
         </div>
 
         <div className="grid gap-4 p-4 rounded-2xl bg-white border border-slate-200 shadow-sm">
-          <h2 className="text-lg font-semibold" id="bloco-rota">Partida, Rota e Destino</h2>
+          <h2 className="text-lg font-semibold" id="bloco-partida">Campo 13 - Informações de Partida</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="grid gap-1">
               <label className="font-medium">Aeródromo de Partida*</label>
@@ -306,13 +323,45 @@ export default function PlanoDeVooForm() {
               <input type="time" className="input" value={horaLocal} onChange={e => setHoraLocal(e.target.value)} placeholder="HH:mm" />
               {errors.horaPartida && <p className="text-red-600 text-sm">{errors.horaPartida}</p>}
             </div>
+          </div>
+        </div>
+
+        <div className="grid gap-4 p-4 rounded-2xl bg-white border border-slate-200 shadow-sm">
+          <h2 className="text-lg font-semibold" id="bloco-destino">Campo 16 - Destino e Alternativas</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="grid gap-1">
+              <label className="font-medium">Aeródromo de Destino*</label>
+              <input className="input" value={data.aerodromoDeDestino} onInput={uppercaseField} onChange={e => set('aerodromoDeDestino', e.target.value.toUpperCase())} placeholder="ex.: SBMT" />
+              {errors.aerodromoDeDestino && <p className="text-red-600 text-sm">{errors.aerodromoDeDestino}</p>}
+            </div>
+            <div className="grid gap-1">
+              <label className="font-medium">EET Total*</label>
+              <input className="input" value={data.tempoDeVooPrevisto} onChange={e => set('tempoDeVooPrevisto', e.target.value)} placeholder="ex.: 0030" />
+              {errors.tempoDeVooPrevisto && <p className="text-red-600 text-sm">{errors.tempoDeVooPrevisto}</p>}
+            </div>
+            <div className="grid gap-1">
+              <label className="font-medium">Aeródromo Alternativo*</label>
+              <input className="input" value={data.aerodromoDeAlternativa} onInput={uppercaseField} onChange={e => set('aerodromoDeAlternativa', e.target.value.toUpperCase())} placeholder="ex.: SBJD (se noturno, sugerir SBSJ)" />
+              {errors.aerodromoDeAlternativa && <p className="text-red-600 text-sm">{errors.aerodromoDeAlternativa}</p>}
+            </div>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="grid gap-1">
+              <label className="font-medium">2º Aeródromo Alternativo (opcional)</label>
+              <input className="input" value={data.aerodromoDeAlternativaSegundo || ''} onInput={uppercaseField} onChange={e => set('aerodromoDeAlternativaSegundo', e.target.value ? e.target.value.toUpperCase() : undefined)} placeholder="ex.: SBxx (opcional)" />
+              {errors.aerodromoDeAlternativaSegundo && <p className="text-red-600 text-sm">{errors.aerodromoDeAlternativaSegundo}</p>}
+            </div>
+          </div>
+        </div>
+
+        <div className="grid gap-4 p-4 rounded-2xl bg-white border border-slate-200 shadow-sm">
+          <h2 className="text-lg font-semibold" id="bloco-infos-rota">Campo 15 - Informações de Rota</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="grid gap-1">
               <label className="font-medium">Velocidade de Cruzeiro*</label>
               <input className="input" value={data.velocidadeDeCruzeiro} onChange={e => set('velocidadeDeCruzeiro', e.target.value.toUpperCase())} placeholder="ex.: N0100" />
               {errors.velocidadeDeCruzeiro && <p className="text-red-600 text-sm">{errors.velocidadeDeCruzeiro}</p>}
             </div>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="grid gap-1">
               <label className="font-medium">Nível de Voo*</label>
               <input className="input" value={data.nivelDeVoo} onChange={e => set('nivelDeVoo', e.target.value.toUpperCase())} placeholder="ex.: VFR, A045, F055" />
@@ -323,30 +372,7 @@ export default function PlanoDeVooForm() {
               <textarea className="input" rows={3} value={data.rota} onChange={e => set('rota', e.target.value)} placeholder={perfilConsulta==='VFR' ? 'REA DELTA ECHO LIMA ALT MAX REA' : 'DCT PNG/N0250F070 IFR DCT CGH'} />
               {errors.rota && <p className="text-red-600 text-sm">{errors.rota}</p>}
             </div>
-            <div className="grid gap-1">
-              <label className="font-medium">Aeródromo de Destino*</label>
-              <input className="input" value={data.aerodromoDeDestino} onInput={uppercaseField} onChange={e => set('aerodromoDeDestino', e.target.value.toUpperCase())} placeholder="ex.: SBMT" />
-              {errors.aerodromoDeDestino && <p className="text-red-600 text-sm">{errors.aerodromoDeDestino}</p>}
-            </div>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="grid gap-1">
-              <label className="font-medium">EET Total (HHmm)*</label>
-              <input className="input" value={data.tempoDeVooPrevisto} onChange={e => set('tempoDeVooPrevisto', e.target.value)} placeholder="ex.: 0030" />
-              {errors.tempoDeVooPrevisto && <p className="text-red-600 text-sm">{errors.tempoDeVooPrevisto}</p>}
-            </div>
-            <div className="grid gap-1">
-              <label className="font-medium">Aeródromo Alternativo*</label>
-              <input className="input" value={data.aerodromoDeAlternativa} onInput={uppercaseField} onChange={e => set('aerodromoDeAlternativa', e.target.value.toUpperCase())} placeholder="ex.: SBJD (se noturno, sugerir SBSJ)" />
-              {errors.aerodromoDeAlternativa && <p className="text-red-600 text-sm">{errors.aerodromoDeAlternativa}</p>}
-            </div>
-            <div className="grid gap-1">
-              <label className="font-medium">2º Aeródromo Alternativo (opcional)</label>
-              <input className="input" value={data.aerodromoDeAlternativaSegundo || ''} onInput={uppercaseField} onChange={e => set('aerodromoDeAlternativaSegundo', e.target.value ? e.target.value.toUpperCase() : undefined)} placeholder="ex.: SBxx (opcional)" />
-              {errors.aerodromoDeAlternativaSegundo && <p className="text-red-600 text-sm">{errors.aerodromoDeAlternativaSegundo}</p>}
-            </div>
-          </div>
-
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="grid gap-1">
               <label className="font-medium">Perfil de Consulta</label>
@@ -354,7 +380,7 @@ export default function PlanoDeVooForm() {
                 <label className="inline-flex items-center gap-2"><input type="radio" className="accent-indigo-600" checked={perfilConsulta==='VFR'} onChange={()=>setPerfilConsulta('VFR')} />VFR</label>
                 <label className="inline-flex items-center gap-2"><input type="radio" className="accent-indigo-600" checked={perfilConsulta==='IFR'} onChange={()=>setPerfilConsulta('IFR')} />IFR</label>
               </div>
-              <label className="font-medium">Rumo Magnético (consulta)</label>
+              <label className="font-medium">Rumo Magnético</label>
               <input type="number" min={0} max={359} className="input" value={rumo ?? ''} onChange={e => setRumo(e.target.value === '' ? undefined : Math.max(0, Math.min(359, parseInt(e.target.value, 10))))} placeholder="0 a 359" />
             </div>
             <div className="md:col-span-2">
@@ -364,63 +390,107 @@ export default function PlanoDeVooForm() {
         </div>
 
         <div className="grid gap-4 p-4 rounded-2xl bg-white border border-slate-200 shadow-sm">
-          <h2 className="text-lg font-semibold" id="bloco-outros">Campo 18 — Outras Informações</h2>
+          <h2 className="text-lg font-semibold" id="bloco-outros">Campo 18 - Outras Informações</h2>
+          <CheckboxGroup
+            name="outras-chaves"
+            label={<><span>Outras Informações*</span></>}
+            options={OUTRAS_KEYS.map(k => ({ value: k, label: k }))}
+            values={outrasSelecionadas}
+            onChange={(vals) => setOutrasSelecionadas(vals as string[])}
+          />
+
+          {/* Campos dinâmicos por chave */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="grid gap-1">
-              <label className="font-medium">EET/ (FIR + tempo)</label>
-              <input className="input" value={data.outrasInformacoes.eet || ''} onChange={e => setOutras('eet', e.target.value)} placeholder="SBC0005 SBBS0150" />
-            </div>
-            <div className="grid gap-1">
-              <label className="font-medium">OPR/*</label>
-              <input className="input" value={data.outrasInformacoes.opr} onChange={e => setOutras('opr', e.target.value)} placeholder="Eduardo Bregaida" />
-              {errors.opr && <p className="text-red-600 text-sm">{errors.opr}</p>}
-            </div>
-            <div className="grid gap-1">
-              <label className="font-medium">FROM/*</label>
-              <input className="input" value={data.outrasInformacoes.from} onInput={uppercaseField} onChange={e => setOutras('from', e.target.value.toUpperCase())} placeholder="SBMT" />
-              {errors.from && <p className="text-red-600 text-sm">{errors.from}</p>}
-            </div>
+            {outrasSelecionadas.includes('EET') && (
+              <div className="grid gap-1">
+                <label className="font-medium">EET/ (FIR + tempo)</label>
+                <input className="input" value={data.outrasInformacoes.eet || ''} onChange={e => setOutras('eet', e.target.value)} placeholder="SBC0005 SBBS0150" />
+              </div>
+            )}
+            {outrasSelecionadas.includes('OPR') && (
+              <div className="grid gap-1">
+                <label className="font-medium">OPR/*</label>
+                <input className="input" value={data.outrasInformacoes.opr} onChange={e => setOutras('opr', e.target.value)} placeholder="Eduardo Bregaida" />
+                {errors.opr && <p className="text-red-600 text-sm">{errors.opr}</p>}
+              </div>
+            )}
+            {outrasSelecionadas.includes('FROM') && (
+              <div className="grid gap-1">
+                <label className="font-medium">FROM/*</label>
+                <input className="input" value={data.outrasInformacoes.from} onInput={uppercaseField} onChange={e => setOutras('from', e.target.value.toUpperCase())} placeholder="SBMT" />
+                {errors.from && <p className="text-red-600 text-sm">{errors.from}</p>}
+              </div>
+            )}
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="grid gap-1">
-              <label className="font-medium">PER/ (PVC)</label>
-              <div className="flex flex-wrap gap-3">
-                {['A','B','C','D','E','H'].map(p => (
-                  <label key={p} className="inline-flex items-center gap-2">
-                    <input type="checkbox" className="accent-indigo-600" checked={(data.outrasInformacoes.per||[]).includes(p)} onChange={() => {
-                      const set = new Set(data.outrasInformacoes.per||[]); if(set.has(p)) set.delete(p); else set.add(p); setOutras('per', Array.from(set))
-                    }} />
-                    <span>{p}<sup title={p==='A'?'PER A':p==='B'?'PER B':p==='C'?'PER C':p==='D'?'PER D':p==='E'?'PER E':'PER H'} className="text-slate-500 ml-1">¹</sup></span>
-                  </label>
-                ))}
+            {outrasSelecionadas.includes('PER') && (
+              <div className="grid gap-1">
+                <label className="font-medium">PER/ (PVC)</label>
+                <div className="flex flex-wrap gap-3">
+                  {['A','B','C','D','E','H'].map(p => (
+                    <label key={p} className="inline-flex items-center gap-2">
+                      <input type="checkbox" className="accent-indigo-600" checked={(data.outrasInformacoes.per||[]).includes(p)} onChange={() => {
+                        const set = new Set(data.outrasInformacoes.per||[]); if(set.has(p)) set.delete(p); else set.add(p); setOutras('per', Array.from(set))
+                      }} />
+                      <span>{p}<sup
+                        title={
+                          p==='A' ? 'Categoria A: Inclui aeronaves com velocidade aerodinâmica indicada menor que \(91\\text{kt}\).' :
+                          p==='B' ? 'Categoria B: Abrange aeronaves com velocidade aerodinâmica indicada igual ou maior que \(91\\text{kt}\) e menor que \(121\\text{kt}\).' :
+                          p==='C' ? 'Categoria C: Engloba aeronaves com velocidade aerodinâmica indicada igual ou maior que \(121\\text{kt}\) e menor que \(141\\text{kt}\).' :
+                          p==='D' ? 'Categoria D: Corresponde a aeronaves com velocidade aerodinâmica indicada igual ou maior que \(141\\text{kt}\) e menor que \(166\\text{kt}\).' :
+                          p==='E' ? 'Categoria E: Refere-se a aeronaves com velocidade aerodinâmica indicada igual ou maior que \(166\\text{kt}\) e menor que \(211\\text{kt}\).' :
+                          'Helicópteros'
+                        }
+                        className="text-slate-500 ml-1"
+                      >¹</sup></span>
+                    </label>
+                  ))}
+                </div>
+                {errors.per && <p className="text-red-600 text-sm">{errors.per}</p>}
               </div>
-              {errors.per && <p className="text-red-600 text-sm">{errors.per}</p>}
-            </div>
-            <div className="grid gap-1">
-              <label className="font-medium">RMK/</label>
-              <input className="input" value={data.outrasInformacoes.rmk || ''} onChange={e => setOutras('rmk', e.target.value)} placeholder="REA DELTA ECHO LIMA ALT MAX REA" />
-              {errors.rmk && <p className="text-red-600 text-sm">{errors.rmk}</p>}
-            </div>
-            <div className="grid gap-1">
-              <label className="font-medium">DOF/* (ddmmaa)</label>
-              <input className="input" value={data.outrasInformacoes.dof} onChange={e => setOutras('dof', e.target.value)} placeholder="ddmmaa" />
-              {errors.dof && <p className="text-red-600 text-sm">{errors.dof}</p>}
-            </div>
+            )}
+            {outrasSelecionadas.includes('RMK') && (
+              <div className="grid gap-1">
+                <label className="font-medium">RMK/*</label>
+                <input className="input" value={data.outrasInformacoes.rmk || ''} onChange={e => setOutras('rmk', e.target.value)} placeholder="REA DELTA ECHO LIMA ALT MAX REA" />
+                {errors.rmk && <p className="text-red-600 text-sm">{errors.rmk}</p>}
+              </div>
+            )}
+            {outrasSelecionadas.includes('DOF') && (
+              <div className="grid gap-1">
+                <label className="font-medium">DOF/* (ddmmaa)</label>
+                <input className="input" value={data.outrasInformacoes.dof} onChange={e => setOutras('dof', e.target.value)} placeholder="ddmmaa" />
+                {errors.dof && <p className="text-red-600 text-sm">{errors.dof}</p>}
+              </div>
+            )}
+          </div>
+
+          {/* Campos genéricos restantes */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {['STS','PBN','NAV','COM','DAT','SUR','DEP','DEST','REG','SEL','TYP','CODE','DLE','ORGN','ALTN','RALT','TALT','RIF'].map(k => (
+              outrasSelecionadas.includes(k) ? (
+                <div key={k} className="grid gap-1">
+                  <label className="font-medium">{k}/</label>
+                  <input className="input" value={(data.outrasInformacoes as any)[k.toLowerCase()] || ''}
+                    onChange={e => setOutras(k.toLowerCase() as any, e.target.value)} />
+                </div>
+              ) : null
+            ))}
           </div>
         </div>
 
         <div className="grid gap-4 p-4 rounded-2xl bg-white border border-slate-200 shadow-sm">
-          <h2 className="text-lg font-semibold" id="bloco-suplementar">Informação Suplementar</h2>
+          <h2 className="text-lg font-semibold" id="bloco-suplementar">Campo 19 - Informações Suplementares</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="grid gap-1">
-              <label className="font-medium">Autonomia (HHmm)*</label>
+              <label className="font-medium">Autonomia*</label>
               <input className="input" value={data.informacaoSuplementar.autonomia} onChange={e => setInfoSup('autonomia', e.target.value)} placeholder="0100" />
               {errors.autonomia && <p className="text-red-600 text-sm">{errors.autonomia}</p>}
             </div>
-            <CheckboxGroup name="radioEmg" label={<><span>Rádio Emergência</span></>} options={[{value:'U',label:'U',tooltip:'UHF'},{value:'V',label:'V',tooltip:'VHF'},{value:'E',label:'E',tooltip:'ELT'}]} values={data.informacaoSuplementar.radioEmergencia || []} onChange={vals => setInfoSup('radioEmergencia', vals)} />
+            <CheckboxGroup name="radioEmg" label={<><span>Equipamento Rádio Emergência*</span></>} options={[{value:'U',label:'U',tooltip:'UHF'},{value:'V',label:'V',tooltip:'VHF'},{value:'E',label:'E',tooltip:'ELT'}]} values={data.informacaoSuplementar.radioEmergencia || []} onChange={vals => setInfoSup('radioEmergencia', vals)} />
             <div className="grid gap-1">
-              <label className="font-medium">Sobrevivência</label>
+              <label className="font-medium">Equipamento de Sobrevivência*</label>
               <label className="inline-flex items-center gap-2">
                 <input type="checkbox" className="accent-indigo-600" checked={(data.informacaoSuplementar.sobrevivencia||[]).length>0} onChange={e => setInfoSup('sobrevivencia', e.target.checked ? ['S'] : [])} />
                 <span>Sim</span>
@@ -439,7 +509,7 @@ export default function PlanoDeVooForm() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="grid gap-1">
-              <label className="font-medium">Coletes</label>
+              <label className="font-medium">Coletes*</label>
               <label className="inline-flex items-center gap-2">
                 <input type="checkbox" className="accent-indigo-600" checked={(data.informacaoSuplementar.coletes||[]).includes('J')} onChange={e => {
                   const on = e.target.checked; const rest = (data.informacaoSuplementar.coletes||[]).filter(x=>x!=='J'); setInfoSup('coletes', on ? ['J', ...rest] : rest)
@@ -447,11 +517,11 @@ export default function PlanoDeVooForm() {
                 <span>Sim</span>
               </label>
               {(data.informacaoSuplementar.coletes||[]).includes('J') && (
-                <CheckboxGroup name="coletesExtras" label={<><span>Opções</span></>} options={[{value:'L',label:'L',tooltip:'Luz'},{value:'F',label:'F',tooltip:'Fluorescente'},{value:'U',label:'U'},{value:'V',label:'V'}]} values={(data.informacaoSuplementar.coletes||[]).filter(v=>v!=='J')} onChange={vals => setInfoSup('coletes', ['J', ...vals])} />
+                <CheckboxGroup name="coletesExtras" label={<><span>Opções</span></>} options={[{value:'L',label:'L',tooltip:'Luz'},{value:'F',label:'F',tooltip:'Fluorescente'},{value:'U',label:'U',tooltip:'UHF'},{value:'V',label:'V',tooltip:'VHF'}]} values={(data.informacaoSuplementar.coletes||[]).filter(v=>v!=='J')} onChange={vals => setInfoSup('coletes', ['J', ...vals])} />
               )}
             </div>
             <div className="grid gap-1">
-              <label className="font-medium">Botes<sup title="Informar número, capacidade, abrigo (C) e cor se Sim" className="text-slate-500 ml-1">¹</sup></label>
+              <label className="font-medium">Botes*<sup title="Informar número, capacidade, abrigo (C) e cor se Sim" className="text-slate-500 ml-1">¹</sup></label>
               <label className="inline-flex items-center gap-2">
                 <input type="checkbox" className="accent-indigo-600" checked={!!data.informacaoSuplementar.botes?.possui} onChange={e => setInfoSup('botes', { ...(data.informacaoSuplementar.botes||{possui:false}), possui: e.target.checked })} />
                 <span>Sim</span>
@@ -489,51 +559,52 @@ export default function PlanoDeVooForm() {
               {errors.corEMarcaAeronave && <p className="text-red-600 text-sm">{errors.corEMarcaAeronave}</p>}
             </div>
             <div className="grid gap-1">
-              <label className="font-medium">Observações</label>
-              <input className="input" value={data.informacaoSuplementar.observacoes || ''} onChange={e => setInfoSup('observacoes', e.target.value)} />
-              {errors.observacoes && <p className="text-red-600 text-sm">{errors.observacoes}</p>}
-            </div>
-            <div className="grid gap-1">
-              <label className="font-medium">Piloto em Comando*</label>
-              <input className="input" value={data.informacaoSuplementar.pilotoEmComando} onChange={e => setInfoSup('pilotoEmComando', e.target.value)} placeholder="Bregaida" />
-              {errors.pilotoEmComando && <p className="text-red-600 text-sm">{errors.pilotoEmComando}</p>}
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="grid gap-1">
-              <label className="font-medium">N</label>
+              <label className="font-medium">N<sup title="Se selecionado, Observações tornam-se obrigatórias" className="text-slate-500 ml-1">¹</sup></label>
               <div className="flex items-center gap-6">
                 <label className="inline-flex items-center gap-2">
                   <input type="checkbox" className="accent-indigo-600" checked={!!data.informacaoSuplementar.n} onChange={e => setInfoSup('n', e.target.checked)} />
                   <span>Sim</span>
                 </label>
-                <span className="text-sm text-slate-600">(se selecionado, Observações tornam-se obrigatórias)</span>
               </div>
+            </div>
+            <div className="grid gap-1">
+              <label className="font-medium">Observações</label>
+              <input className="input" value={data.informacaoSuplementar.observacoes || ''} onChange={e => setInfoSup('observacoes', e.target.value)} />
+              {errors.observacoes && <p className="text-red-600 text-sm">{errors.observacoes}</p>}
             </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="grid gap-1">
+              <label className="font-medium">Piloto em Comando*</label>
+              <input className="input" value={data.informacaoSuplementar.pilotoEmComando} onChange={e => setInfoSup('pilotoEmComando', e.target.value)} placeholder="Bregaida" />
+              {errors.pilotoEmComando && <p className="text-red-600 text-sm">{errors.pilotoEmComando}</p>}
+            </div>
             <div className="grid gap-1">
               <label className="font-medium">Cód. ANAC 1º Piloto*</label>
               <input className="input" value={data.informacaoSuplementar.anacPrimeiroPiloto} onChange={e => setInfoSup('anacPrimeiroPiloto', e.target.value)} />
               {errors.anacPrimeiroPiloto && <p className="text-red-600 text-sm">{errors.anacPrimeiroPiloto}</p>}
             </div>
             <div className="grid gap-1">
-              <label className="font-medium">Cód. ANAC 2º Piloto</label>
+              <label className="font-medium">Cód. ANAC 2º Piloto*</label>
               <input className="input" value={data.informacaoSuplementar.anacSegundoPiloto || ''} onChange={e => setInfoSup('anacSegundoPiloto', e.target.value)} />
+              {errors.anacSegundoPiloto && <p className="text-red-600 text-sm">{errors.anacSegundoPiloto}</p>}
             </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="grid gap-1">
-              <label className="font-medium">Telefone* (10-11 dígitos)</label>
+              <label className="font-medium">Telefone*</label>
               <input className="input" value={data.informacaoSuplementar.telefone} onChange={e => setInfoSup('telefone', e.target.value.replace(/\D/g, ''))} placeholder="11985586633" />
               {errors.telefone && <p className="text-red-600 text-sm">{errors.telefone}</p>}
             </div>
+            <div />
+            <div />
           </div>
         </div>
 
         <div className="flex items-center gap-3">
-          <button type="button" className="px-4 py-2 rounded-xl border" onClick={() => alert('Rascunho salvo localmente (simulado).')}>Salvar rascunho</button>
-          <button type="submit" className="px-4 py-2 rounded-xl bg-indigo-600 text-white" disabled={submitting}>{submitting ? 'Enviando...' : 'Submeter'}</button>
+          <button type="submit" className="px-4 py-2 rounded-xl bg-indigo-600 text-white" disabled={submitting}>{submitting ? 'Salvando...' : 'Salvar'}</button>
         </div>
       </form>
     </section>
