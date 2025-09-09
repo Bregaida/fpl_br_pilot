@@ -149,7 +149,6 @@ export default function PlanoDeVooForm() {
     if (!data.informacaoSuplementar.corEMarcaAeronave) e.corEMarcaAeronave = 'Cor e Marca da Aeronave é obrigatório'
     if (!data.informacaoSuplementar.pilotoEmComando) e.pilotoEmComando = 'Piloto em Comando é obrigatório'
     if (!data.informacaoSuplementar.anacPrimeiroPiloto) e.anacPrimeiroPiloto = 'Cód. ANAC 1º Piloto é obrigatório'
-    if (!data.informacaoSuplementar.anacSegundoPiloto) e.anacSegundoPiloto = 'Cód. ANAC 2º Piloto é obrigatório'
     if (!/^\d{10,11}$/.test(data.informacaoSuplementar.telefone)) e.telefone = 'Informe um telefone válido (somente números)'
     if (!data.informacaoSuplementar.radioEmergencia || (data.informacaoSuplementar.radioEmergencia.length === 0)) e.radioEmergencia = 'Selecione ao menos um equipamento de rádio de emergência'
     if (data.informacaoSuplementar.n && !(data.informacaoSuplementar.observacoes && data.informacaoSuplementar.observacoes.trim().length>0)) e.observacoes = 'Observações tornam-se obrigatórias quando N = sim'
@@ -586,7 +585,7 @@ export default function PlanoDeVooForm() {
               {errors.anacPrimeiroPiloto && <p className="text-red-600 text-sm">{errors.anacPrimeiroPiloto}</p>}
             </div>
             <div className="grid gap-1">
-              <label className="font-medium">Cód. ANAC 2º Piloto*</label>
+              <label className="font-medium">Cód. ANAC 2º Piloto</label>
               <input className="input" value={data.informacaoSuplementar.anacSegundoPiloto || ''} onChange={e => setInfoSup('anacSegundoPiloto', e.target.value)} />
               {errors.anacSegundoPiloto && <p className="text-red-600 text-sm">{errors.anacSegundoPiloto}</p>}
             </div>
