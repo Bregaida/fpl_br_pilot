@@ -19,6 +19,6 @@ export const AerodromosAPI = {
 };
 
 export const FlightplanAPI = {
-  create: (payload: any) => api.post(`/api/v1/flightplans`, payload),
+  create: (payload: any) => api.post(`/api/v1/fpl`, payload),
   getById: (id: string | number) => api.get(`/api/v1/flightplans/${id}`)
 };
