@@ -11,8 +11,8 @@ export const mockAerodromeInfo: AerodromoInfo = {
     fonte: 'INMET'
   },
   cartas: [
-    { tipo: 'VAC', titulo: 'Carta de AproximaÃ§Ã£o Visual', pdf: 'SBGR_VAC.pdf' },
-    { tipo: 'IAC', titulo: 'Carta de AproximaÃ§Ã£o por Instrumentos', pdf: 'SBGR_IAC.pdf' }
+    { tipo: 'VAC', titulo: 'Carta de Aproximação Visual', pdf: 'SBGR_VAC.pdf' },
+    { tipo: 'IAC', titulo: 'Carta de Aproximação por Instrumentos', pdf: 'SBGR_IAC.pdf' }
   ]
 };
 

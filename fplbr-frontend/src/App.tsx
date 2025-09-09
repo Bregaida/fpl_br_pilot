@@ -1,7 +1,9 @@
 ﻿import { Routes, Route, Navigate, Link, useLocation } from 'react-router-dom'
 import PlanoDeVooForm from './pages/PlanoDeVooForm'
+import PlanoDeVooView from './pages/PlanoDeVooView'
 import { FlightPlanList } from './pages/FlightPlanList'
 import { Layout } from './components/Layout'
+import AerodromosPage from './pages/Aerodromos'
 
 export default function App() {
   const location = useLocation()
@@ -10,7 +12,9 @@ export default function App() {
       <Routes location={location}>
         <Route path="/" element={<Navigate to="/flightplan/novo" replace />} />
         <Route path="/flightplan/novo" element={<PlanoDeVooForm />} />
+        <Route path="/flightplan/:id" element={<PlanoDeVooView />} />
         <Route path="/flightplan/listar" element={<FlightPlanList />} />
+        <Route path="/aerodromos" element={<AerodromosPage />} />
         <Route
           path="*"
           element={

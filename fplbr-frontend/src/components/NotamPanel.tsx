@@ -77,7 +77,7 @@ export default function NotamPanel({ notams, aerodromes, isLoading = false }: No
     return (
       <div className="bg-white rounded-lg shadow p-4">
         <div className="text-center py-4 text-gray-500">
-          <p>Nenhum aerÃ³dromo selecionado</p>
+          <p>Nenhum aeródromo selecionado</p>
         </div>
       </div>
     );
@@ -150,11 +150,11 @@ export default function NotamPanel({ notams, aerodromes, isLoading = false }: No
         ) : (
           <div className="p-6 text-center">
             <ExclamationCircleIcon className="mx-auto h-12 w-12 text-gray-400" />
-            <h3 className="mt-2 text-sm font-medium text-gray-900">Nenhum NOTAM encontrado</h3>
+            <h3 className="mt-2 text-sm font-medium text-gray-900">Nenhuma NOTAM encontrada</h3>
             <p className="mt-1 text-sm text-gray-500">
               {showActiveOnly 
-                ? 'Nenhum NOTAM ativo encontrado para o aerÃ³dromo selecionado.'
-                : 'Nenhum NOTAM encontrado para o aerÃ³dromo selecionado.'}
+                ? 'Nenhuma NOTAM ativa encontrada para o aeródromo selecionado.'
+                : 'Nenhuma NOTAM encontrada para o aeródromo selecionado.'}
             </p>
           </div>
         )}
