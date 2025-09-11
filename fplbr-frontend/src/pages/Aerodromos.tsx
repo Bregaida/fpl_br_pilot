@@ -2,7 +2,7 @@ import React from 'react'
 import AerodromePanel from '../components/AerodromePanel'
 import MeteoPanel from '../components/MeteoPanel'
 import NotamPanel from '../components/NotamPanel'
-import { api, AerodromosAPI } from '../services/api'
+import { api } from '../services/api'
 
 type AerodromoDTO = {
   icao: string
@@ -29,9 +29,11 @@ export default function AerodromosPage() {
       const res = await api.get(`/api/v1/aerodromos/${q}`)
       setSelecionado(q)
       setDetalhe(res.data)
-      // Carregar MET e NOTAMs
-      try { setMeteo({ [q]: (await api.get('/api/briefing', { params: { icao: q }})).data }) } catch {}
-      try { setNotams({ [q]: (await api.get('/api/notams', { params: { icao: q }})).data }) } catch {}
+      // TODO: Implementar endpoints de MET e NOTAMs no backend
+      // try { setMeteo({ [q]: (await api.get('/api/briefing', { params: { icao: q }})).data }) } catch {}
+      // try { setNotams({ [q]: (await api.get('/api/notams', { params: { icao: q }})).data }) } catch {}
+    } catch (error) {
+      console.error('Erro ao buscar aeródromo:', error)
     } finally {
       setLoading(false)
     }

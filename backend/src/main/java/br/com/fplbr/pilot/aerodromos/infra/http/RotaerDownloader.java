@@ -9,7 +9,7 @@ import java.net.URL;
 
 @ApplicationScoped
 public class RotaerDownloader {
-    private static final String ROTAER_PDF = "https://aisweb.decea.gov.br/downloads/rotaer/rotaer_completo.pdf";
+    private static final String ROTAER_PDF = "https://aisweb.decea.mil.br/downloads/rotaer/rotaer_completo.pdf";
     private static final Logger LOG = Logger.getLogger(RotaerDownloader.class);
 
     public byte[] baixarPdf() {

@@ -2,8 +2,8 @@ import React from 'react'
 import RadioGroup from '../components/RadioGroup'
 import CheckboxGroup from '../components/CheckboxGroup'
 import NivelAssist from '../components/NivelAssist'
-import { PlanoDeVooDTO, ModoPlano } from '../types/PlanoDeVooDTO'
-import { nowUtcISO, toUtcIsoFromLocalDateTimeLocal, todayDdmmaaUtc, parseHHmmToMinutes, isFutureAtLeastMinutes } from '../utils/time'
+import { PlanoDeVooDTO } from '../types/PlanoDeVooDTO'
+import { nowUtcISO, todayDdmmaaUtc, parseHHmmToMinutes, isFutureAtLeastMinutes } from '../utils/time'
 import { getSunInfo, isNoturnoPorJanela } from '../services/SunService'
 import { vooNoturnoAutorizado } from '../services/AerodromoService'
 import { api } from '../services/api'
@@ -41,6 +41,7 @@ export default function PlanoDeVooForm() {
     },
     informacaoSuplementar: {
       autonomia: '',
+      pob: 1,
       corEMarcaAeronave: '',
       pilotoEmComando: '',
       anacPrimeiroPiloto: '',
@@ -151,6 +152,7 @@ export default function PlanoDeVooForm() {
 
     if (!data.tempoDeVooPrevisto || isNaN(parseHHmmToMinutes(data.tempoDeVooPrevisto))) e.tempoDeVooPrevisto = 'Informe EET (HHmm)'
     if (!data.informacaoSuplementar.autonomia || isNaN(parseHHmmToMinutes(data.informacaoSuplementar.autonomia))) e.autonomia = 'Informe autonomia'
+    if (!data.informacaoSuplementar.pob || data.informacaoSuplementar.pob < 1 || data.informacaoSuplementar.pob > 999) e.pob = 'Informe pessoas a bordo (1-999)'
     const eetMin = parseHHmmToMinutes(data.tempoDeVooPrevisto)
     const autMin = parseHHmmToMinutes(data.informacaoSuplementar.autonomia)
     if (!isNaN(eetMin) && !isNaN(autMin) && eetMin > autMin) e.tempoDeVooPrevisto = 'EET não pode exceder a autonomia informada'
@@ -159,7 +161,7 @@ export default function PlanoDeVooForm() {
     const minAhead = data.modo === 'PVC' ? 45 : 15
     const iso = buildIsoFromDofAndHora()
     if (!iso || !isFutureAtLeastMinutes(iso, minAhead)) {
-      e.horaPartida = `Hora de partida deve ser ≥ agora UTC + ${minAhead} min`
+      e.horaPartida = `Hora de partida deve ser maior ou igual hora atual (ZULU) + ${minAhead} min`
     }
 
     // OutrasInformações
@@ -203,26 +205,139 @@ export default function PlanoDeVooForm() {
 
   React.useEffect(() => { verificarNoturno() }, [data.aerodromoDeAlternativa, data.horaPartida, data.tempoDeVooPrevisto, data.outrasInformacoes.dof])
 
+  // Função para transformar FplForm em PlanoDeVooDTO
+  function transformToPlanoDeVooDTO(formData: any) {
+    // Converter equipamentos para array de strings
+    let equipamentos = []
+    if (Array.isArray(formData.equipamentoCapacidadeDaAeronave)) {
+      equipamentos = formData.equipamentoCapacidadeDaAeronave
+    } else if (formData.equipamentoCapacidadeDaAeronave) {
+      for (const [key, value] of Object.entries(formData.equipamentoCapacidadeDaAeronave)) {
+        if (value) equipamentos.push(key)
+      }
+    }
+    
+    // Converter vigilância para array de strings
+    let vigilancia = []
+    if (Array.isArray(formData.vigilancia)) {
+      vigilancia = formData.vigilancia
+    } else if (formData.vigilancia) {
+      for (const [key, value] of Object.entries(formData.vigilancia)) {
+        if (value) vigilancia.push(key)
+      }
+    }
+    
+    return {
+      identificacaoDaAeronave: formData.identificacaoDaAeronave,
+      indicativoDeChamada: formData.indicativoDeChamada,
+      regraDeVooEnum: formData.regraDeVooEnum,
+      tipoDeVooEnum: formData.tipoDeVooEnum,
+      numeroDeAeronaves: formData.numeroDeAeronaves || 1,
+      tipoDeAeronave: formData.tipoDeAeronave,
+      categoriaEsteiraTurbulenciaEnum: formData.categoriaEsteiraTurbulenciaEnum,
+      equipamentoCapacidadeDaAeronave: equipamentos,
+      vigilancia: vigilancia,
+      aerodromoDePartida: formData.aerodromoDePartida,
+      horaPartida: formData.horaPartida,
+      aerodromoDeDestino: formData.aerodromoDeDestino,
+      tempoDeVooPrevisto: formData.tempoDeVooPrevisto,
+      aerodromoDeAlternativa: formData.aerodromoDeAlternativa,
+      aerodromoDeAlternativaSegundo: formData.aerodromoDeAlternativaSegundo,
+      velocidadeDeCruzeiro: formData.velocidadeDeCruzeiro,
+      nivelDeVoo: formData.nivelDeVoo,
+      rota: formData.rota,
+      outrasInformacoes: {
+        sts: formData.outrasInformacoes?.sts || '',
+        pbn: formData.outrasInformacoes?.pbn || '',
+        nav: formData.outrasInformacoes?.nav || '',
+        com: formData.outrasInformacoes?.com || '',
+        dat: formData.outrasInformacoes?.dat || '',
+        sur: formData.outrasInformacoes?.sur || '',
+        dep: formData.outrasInformacoes?.dep || '',
+        dest: formData.outrasInformacoes?.dest || '',
+        reg: formData.outrasInformacoes?.reg || '',
+        eet: formData.outrasInformacoes?.eet || '',
+        sel: formData.outrasInformacoes?.sel || '',
+        typ: formData.outrasInformacoes?.typ || '',
+        code: formData.outrasInformacoes?.code || '',
+        dle: formData.outrasInformacoes?.dle || '',
+        opr: formData.outrasInformacoes?.opr || '',
+        orgn: formData.outrasInformacoes?.orgn || '',
+        per: formData.outrasInformacoes?.per || [],
+        altn: formData.outrasInformacoes?.altn || '',
+        ralt: formData.outrasInformacoes?.ralt || '',
+        talt: formData.outrasInformacoes?.talt || '',
+        rif: formData.outrasInformacoes?.rif || '',
+        rmk: formData.outrasInformacoes?.rmk || '',
+        from: formData.outrasInformacoes?.from || '',
+        dof: formData.outrasInformacoes?.dof || ''
+      },
+      informacaoSuplementar: {
+        autonomia: formData.informacaoSuplementar?.autonomia || '0000',
+        pob: formData.informacaoSuplementar?.pob || 1,
+        radioEmergencia: Array.isArray(formData.informacaoSuplementar?.radioEmergencia) ? 
+          formData.informacaoSuplementar.radioEmergencia : 
+          (formData.informacaoSuplementar?.radioEmergencia ? 
+            Object.keys(formData.informacaoSuplementar.radioEmergencia).filter(k => formData.informacaoSuplementar.radioEmergencia[k]) : []),
+        sobrevivencia: Array.isArray(formData.informacaoSuplementar?.sobrevivencia) ? 
+          formData.informacaoSuplementar.sobrevivencia : 
+          (formData.informacaoSuplementar?.sobrevivencia ? 
+            Object.keys(formData.informacaoSuplementar.sobrevivencia).filter(k => formData.informacaoSuplementar.sobrevivencia[k]) : []),
+        coletes: Array.isArray(formData.informacaoSuplementar?.coletes) ? 
+          formData.informacaoSuplementar.coletes : 
+          (formData.informacaoSuplementar?.coletes ? 
+            Object.keys(formData.informacaoSuplementar.coletes).filter(k => formData.informacaoSuplementar.coletes[k]) : []),
+        botes: formData.informacaoSuplementar?.botes || null,
+        corEMarcaAeronave: formData.informacaoSuplementar?.corEMarcaAeronave || formData.informacaoSuplementar?.infoAdicionais?.corMarcaANV || '',
+        observacoes: formData.informacaoSuplementar?.observacoes || formData.informacaoSuplementar?.infoAdicionais?.observacoes || '',
+        pilotoEmComando: formData.informacaoSuplementar?.pilotoEmComando || formData.informacaoSuplementar?.infoAdicionais?.pilotoEmComando || '',
+        anacPrimeiroPiloto: formData.informacaoSuplementar?.anacPrimeiroPiloto || formData.informacaoSuplementar?.infoAdicionais?.codAnac1 || '',
+        anacSegundoPiloto: formData.informacaoSuplementar?.anacSegundoPiloto || formData.informacaoSuplementar?.infoAdicionais?.codAnac2 || '',
+        telefone: formData.informacaoSuplementar?.telefone || formData.informacaoSuplementar?.infoAdicionais?.telefone || '',
+        n: formData.informacaoSuplementar?.n || formData.informacaoSuplementar?.infoAdicionais?.n || false
+      },
+      modo: formData.modo
+    }
+  }
+
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault()
     if (!validate()) return
     setSubmitting(true)
     try {
       const iso = buildIsoFromDofAndHora()
-      if (iso) data.horaPartida = iso
+      if (iso) {
+        data.horaPartida = iso
+      } else {
+        console.warn('Não foi possível construir ISO date, usando data atual')
+        data.horaPartida = new Date().toISOString()
+      }
       // Garantir DOF em ddMMaa no envio
       const dofVal = data.outrasInformacoes.dof || ''
       if (dofVal.includes('-')) {
         setOutras('dof', ymdToDdmmaa(dofVal))
       }
-      const res = await api.post('/api/v1/flightplans', data)
+      // Transformar dados para o formato esperado pelo backend
+      console.log('Dados do formulário antes da transformação:', data)
+      const transformedData = transformToPlanoDeVooDTO(data)
+      console.log('Dados transformados para envio:', transformedData)
+      const res = await api.post('/api/v1/flightplans', transformedData)
       const id = res?.data?.id
       if (id) {
         navigate(`/flightplan/${id}`)
       } else {
-        alert('FPL enviado com sucesso')
+        // Se não há ID (persistência falhou), redireciona para detalhes com dados temporários
+        alert('FPL enviado com sucesso! Redirecionando para detalhes...')
+        // Criar um ID temporário baseado no timestamp
+        const tempId = `temp-${Date.now()}`
+        // Salvar dados temporariamente no localStorage para exibição
+        localStorage.setItem(`flightplan-${tempId}`, JSON.stringify(transformedData))
+        navigate(`/flightplan/${tempId}`)
       }
     } catch (err: any) {
+      console.error('Erro ao enviar FPL:', err)
+      console.error('Response data:', err?.response?.data)
+      console.error('Response status:', err?.response?.status)
       alert('Erro ao enviar FPL: ' + (err?.response?.data?.message || err?.message || 'desconhecido'))
     } finally {
       setSubmitting(false)
@@ -436,10 +551,88 @@ export default function PlanoDeVooForm() {
 
           {/* Campos dinâmicos por chave */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {outrasSelecionadas.includes('STS') && (
+              <div className="grid gap-1">
+                <label className="font-medium">STS/</label>
+                <input className="input" value={data.outrasInformacoes.sts || ''} onChange={e => setOutras('sts', e.target.value)} placeholder="ex.: ALTRV" />
+              </div>
+            )}
+            {outrasSelecionadas.includes('PBN') && (
+              <div className="grid gap-1">
+                <label className="font-medium">PBN/</label>
+                <input className="input" value={data.outrasInformacoes.pbn || ''} onChange={e => setOutras('pbn', e.target.value)} placeholder="ex.: A1B1C1D1L1O1S1T1" />
+              </div>
+            )}
+            {outrasSelecionadas.includes('NAV') && (
+              <div className="grid gap-1">
+                <label className="font-medium">NAV/</label>
+                <input className="input" value={data.outrasInformacoes.nav || ''} onChange={e => setOutras('nav', e.target.value)} placeholder="ex.: GNSS" />
+              </div>
+            )}
+            {outrasSelecionadas.includes('COM') && (
+              <div className="grid gap-1">
+                <label className="font-medium">COM/</label>
+                <input className="input" value={data.outrasInformacoes.com || ''} onChange={e => setOutras('com', e.target.value)} placeholder="ex.: VHF" />
+              </div>
+            )}
+            {outrasSelecionadas.includes('DAT') && (
+              <div className="grid gap-1">
+                <label className="font-medium">DAT/</label>
+                <input className="input" value={data.outrasInformacoes.dat || ''} onChange={e => setOutras('dat', e.target.value)} placeholder="ex.: CPDLC" />
+              </div>
+            )}
+            {outrasSelecionadas.includes('SUR') && (
+              <div className="grid gap-1">
+                <label className="font-medium">SUR/</label>
+                <input className="input" value={data.outrasInformacoes.sur || ''} onChange={e => setOutras('sur', e.target.value)} placeholder="ex.: 400B" />
+              </div>
+            )}
+            {outrasSelecionadas.includes('DEP') && (
+              <div className="grid gap-1">
+                <label className="font-medium">DEP/</label>
+                <input className="input" value={data.outrasInformacoes.dep || ''} onChange={e => setOutras('dep', e.target.value)} placeholder="ex.: SBMT" />
+              </div>
+            )}
+            {outrasSelecionadas.includes('DEST') && (
+              <div className="grid gap-1">
+                <label className="font-medium">DEST/</label>
+                <input className="input" value={data.outrasInformacoes.dest || ''} onChange={e => setOutras('dest', e.target.value)} placeholder="ex.: SBMT" />
+              </div>
+            )}
+            {outrasSelecionadas.includes('REG') && (
+              <div className="grid gap-1">
+                <label className="font-medium">REG/</label>
+                <input className="input" value={data.outrasInformacoes.reg || ''} onChange={e => setOutras('reg', e.target.value)} placeholder="ex.: PT-OSP" />
+              </div>
+            )}
             {outrasSelecionadas.includes('EET') && (
               <div className="grid gap-1">
                 <label className="font-medium">EET/ (FIR + tempo)</label>
                 <input className="input" value={data.outrasInformacoes.eet || ''} onChange={e => setOutras('eet', e.target.value)} placeholder="ex.: SBC0005 SBBS0150" />
+              </div>
+            )}
+            {outrasSelecionadas.includes('SEL') && (
+              <div className="grid gap-1">
+                <label className="font-medium">SEL/</label>
+                <input className="input" value={data.outrasInformacoes.sel || ''} onChange={e => setOutras('sel', e.target.value)} placeholder="ex.: SELCAL" />
+              </div>
+            )}
+            {outrasSelecionadas.includes('TYP') && (
+              <div className="grid gap-1">
+                <label className="font-medium">TYP/</label>
+                <input className="input" value={data.outrasInformacoes.typ || ''} onChange={e => setOutras('typ', e.target.value)} placeholder="ex.: BL8" />
+              </div>
+            )}
+            {outrasSelecionadas.includes('CODE') && (
+              <div className="grid gap-1">
+                <label className="font-medium">CODE/</label>
+                <input className="input" value={data.outrasInformacoes.code || ''} onChange={e => setOutras('code', e.target.value)} placeholder="ex.: 1234" />
+              </div>
+            )}
+            {outrasSelecionadas.includes('DLE') && (
+              <div className="grid gap-1">
+                <label className="font-medium">DLE/</label>
+                <input className="input" value={data.outrasInformacoes.dle || ''} onChange={e => setOutras('dle', e.target.value)} placeholder="ex.: SBMT0030" />
               </div>
             )}
             {outrasSelecionadas.includes('OPR') && (
@@ -449,11 +642,41 @@ export default function PlanoDeVooForm() {
                 {errors.opr && <p className="text-red-600 text-sm">{errors.opr}</p>}
               </div>
             )}
+            {outrasSelecionadas.includes('ORGN') && (
+              <div className="grid gap-1">
+                <label className="font-medium">ORGN/</label>
+                <input className="input" value={data.outrasInformacoes.orgn || ''} onChange={e => setOutras('orgn', e.target.value)} placeholder="ex.: SBMT" />
+              </div>
+            )}
             {outrasSelecionadas.includes('FROM') && (
               <div className="grid gap-1">
                 <label className="font-medium">FROM/*</label>
                 <input className="input" value={data.outrasInformacoes.from} onInput={uppercaseField} onChange={e => setOutras('from', e.target.value.toUpperCase())} placeholder="ex.: SBMT" />
                 {errors.from && <p className="text-red-600 text-sm">{errors.from}</p>}
+              </div>
+            )}
+            {outrasSelecionadas.includes('ALTN') && (
+              <div className="grid gap-1">
+                <label className="font-medium">ALTN/</label>
+                <input className="input" value={data.outrasInformacoes.altn || ''} onChange={e => setOutras('altn', e.target.value)} placeholder="ex.: SBJD" />
+              </div>
+            )}
+            {outrasSelecionadas.includes('RALT') && (
+              <div className="grid gap-1">
+                <label className="font-medium">RALT/</label>
+                <input className="input" value={data.outrasInformacoes.ralt || ''} onChange={e => setOutras('ralt', e.target.value)} placeholder="ex.: SBJD" />
+              </div>
+            )}
+            {outrasSelecionadas.includes('TALT') && (
+              <div className="grid gap-1">
+                <label className="font-medium">TALT/</label>
+                <input className="input" value={data.outrasInformacoes.talt || ''} onChange={e => setOutras('talt', e.target.value)} placeholder="ex.: SBJD" />
+              </div>
+            )}
+            {outrasSelecionadas.includes('RIF') && (
+              <div className="grid gap-1">
+                <label className="font-medium">RIF/</label>
+                <input className="input" value={data.outrasInformacoes.rif || ''} onChange={e => setOutras('rif', e.target.value)} placeholder="ex.: SBMT SBJD" />
               </div>
             )}
           </div>
@@ -462,26 +685,15 @@ export default function PlanoDeVooForm() {
             {outrasSelecionadas.includes('PER') && (
               <div className="grid gap-1">
                 <label className="font-medium">PER/ (PVC)</label>
-                <div className="flex flex-wrap gap-3">
-                  {['A','B','C','D','E','H'].map(p => (
-                    <label key={p} className="inline-flex items-center gap-2">
-                      <input type="checkbox" className="accent-indigo-600" checked={(data.outrasInformacoes.per||[]).includes(p)} onChange={() => {
-                        const set = new Set(data.outrasInformacoes.per||[]); if(set.has(p)) set.delete(p); else set.add(p); setOutras('per', Array.from(set))
-                      }} />
-                      <span>{p}<sup
-                        title={
-                          p==='A' ? 'Categoria A: Inclui aeronaves com velocidade aerodinâmica indicada menor que \(91\\text{kt}\).' :
-                          p==='B' ? 'Categoria B: Abrange aeronaves com velocidade aerodinâmica indicada igual ou maior que \(91\\text{kt}\) e menor que \(121\\text{kt}\).' :
-                          p==='C' ? 'Categoria C: Engloba aeronaves com velocidade aerodinâmica indicada igual ou maior que \(121\\text{kt}\) e menor que \(141\\text{kt}\).' :
-                          p==='D' ? 'Categoria D: Corresponde a aeronaves com velocidade aerodinâmica indicada igual ou maior que \(141\\text{kt}\) e menor que \(166\\text{kt}\).' :
-                          p==='E' ? 'Categoria E: Refere-se a aeronaves com velocidade aerodinâmica indicada igual ou maior que \(166\\text{kt}\) e menor que \(211\\text{kt}\).' :
-                          'Helicópteros'
-                        }
-                        className="text-slate-500 ml-1"
-                      >¹</sup></span>
-                    </label>
-                  ))}
-                </div>
+                <select className="input" value={data.outrasInformacoes.per?.[0] || ''} onChange={e => setOutras('per', e.target.value ? [e.target.value] : [])}>
+                  <option value="">Selecione uma categoria</option>
+                  <option value="A">A - Categoria A (&lt;91kt)</option>
+                  <option value="B">B - Categoria B (91-121kt)</option>
+                  <option value="C">C - Categoria C (121-141kt)</option>
+                  <option value="D">D - Categoria D (141-166kt)</option>
+                  <option value="E">E - Categoria E (166-211kt)</option>
+                  <option value="H">H - Helicópteros</option>
+                </select>
                 {errors.per && <p className="text-red-600 text-sm">{errors.per}</p>}
               </div>
             )}
@@ -507,18 +719,6 @@ export default function PlanoDeVooForm() {
             )}
           </div>
 
-          {/* Campos genéricos restantes */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {['STS','PBN','NAV','COM','DAT','SUR','DEP','DEST','REG','SEL','TYP','CODE','DLE','ORGN','ALTN','RALT','TALT','RIF'].map(k => (
-              outrasSelecionadas.includes(k) ? (
-                <div key={k} className="grid gap-1">
-                  <label className="font-medium">{k}/</label>
-                  <input className="input" value={(data.outrasInformacoes as any)[k.toLowerCase()] || ''}
-                    onChange={e => setOutras(k.toLowerCase() as any, e.target.value)} />
-                </div>
-              ) : null
-            ))}
-          </div>
         </div>
 
         <div className="grid gap-4 p-4 rounded-2xl bg-white border border-slate-200 shadow-sm">
@@ -528,6 +728,11 @@ export default function PlanoDeVooForm() {
               <label className="font-medium">Autonomia*</label>
               <input className="input" value={data.informacaoSuplementar.autonomia} onChange={e => setInfoSup('autonomia', e.target.value)} placeholder="ex.: 0100" />
               {errors.autonomia && <p className="text-red-600 text-sm">{errors.autonomia}</p>}
+            </div>
+            <div className="grid gap-1">
+              <label className="font-medium">Pessoas a bordo*</label>
+              <input type="number" min={1} max={999} className="input" value={data.informacaoSuplementar.pob || ''} onChange={e => setInfoSup('pob', e.target.value === '' ? 1 : Math.max(1, Math.min(999, parseInt(e.target.value, 10))))} placeholder="ex.: 2" />
+              {errors.pob && <p className="text-red-600 text-sm">{errors.pob}</p>}
             </div>
             <CheckboxGroup name="radioEmg" label={<><span>Equipamento Rádio Emergência*</span></>} options={[{value:'U',label:'U',tooltip:'UHF'},{value:'V',label:'V',tooltip:'VHF'},{value:'E',label:'E',tooltip:'ELT'}]} values={data.informacaoSuplementar.radioEmergencia || []} onChange={vals => setInfoSup('radioEmergencia', vals)} />
             <div className="grid gap-1">

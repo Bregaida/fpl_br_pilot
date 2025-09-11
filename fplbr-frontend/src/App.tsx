@@ -4,6 +4,12 @@ import PlanoDeVooView from './pages/PlanoDeVooView'
 import { FlightPlanList } from './pages/FlightPlanList'
 import { Layout } from './components/Layout'
 import AerodromosPage from './pages/Aerodromos'
+import LoginPage from './pages/Login'
+import CadastroPage from './pages/Cadastro'
+import EsqueciSenhaPage from './pages/EsqueciSenha'
+import TrocaSenhaPage from './pages/TrocaSenha'
+import TesteValidacaoPage from './pages/TesteValidacao'
+import TesteOnBlurPage from './pages/TesteOnBlur'
 
 export default function App() {
   const location = useLocation()
@@ -15,6 +21,12 @@ export default function App() {
         <Route path="/flightplan/:id" element={<PlanoDeVooView />} />
         <Route path="/flightplan/listar" element={<FlightPlanList />} />
         <Route path="/aerodromos" element={<AerodromosPage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/cadastro" element={<CadastroPage />} />
+        <Route path="/esqueci-senha" element={<EsqueciSenhaPage />} />
+        <Route path="/troca-senha" element={<TrocaSenhaPage />} />
+        <Route path="/teste-validacao" element={<TesteValidacaoPage />} />
+        <Route path="/teste-onblur" element={<TesteOnBlurPage />} />
         <Route
           path="*"
           element={

@@ -25,6 +25,8 @@ public class RotaerPdfParser {
             PDFTextStripper stripper = new PDFTextStripper();
             String text = stripper.getText(doc);
             String[] lines = text.split("\r?\n");
+            
+            // Primeiro, tenta o padrão principal
             for (String line : lines) {
                 Matcher m = ICAO_LINE.matcher(line.trim());
                 if (m.find()) {
@@ -33,6 +35,8 @@ public class RotaerPdfParser {
                     out.add(Aerodromo.builder().icao(icao).nome(nome.isEmpty()?icao:nome).ativo(true).build());
                 }
             }
+            
+            // Se não encontrou nada, usa o fallback
             if (out.isEmpty()) {
                 java.util.Set<String> codigos = new java.util.LinkedHashSet<>();
                 Matcher m2 = ICAO_FALLBACK.matcher(text);
@@ -43,7 +47,16 @@ public class RotaerPdfParser {
                     out.add(Aerodromo.builder().icao(icao).nome(icao).ativo(true).build());
                 }
             }
-        } catch (Exception ignore) {}
+            
+            // Log para debug
+            System.out.println("ROTAER Parser: encontrados " + out.size() + " aeródromos");
+            if (out.size() > 0) {
+                System.out.println("Primeiros 5: " + out.stream().limit(5).map(a -> a.getIcao()).toList());
+            }
+            
+        } catch (Exception e) {
+            System.err.println("Erro no parser ROTAER: " + e.getMessage());
+        }
         return out;
     }
 }
