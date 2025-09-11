@@ -1,61 +1,43 @@
 ﻿services:
-  backend:
-    build:
-      context: ./backend
-    container_name: fplbr-backend
+  db:
+    image: postgres:16
+    container_name: fplbr-db
     environment:
-      # H2 em memÃ³ria (dev)
-      - QUARKUS_DATASOURCE_DB_KIND=h2
-      - QUARKUS_DATASOURCE_JDBC_URL=jdbc:h2:mem:fplrotaer;DB_CLOSE_DELAY=-1
-      - QUARKUS_DATASOURCE_USERNAME=sa
-      - QUARKUS_DATASOURCE_PASSWORD=sa
-      - QUARKUS_HIBERNATE_ORM_DATABASE_GENERATION=update
-      # Schedulers ativados em dev, se aplicÃ¡vel
-      - QUARKUS_SCHEDULER_ENABLED=true
-    restart: unless-stopped
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8080/api/v1/saude/ping"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 5s
-
-  bff:
-    build: ./bff
-    container_name: fplbr-bff
+      POSTGRES_DB: ${POSTGRES_DB:-fpl}
+      POSTGRES_USER: ${POSTGRES_USER:-fpl_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-fpl_pass}
     ports:
-      - "3001:3001"
+      - "5432:5432"
+    volumes:
+      - fpl_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  pgadmin:
+    image: dpage/pgadmin4:8
+    container_name: fplbr-pgadmin
     environment:
-      - PORT=3001
-      - BACKEND_BASE_URL=http://backend:8080
-      - NODE_ENV=production
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL:-admin@local}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASS:-admin}
+    ports:
+      - "8081:80"
     depends_on:
-      backend:
+      db:
         condition: service_healthy
     restart: unless-stopped
-    healthcheck:
-      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3001/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 5s
 
-  web:
-    build:
-      context: ./fplbr-frontend
-      args:
-        - VITE_BFF_URL=/api
-    container_name: fplbr-web
-    ports:
-      - "8088:80"
-      - "8089:80"
-    depends_on:
-      bff:
-        condition: service_healthy
+  mailhog:
+    image: mailhog/mailhog:latest
+    container_name: fpl_mailhog
     restart: unless-stopped
-    healthcheck:
-      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 5s
+    ports:
+      - "1025:1025"
+      - "8025:8025"
+
+volumes:
+  fpl_pgdata:
+    name: fpl_pgdata

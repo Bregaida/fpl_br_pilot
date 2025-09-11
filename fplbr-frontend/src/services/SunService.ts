@@ -5,7 +5,7 @@ export interface SunInfo {
   sunsetUtc: string  // ISO UTC
 }
 
-function mockSun(icao: string, dofYyMmDd: string): SunInfo {
+function mockSun(_icao: string, dofYyMmDd: string): SunInfo {
   // Mock simples: sunrise 09:30Z, sunset 21:30Z na data informada (UTC)
   const yy = dofYyMmDd.slice(4, 6)
   const mm = dofYyMmDd.slice(2, 4)

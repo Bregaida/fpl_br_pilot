@@ -1,5 +1,5 @@
 import React from 'react'
-import { FormField } from '../components/FormField'
+import FormField from '../components/FormField'
 
 export function FlightPlanNew() {
   const [submitting, setSubmitting] = React.useState(false)

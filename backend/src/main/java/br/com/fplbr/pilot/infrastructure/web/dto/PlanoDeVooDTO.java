@@ -156,6 +156,10 @@ public class PlanoDeVooDTO {
         @Pattern(regexp = "^([0-1]\\d|2[0-3])[0-5]\\d$")
         private String autonomia; // HHmm
 
+        @NotNull
+        @Min(1)
+        private Integer pob; // pessoas a bordo
+
         private List<@Pattern(regexp = "^[UVE]$") String> radioEmergencia;
         private List<@Pattern(regexp = "^[SPDMJ]$") String> sobrevivencia;
         private List<@Pattern(regexp = "^[JLFUV]$") String> coletes;

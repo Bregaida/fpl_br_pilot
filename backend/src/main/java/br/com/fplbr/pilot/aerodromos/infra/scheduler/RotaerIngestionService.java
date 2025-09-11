@@ -1,11 +1,9 @@
 package br.com.fplbr.pilot.aerodromos.infra.scheduler;
 
-import br.com.fplbr.pilot.aerodromos.application.service.AerodromoService;
-import br.com.fplbr.pilot.aerodromos.infra.http.RotaerDownloader;
-import br.com.fplbr.pilot.aerodromos.infra.http.RotaerPdfParser;
 import br.com.fplbr.pilot.aerodromos.ports.in.CartasIndexerPort;
 import br.com.fplbr.pilot.aerodromos.ports.in.CartasZipDownloaderPort;
 import br.com.fplbr.pilot.aerodromos.ports.out.CartaRepositoryPort;
+import br.com.fplbr.pilot.rotaer.application.service.RotaerIntegrationService;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 
@@ -14,31 +12,24 @@ public class RotaerIngestionService {
     @Inject CartasZipDownloaderPort downloader;
     @Inject CartasIndexerPort indexer;
     @Inject CartaRepositoryPort cartaRepo;
-    @Inject RotaerDownloader rotaerDownloader;
-    @Inject RotaerPdfParser rotaerParser;
-    @Inject AerodromoService aerodromoService;
+    @Inject RotaerIntegrationService rotaerIntegrationService;
 
     public IngestionResult atualizarDados() {
         IngestionResult result = new IngestionResult();
 
-        // ROTAER PDF → Aeródromos
+        // ROTAER PDF → Aeródromos (usando novo pipeline)
         try {
-            byte[] pdf = rotaerDownloader.baixarPdf();
-            result.pdfDownloaded = pdf != null && pdf.length > 0;
-            var aerodromos = rotaerParser.parse(pdf);
-            result.aerodromosParsed = aerodromos != null ? aerodromos.size() : 0;
-            if (result.aerodromosParsed == 0) {
-                // Fallback mínimo para não ficar vazio (seed inicial)
-                aerodromos = java.util.List.of(
-                        br.com.fplbr.pilot.aerodromos.domain.model.Aerodromo.builder().icao("SBSP").nome("CONGONHAS").ativo(true).build(),
-                        br.com.fplbr.pilot.aerodromos.domain.model.Aerodromo.builder().icao("SBMT").nome("CAMPO DE MARTE").ativo(true).build()
-                );
+            RotaerIntegrationService.IngestionResult rotaerResult = rotaerIntegrationService.atualizarDados();
+            
+            // Mapear resultado do novo serviço para o formato existente
+            result.pdfDownloaded = rotaerResult.pdfDownloaded;
+            result.aerodromosParsed = rotaerResult.aerodromosParsed;
+            result.aerodromosPersisted = rotaerResult.aerodromosPersisted;
+            
+            if (rotaerResult.message != null && !rotaerResult.message.isEmpty()) {
+                result.message = "ROTAER: " + rotaerResult.message;
             }
-            int persisted = 0;
-            for (var a : aerodromos) {
-                try { aerodromoService.salvarAerodromo(a); persisted++; } catch (Exception ignored) {}
-            }
-            result.aerodromosPersisted = persisted;
+            
         } catch (Exception e) {
             result.message = (result.message == null ? "" : result.message + " | ") + "erro ROTAER: " + e.getClass().getSimpleName();
         }

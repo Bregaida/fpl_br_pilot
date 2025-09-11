@@ -1,7 +1,5 @@
 package br.com.fplbr.pilot.flightplan.infrastructure.web;
 
-import br.com.fplbr.pilot.flightplan.infrastructure.web.dto.FlightPlanDTO;
-import br.com.fplbr.pilot.flightplan.application.service.FlightPlanService;
 import br.com.fplbr.pilot.infrastructure.web.dto.PlanoDeVooDTO;
 import jakarta.persistence.EntityManager;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -14,7 +12,6 @@ import jakarta.ws.rs.core.Response;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.media.Content;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
-import org.eclipse.microprofile.openapi.annotations.parameters.Parameter;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 import jakarta.inject.Inject;
@@ -29,21 +26,20 @@ import java.util.List;
 @Tag(name = "Plano de Voo", description = "Operações relacionadas a planos de voo")
 public class FlightPlanResource {
 
-    private final FlightPlanService flightPlanService;
+    // private final FlightPlanService flightPlanService;
 
     @Inject
     ObjectMapper mapper;
+    
+    @Inject
     EntityManager em;
 
-    public FlightPlanResource(FlightPlanService flightPlanService) {
-        this.flightPlanService = flightPlanService;
-    }
+    // public FlightPlanResource(FlightPlanService flightPlanService) {
+    //     this.flightPlanService = flightPlanService;
+    // }
 
     @Inject
     public void setMapper(ObjectMapper mapper) { this.mapper = mapper; }
-
-    @Inject
-    public void setEntityManager(EntityManager em) { this.em = em; }
 
     @POST
     @Operation(summary = "Cria um novo plano de voo", description = "Recebe PlanoDeVooDTO e aplica as regras de validação")
@@ -57,7 +53,8 @@ public class FlightPlanResource {
             return badRequest("horaPartida", "Hora de partida deve ser ≥ agora UTC + " + minutos + " min");
         }
         int eet = hhmmToMinutes(dto.getTempoDeVooPrevisto());
-        int aut = hhmmToMinutes(dto.getInformacaoSuplementar().getAutonomia());
+        int aut = dto.getInformacaoSuplementar() != null ? 
+            hhmmToMinutes(dto.getInformacaoSuplementar().getAutonomia()) : Integer.MAX_VALUE;
         if (eet > aut) {
             return badRequest("tempoDeVooPrevisto", "EET não pode exceder a autonomia informada");
         }
@@ -76,24 +73,33 @@ public class FlightPlanResource {
         }
         br.com.fplbr.pilot.infrastructure.persistence.FplSubmission entity = null;
         try {
+            System.out.println("EntityManager: " + (em != null ? "OK" : "NULL"));
             String json = mapper.writeValueAsString(dto);
+            System.out.println("JSON gerado: " + json);
             entity = br.com.fplbr.pilot.infrastructure.persistence.FplSubmission.builder()
                     .createdAt(java.time.OffsetDateTime.now())
                     .modo(dto.getModo())
                     .identificacao(dto.getIdentificacaoDaAeronave())
                     .payloadJson(json)
                     .build();
+            System.out.println("Entity criada: " + entity);
             em.persist(entity);
-        } catch (Exception ignore) {}
+            System.out.println("Entity persistida");
+            em.flush(); // Força a persistência imediata
+            System.out.println("Flush executado");
+            System.out.println("ID após persist: " + entity.getId());
+        } catch (Exception e) {
+            System.err.println("Erro ao persistir FplSubmission: " + e.getMessage());
+            e.printStackTrace();
+        }
         URI location = entity != null && entity.getId() != null
                 ? URI.create("/api/v1/flightplans/submissions/" + entity.getId())
                 : URI.create("/api/v1/flightplans/submissions");
-        var body = java.util.Map.of(
-                "id", entity != null ? entity.getId() : null,
-                "createdAt", entity != null ? entity.getCreatedAt() : null,
-                "modo", dto.getModo(),
-                "identificacao", dto.getIdentificacaoDaAeronave()
-        );
+        var body = new java.util.HashMap<String, Object>();
+        body.put("id", entity != null ? entity.getId() : null);
+        body.put("createdAt", entity != null ? entity.getCreatedAt() : null);
+        body.put("modo", dto.getModo());
+        body.put("identificacao", dto.getIdentificacaoDaAeronave());
         return Response.created(location).entity(body).build();
     }
 
@@ -136,12 +142,12 @@ public class FlightPlanResource {
             return java.util.Map.of(
                     "id", f.getId(),
                     "createdAt", f.getCreatedAt(),
-                    "modo", f.getModo(),
-                    "identificacao", f.getIdentificacao(),
-                    "aerodromoDePartida", dep,
-                    "aerodromoDeDestino", dest,
-                    "tipoDeVooEnum", tipo,
-                    "regraDeVooEnum", regra
+                    "modo", f.getModo() != null ? f.getModo() : "",
+                    "identificacao", f.getIdentificacao() != null ? f.getIdentificacao() : "",
+                    "aerodromoDePartida", dep != null ? dep : "",
+                    "aerodromoDeDestino", dest != null ? dest : "",
+                    "tipoDeVooEnum", tipo != null ? tipo : "",
+                    "regraDeVooEnum", regra != null ? regra : ""
             );
         }).toList();
         return Response.ok(out).build();
@@ -169,6 +175,10 @@ public class FlightPlanResource {
         return Response.ok(out).build();
     }
 
+    // Endpoints comentados temporariamente devido a conflitos de DTO
+    // TODO: Resolver conflitos entre FlightPlanDTO e PlanoDeVooDTO
+    
+    /*
     @GET
     @Path("/{id}")
     @Operation(
@@ -294,4 +304,5 @@ public class FlightPlanResource {
         List<FlightPlanDTO> flightPlans = flightPlanService.getFlightPlansByAircraft(aircraftRegistration);
         return Response.ok(flightPlans).build();
     }
+    */
 }

@@ -33,6 +33,9 @@ export function FlightPlanList() {
           }
         }
         setRows(grouped)
+      } catch (error) {
+        console.error('Erro ao carregar lista de FPLs:', error)
+        setRows([])
       } finally {
         setLoading(false)
       }
