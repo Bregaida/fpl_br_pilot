@@ -195,7 +195,7 @@ function Run-Backend {
 
 function Run-Frontend {
   Write-Title "Frontend: npm ci && build"
-  Push-Location fplbr-frontend
+  Push-Location frontend
   try {
     if (Test-Path package-lock.json) { npm ci } else { npm install }
     npm run build

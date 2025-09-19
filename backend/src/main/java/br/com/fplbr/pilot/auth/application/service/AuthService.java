@@ -137,7 +137,8 @@ public class AuthService {
         if (u.isTwoFactorEnabled()) {
             if (totp == null) return Map.of("ok", false, "reason", "totp_requerido");
             String secret = totpService.decryptSecret(u.getTotpSecretEncrypted());
-            long last = u.getTotpLastUsedCounter() == null ? -1 : u.getTotpLastUsedCounter();
+            Long lastCounter = u.getTotpLastUsedCounter();
+            long last = lastCounter == null ? -1L : lastCounter;
             boolean ok = totpService.verify(secret, totp, last);
             if (!ok) return Map.of("ok", false, "reason", "totp_invalido");
             // atualiza anti-replay
@@ -157,7 +158,8 @@ public class AuthService {
         UserEntity u = opt.orElseThrow(() -> new IllegalArgumentException("Usuário não encontrado"));
         if (!u.isTwoFactorEnabled()) throw new IllegalStateException("2FA não habilitado");
         String secret = totpService.decryptSecret(u.getTotpSecretEncrypted());
-        long last = u.getTotpLastUsedCounter() == null ? -1 : u.getTotpLastUsedCounter();
+        Long lastCounter = u.getTotpLastUsedCounter();
+        long last = lastCounter == null ? -1L : lastCounter;
         if (!totpService.verify(secret, code, last)) throw new IllegalArgumentException("TOTP inválido");
         String token = jwtService.issueResetToken(u.getId().toString());
         return Map.of("ok", true, "resetJwt", token);

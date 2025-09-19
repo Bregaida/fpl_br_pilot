@@ -17,6 +17,21 @@
       retries: 5
     restart: unless-stopped
 
+  redis:
+    image: redis:7-alpine
+    container_name: fpl_redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - fpl_redis_data:/data
+    command: redis-server --appendonly yes
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
   pgadmin:
     image: dpage/pgadmin4:8
     container_name: fplbr-pgadmin
@@ -41,3 +56,5 @@
 volumes:
   fpl_pgdata:
     name: fpl_pgdata
+  fpl_redis_data:
+    name: fpl_redis_data

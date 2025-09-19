@@ -59,7 +59,7 @@ function Detect-BOM {
 
 function Run-FrontendBuild {
   Title "Frontend: instalar deps e build"
-  Push-Location fplbr-frontend
+  Push-Location frontend
   try {
     $installed = $false
     if (Test-Path package-lock.json) {

@@ -2,16 +2,12 @@ package br.com.fplbr.pilot.auth.infrastructure.persistence;
 
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
 import java.time.OffsetDateTime;
 import java.time.LocalDate;
 import java.util.UUID;
 
 @Entity
 @Table(name = "users")
-@Getter
-@Setter
 public class UserEntity extends PanacheEntityBase {
     @Id
     @Column(name = "id", nullable = false)
@@ -77,6 +73,76 @@ public class UserEntity extends PanacheEntityBase {
     private String consentsJson;
     @Column(name = "audit_version", nullable = false)
     private int auditVersion;
+    
+    // === GETTERS ===
+    
+    public UUID getId() { return id; }
+    public String getFullName() { return fullName; }
+    public String getEmail() { return email; }
+    public String getCpf() { return cpf; }
+    public String getPhoneDdd() { return phoneDdd; }
+    public String getPhoneNumber() { return phoneNumber; }
+    public String getCep() { return cep; }
+    public String getAddress() { return address; }
+    public String getAddressNumber() { return addressNumber; }
+    public String getAddressComplement() { return addressComplement; }
+    public String getNeighborhood() { return neighborhood; }
+    public String getCity() { return city; }
+    public String getUf() { return uf; }
+    public LocalDate getBirthDate() { return birthDate; }
+    public String getMaritalStatus() { return maritalStatus; }
+    public String getPilotType() { return pilotType; }
+    public String getCompany() { return company; }
+    public String getLoginAlias() { return loginAlias; }
+    public String getPasswordHash() { return passwordHash; }
+    public int getPasswordPepperVer() { return passwordPepperVer; }
+    public boolean isTwoFactorEnabled() { return twoFactorEnabled; }
+    public String getTotpSecretEncrypted() { return totpSecretEncrypted; }
+    public long getTotpLastUsedCounter() { return totpLastUsedCounter; }
+    public OffsetDateTime getTwoFactorVerifiedAt() { return twoFactorVerifiedAt; }
+    public OffsetDateTime getCreatedAt() { return createdAt; }
+    public OffsetDateTime getUpdatedAt() { return updatedAt; }
+    public OffsetDateTime getLastLoginAt() { return lastLoginAt; }
+    public String getConsentsJson() { return consentsJson; }
+    public int getAuditVersion() { return auditVersion; }
+    
+    // === SETTERS ===
+    
+    public void setId(UUID id) { this.id = id; }
+    public void setFullName(String fullName) { this.fullName = fullName; }
+    public void setEmail(String email) { this.email = email; }
+    public void setCpf(String cpf) { this.cpf = cpf; }
+    public void setPhoneDdd(String phoneDdd) { this.phoneDdd = phoneDdd; }
+    public void setPhoneNumber(String phoneNumber) { this.phoneNumber = phoneNumber; }
+    public void setCep(String cep) { this.cep = cep; }
+    public void setAddress(String address) { this.address = address; }
+    public void setAddressNumber(String addressNumber) { this.addressNumber = addressNumber; }
+    public void setAddressComplement(String addressComplement) { this.addressComplement = addressComplement; }
+    public void setNeighborhood(String neighborhood) { this.neighborhood = neighborhood; }
+    public void setCity(String city) { this.city = city; }
+    public void setUf(String uf) { this.uf = uf; }
+    public void setBirthDate(LocalDate birthDate) { this.birthDate = birthDate; }
+    public void setMaritalStatus(String maritalStatus) { this.maritalStatus = maritalStatus; }
+    public void setPilotType(String pilotType) { this.pilotType = pilotType; }
+    public void setCompany(String company) { this.company = company; }
+    public void setLoginAlias(String loginAlias) { this.loginAlias = loginAlias; }
+    public void setPasswordHash(String passwordHash) { this.passwordHash = passwordHash; }
+    public void setPasswordPepperVer(int passwordPepperVer) { this.passwordPepperVer = passwordPepperVer; }
+    public void setTwoFactorEnabled(boolean twoFactorEnabled) { this.twoFactorEnabled = twoFactorEnabled; }
+    public void setTotpSecretEncrypted(String totpSecretEncrypted) { this.totpSecretEncrypted = totpSecretEncrypted; }
+    public void setTotpLastUsedCounter(long totpLastUsedCounter) { this.totpLastUsedCounter = totpLastUsedCounter; }
+    public void setTwoFactorVerifiedAt(OffsetDateTime twoFactorVerifiedAt) { this.twoFactorVerifiedAt = twoFactorVerifiedAt; }
+    public void setCreatedAt(OffsetDateTime createdAt) { this.createdAt = createdAt; }
+    public void setUpdatedAt(OffsetDateTime updatedAt) { this.updatedAt = updatedAt; }
+    public void setLastLoginAt(OffsetDateTime lastLoginAt) { this.lastLoginAt = lastLoginAt; }
+    public void setConsentsJson(String consentsJson) { this.consentsJson = consentsJson; }
+    public void setAuditVersion(int auditVersion) { this.auditVersion = auditVersion; }
+    
+    // Métodos faltantes para compilar
+    public OffsetDateTime getLockedUntil() { return lockedUntil; }
+    public void setLockedUntil(OffsetDateTime lockedUntil) { this.lockedUntil = lockedUntil; }
+    public int getFailedLoginAttempts() { return failedLoginAttempts; }
+    public void setFailedLoginAttempts(int failedLoginAttempts) { this.failedLoginAttempts = failedLoginAttempts; }
 }
 
 

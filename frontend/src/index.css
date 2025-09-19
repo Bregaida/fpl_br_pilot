@@ -1,0 +1,443 @@
+﻿@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: light;
+  }
+  
+  * {
+    @apply border-gray-200;
+  }
+  
+  body {
+    @apply bg-background text-gray-900 font-sans antialiased;
+    margin: 0;
+    min-height: 100vh;
+  }
+  
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+@layer components {
+  /* Cards modernos com gradientes suaves */
+  .card {
+    @apply rounded-3xl shadow-soft border border-gray-100 bg-white p-6 md:p-8
+           transition-all duration-300 hover:shadow-soft-lg hover:-translate-y-1;
+  }
+  
+  .card-gradient {
+    @apply rounded-3xl shadow-soft border border-gray-100 bg-gradient-to-br from-white to-gray-50 p-6 md:p-8
+           transition-all duration-300 hover:shadow-soft-lg hover:-translate-y-1;
+  }
+  
+  /* Botões modernos com gradientes */
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-2xl border-0 px-6 py-3 text-sm font-medium transition-all duration-300
+           focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white
+           disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+  
+  .btn-primary {
+    @apply bg-gradient-aviation-red text-aviation-white shadow-lg hover:shadow-xl hover:scale-105
+           focus:ring-aviation-red-500 active:scale-95;
+  }
+  
+  .btn-secondary {
+    @apply bg-gradient-aviation-navy text-aviation-white shadow-lg hover:shadow-xl hover:scale-105
+           focus:ring-aviation-navy-500 active:scale-95;
+  }
+  
+  .btn-ghost {
+    @apply bg-white text-gray-700 border border-gray-200 hover:bg-gray-50 hover:border-gray-300
+           focus:ring-gray-500 active:scale-95;
+  }
+  
+  .btn-outline {
+    @apply bg-transparent text-red-600 border-2 border-red-200 hover:bg-red-50 hover:border-red-300
+           focus:ring-red-500 active:scale-95;
+  }
+  
+  /* Inputs modernos */
+  .input,
+  .select,
+  .textarea {
+    @apply w-full rounded-2xl border border-gray-200 bg-gray-50 px-4 py-3 text-gray-900 placeholder-gray-500
+           focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent focus:bg-white
+           transition-all duration-300;
+  }
+  
+  .input:focus,
+  .select:focus,
+  .textarea:focus {
+    @apply shadow-soft;
+  }
+  
+  /* Títulos modernos */
+  .title {
+    @apply text-3xl md:text-4xl font-display font-bold text-gray-900 leading-tight;
+  }
+  
+  .subtitle {
+    @apply text-xl md:text-2xl font-display font-semibold text-gray-800 leading-tight;
+  }
+  
+  .section-title {
+    @apply text-lg font-semibold text-gray-800 mb-4;
+  }
+  
+  /* Navegação mobile-first */
+  .nav-button {
+    @apply flex flex-col items-center justify-center gap-1 p-4 rounded-2xl bg-white shadow-soft
+           hover:shadow-lg hover:scale-105 transition-all duration-300 active:scale-95
+           border border-gray-100;
+  }
+  
+  .nav-button.active {
+    @apply bg-gradient-aviation-red text-aviation-white shadow-lg;
+  }
+  
+  .nav-button-icon {
+    @apply w-6 h-6;
+  }
+  
+  .nav-button-text {
+    @apply text-xs font-medium;
+  }
+  
+  /* Menu hambúrguer */
+  .hamburger {
+    @apply flex flex-col gap-1 cursor-pointer p-2 rounded-xl hover:bg-gray-100 transition-colors;
+  }
+  
+  .hamburger-line {
+    @apply w-6 h-0.5 bg-gray-700 rounded-full transition-all duration-300;
+  }
+  
+  .hamburger.active .hamburger-line:nth-child(1) {
+    @apply rotate-45 translate-y-1.5;
+  }
+  
+  .hamburger.active .hamburger-line:nth-child(2) {
+    @apply opacity-0;
+  }
+  
+  .hamburger.active .hamburger-line:nth-child(3) {
+    @apply -rotate-45 -translate-y-1.5;
+  }
+  
+  /* Animações suaves */
+  .fade-in {
+    @apply animate-fade-in;
+  }
+  
+  .slide-up {
+    @apply animate-slide-up;
+  }
+  
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    @apply w-2 h-2;
+  }
+  
+  ::-webkit-scrollbar-track {
+    @apply bg-gray-100 rounded-full;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    @apply bg-gray-300 rounded-full hover:bg-gray-400 transition-colors;
+  }
+  
+  /* Efeitos de hover para cards */
+  .hover-lift {
+    @apply transition-all duration-300 hover:-translate-y-2 hover:shadow-soft-lg;
+  }
+  
+  /* Gradientes de texto */
+  .text-gradient-aviation-red {
+    @apply bg-gradient-to-r from-aviation-red-600 to-aviation-red-800 bg-clip-text text-transparent;
+  }
+  
+  .text-gradient-aviation-navy {
+    @apply bg-gradient-to-r from-aviation-navy-700 to-aviation-navy-900 bg-clip-text text-transparent;
+  }
+  
+  .text-gradient-aviation-mixed {
+    @apply bg-gradient-to-r from-aviation-red-600 via-aviation-navy-800 to-aviation-red-800 bg-clip-text text-transparent;
+  }
+  
+  /* Componentes de aviação */
+  .aviation-card {
+    @apply rounded-2xl shadow-soft border border-aviation-gray-200 bg-aviation-white p-6 md:p-8
+           transition-all duration-300 hover:shadow-soft-lg hover:-translate-y-1
+           relative overflow-hidden;
+  }
+  
+  .aviation-card::before {
+    content: '';
+    @apply absolute top-0 left-0 w-full h-1 bg-gradient-aviation-red;
+  }
+  
+  .cockpit-panel {
+    @apply bg-gradient-cockpit text-aviation-white rounded-2xl p-6 shadow-lg border border-aviation-navy-700;
+  }
+  
+  .instrument-panel {
+    @apply bg-gradient-instrument rounded-2xl p-4 border-2 border-aviation-navy-300 shadow-lg;
+  }
+  
+  .warning-panel {
+    @apply bg-gradient-warning rounded-2xl p-4 border-2 border-aviation-red-200 shadow-lg;
+  }
+  
+  .runway-strip {
+    @apply bg-gradient-runway rounded-lg p-2 border border-aviation-gray-300;
+  }
+  
+  /* Botões de aviação */
+  .btn-aviation-red {
+    @apply bg-gradient-aviation-red text-aviation-white shadow-lg hover:shadow-xl hover:scale-105
+           focus:ring-aviation-red-500 active:scale-95 relative overflow-hidden rounded-xl;
+  }
+  
+  .btn-aviation-navy {
+    @apply bg-gradient-aviation-navy text-aviation-white shadow-lg hover:shadow-xl hover:scale-105
+           focus:ring-aviation-navy-500 active:scale-95 relative overflow-hidden rounded-xl;
+  }
+  
+  /* Tema para PLN Codificado - versão simplificada */
+  .btn-primary-pastel {
+    @apply bg-red-500 text-white px-4 py-2 rounded-xl hover:bg-red-600 transition-colors;
+  }
+  
+  .btn-success-pastel {
+    @apply bg-blue-500 text-white px-4 py-2 rounded-xl hover:bg-blue-600 transition-colors;
+  }
+  
+  .card-pln-codificado {
+    @apply rounded-2xl bg-gray-50 border border-blue-800 p-6;
+  }
+  
+  .code-block {
+    @apply bg-white rounded-xl p-4 border border-gray-200;
+  }
+  
+  .code-text {
+    @apply text-sm font-mono text-gray-800 whitespace-pre-wrap;
+  }
+  
+  /* Painel ROTAER */
+  .rotaer-panel {
+    @apply rounded-2xl bg-gradient-to-br from-gray-50 to-gray-100 border border-blue-800 p-6 shadow-lg;
+  }
+  
+  .rotaer-tabs {
+    @apply flex border-b border-gray-200 mb-6 overflow-x-auto bg-gray-50 rounded-t-lg;
+  }
+  
+  .rotaer-tab {
+    @apply px-6 py-3 text-sm font-semibold text-gray-700 border-b-2 border-transparent hover:text-gray-900 hover:border-gray-400 cursor-pointer transition-all duration-200 whitespace-nowrap bg-gray-100 hover:bg-gray-200;
+  }
+  
+  .rotaer-tab.active {
+    @apply text-slate-800 border-slate-600 bg-white rounded-t-lg shadow-sm border-b-0;
+  }
+  
+  .rotaer-content {
+    @apply space-y-6;
+  }
+  
+  .rotaer-section {
+    @apply bg-white rounded-xl p-4 border border-gray-200 shadow-sm;
+  }
+  
+  .rotaer-section-title {
+    @apply text-lg font-semibold text-gray-800 mb-3 pb-2 border-b border-gray-200;
+  }
+  
+  .rotaer-field {
+    @apply flex justify-between items-start py-3 border-b border-gray-100 last:border-b-0;
+  }
+  
+  .rotaer-label {
+    @apply font-medium text-gray-700 min-w-0 flex-shrink-0 mr-4;
+  }
+  
+  .rotaer-value {
+    @apply text-gray-900 text-right flex-1;
+  }
+  
+  .rotaer-map-container {
+    @apply bg-gray-100 rounded-lg p-4 border border-gray-200;
+  }
+  
+  .rotaer-map {
+    @apply w-full h-48 rounded-lg border border-gray-300;
+  }
+  
+  .rotaer-coordinates {
+    @apply font-mono text-sm bg-gray-50 px-3 py-2 rounded border;
+  }
+  
+  .rotaer-grid {
+    @apply grid grid-cols-1 md:grid-cols-2 gap-4;
+  }
+  
+  .rotaer-list {
+    @apply space-y-2;
+  }
+  
+  .rotaer-list-item {
+    @apply bg-gray-50 px-3 py-2 rounded border text-sm;
+  }
+  
+  /* Estilos para o mini mapa */
+  .airplane-marker {
+    background: transparent !important;
+    border: none !important;
+  }
+  
+  .rotaer-map {
+    @apply rounded-lg border border-gray-300;
+  }
+  
+  .rotaer-map .leaflet-popup-content-wrapper {
+    @apply rounded-lg shadow-lg;
+  }
+  
+  .rotaer-map .leaflet-popup-content {
+    @apply m-2 text-sm;
+  }
+  
+  .rotaer-map .leaflet-popup-tip {
+    @apply bg-white;
+  }
+  
+  /* Botão de expansão de observações */
+  .expand-button {
+    @apply text-center text-sm text-blue-600 hover:text-blue-800 mt-2 cursor-pointer underline transition-colors duration-200 bg-transparent border-none p-2 rounded;
+  }
+  
+  .expand-button:hover {
+    @apply bg-blue-50;
+  }
+  
+  .expand-button:focus {
+    @apply outline-none ring-2 ring-blue-500 ring-opacity-50;
+  }
+  
+  /* Estilos para seções ROTAER expandidas */
+  .rotaer-section-grid {
+    @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4;
+  }
+  
+  .rotaer-info-card {
+    @apply bg-white rounded-lg p-4 border border-gray-200 shadow-sm;
+  }
+  
+  .rotaer-info-card-header {
+    @apply font-semibold text-sm mb-2 text-gray-800;
+  }
+  
+  .rotaer-info-card-content {
+    @apply text-sm text-gray-600;
+  }
+  
+  .rotaer-service-card {
+    @apply p-3 rounded-lg border;
+  }
+  
+  .rotaer-service-card.communications {
+    @apply bg-green-50 border-green-200;
+  }
+  
+  .rotaer-service-card.fuel {
+    @apply bg-yellow-50 border-yellow-200;
+  }
+  
+  .rotaer-service-card.aircraft {
+    @apply bg-blue-50 border-blue-200;
+  }
+  
+  .rotaer-service-card.airport {
+    @apply bg-purple-50 border-purple-200;
+  }
+  
+  .rotaer-service-card.meteorology {
+    @apply bg-cyan-50 border-cyan-200;
+  }
+  
+  .rotaer-service-card.ais {
+    @apply bg-indigo-50 border-indigo-200;
+  }
+  
+  .rotaer-service-card.navigation {
+    @apply bg-orange-50 border-orange-200;
+  }
+
+  /* Blocos meteorológicos específicos */
+  .meteo-block-pink {
+    @apply bg-pink-50 border-pink-200;
+  }
+
+  .meteo-block-red {
+    @apply bg-red-50 border-red-200;
+  }
+
+  .meteo-block-blue {
+    @apply bg-blue-50 border-blue-200;
+  }
+
+  .meteo-block-yellow {
+    @apply bg-yellow-50 border-yellow-200;
+  }
+  
+  .btn-aviation-mixed {
+    @apply bg-gradient-aviation-mixed text-aviation-white shadow-lg hover:shadow-xl hover:scale-105
+           focus:ring-aviation-red-500 active:scale-95 relative overflow-hidden rounded-xl;
+  }
+  
+  /* Instrumentos de voo */
+  .altitude-gauge {
+    @apply relative w-20 h-20 rounded-full border-4 border-aviation-navy-300 bg-aviation-white;
+  }
+  
+  .gauge-needle {
+    @apply absolute top-1/2 left-1/2 w-1 h-8 bg-aviation-red-600 transform -translate-x-1/2 -translate-y-full
+           origin-bottom transition-transform duration-500;
+  }
+  
+  .speed-indicator {
+    @apply bg-aviation-navy-800 text-aviation-white rounded-xl p-3 border border-aviation-navy-600;
+  }
+  
+  .fuel-gauge {
+    @apply bg-aviation-red-50 border-2 border-aviation-red-200 rounded-xl p-3;
+  }
+  
+  /* Animações de aviação */
+  .fly-in {
+    @apply animate-fly-in;
+  }
+  
+  .takeoff {
+    @apply animate-takeoff;
+  }
+  
+  .landing {
+    @apply animate-landing;
+  }
+  
+  .propeller {
+    @apply animate-propeller;
+  }
+  
+  .altitude {
+    @apply animate-altitude;
+  }
+}
