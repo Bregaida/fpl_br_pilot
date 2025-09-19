@@ -1,18 +1,10 @@
 package br.com.fplbr.pilot.flightplan.domain.model;
 
 import jakarta.persistence.Embeddable;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
-@Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
 @Embeddable
 public class OutrasInformacoes {
     private String sts;
@@ -38,6 +30,7 @@ public class OutrasInformacoes {
     private String rif;
     private String rmk;
     private String from;
+    private String ops;
 
     /**
      * Verifica se todas as informações estão em branco (nulas ou vazias).
@@ -68,4 +61,31 @@ public class OutrasInformacoes {
                (rmk == null || rmk.trim().isEmpty()) &&
                (from == null || from.trim().isEmpty());
     }
+    
+    // Construtor padrão
+    public OutrasInformacoes() {}
+    
+    // Getters e Setters básicos
+    public String getSts() { return sts; }
+    public void setSts(String sts) { this.sts = sts; }
+    public String getPbn() { return pbn; }
+    public void setPbn(String pbn) { this.pbn = pbn; }
+    public String getNav() { return nav; }
+    public void setNav(String nav) { this.nav = nav; }
+    public String getCom() { return com; }
+    public void setCom(String com) { this.com = com; }
+    public String getDat() { return dat; }
+    public void setDat(String dat) { this.dat = dat; }
+    public String getSur() { return sur; }
+    public void setSur(String sur) { this.sur = sur; }
+    public String getDep() { return dep; }
+    public void setDep(String dep) { this.dep = dep; }
+    public String getDle() { return dle; }
+    public void setDle(String dle) { this.dle = dle; }
+    public String getOps() { return ops; }
+    public void setOps(String ops) { this.ops = ops; }
+    public String getRmk() { return rmk; }
+    public void setRmk(String rmk) { this.rmk = rmk; }
+    public String getFrom() { return from; }
+    public void setFrom(String from) { this.from = from; }
 }

@@ -1,18 +1,10 @@
 package br.com.fplbr.pilot.flightplan.domain.model;
 
 import jakarta.persistence.Embeddable;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
-@Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
 @Embeddable
 public class Vigilancia {
     // Um boolean por checkbox do Item 10B
@@ -21,6 +13,7 @@ public class Vigilancia {
     // SSR Modos A/C
     private boolean a;
     private boolean c;
+    private boolean d;
 
     // ADS-C
     private boolean d1;
@@ -155,4 +148,35 @@ public class Vigilancia {
         }
         return v;
     }
+    
+    // Construtor padrão
+    public Vigilancia() {}
+    
+    // Getters e Setters básicos
+    public boolean isN() { return n; }
+    public void setN(boolean n) { this.n = n; }
+    public boolean isA() { return a; }
+    public void setA(boolean a) { this.a = a; }
+    public boolean isC() { return c; }
+    public void setC(boolean c) { this.c = c; }
+    public boolean isX() { return x; }
+    public void setX(boolean x) { this.x = x; }
+    public boolean isS() { return s; }
+    public void setS(boolean s) { this.s = s; }
+    public boolean isP() { return p; }
+    public void setP(boolean p) { this.p = p; }
+    public boolean isD() { return d; }
+    public void setD(boolean d) { this.d = d; }
+    public boolean isB1() { return b1; }
+    public void setB1(boolean b1) { this.b1 = b1; }
+    public boolean isB2() { return b2; }
+    public void setB2(boolean b2) { this.b2 = b2; }
+    public boolean isU1() { return u1; }
+    public void setU1(boolean u1) { this.u1 = u1; }
+    public boolean isU2() { return u2; }
+    public void setU2(boolean u2) { this.u2 = u2; }
+    public boolean isV1() { return v1; }
+    public void setV1(boolean v1) { this.v1 = v1; }
+    public boolean isV2() { return v2; }
+    public void setV2(boolean v2) { this.v2 = v2; }
 }

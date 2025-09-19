@@ -1,10 +1,10 @@
 package br.com.fplbr.pilot.flightplan.domain.model;
 
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
-import br.com.fplbr.pilot.flightplan.validation.ValidFlightPlan;
+import br.com.fplbr.pilot.flightplan.application.validator.ValidFlightPlan;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
-import lombok.*;
+import java.util.Objects;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -12,9 +12,6 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "flight_plans")
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
 @ValidFlightPlan
 public class FlightPlan extends PanacheEntityBase {
     // Getters e Setters manuais

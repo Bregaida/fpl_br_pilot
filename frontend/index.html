@@ -1,0 +1,127 @@
+﻿<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FPL BR Pilot - Sistema de Planos de Voo</title>
+    
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+          integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+          crossorigin=""/>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+    
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+            integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+            crossorigin=""></script>
+    
+    <!-- Script de Geocoding e Mapa ROTAER -->
+    <script>
+      // === Extensão: Reverse Geocoding + ROTAER ===
+      async function reverseGeocode(lat, lon) {
+        try {
+          const url = `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=jsonv2&accept-language=pt-BR`;
+          const r = await fetch(url);
+          if (!r.ok) throw new Error();
+          const j = await r.json();
+          return j && j.display_name ? j.display_name : null;
+        } catch (_) { return null; }
+      }
+
+      // Guarda referência do update original (definido no script principal)
+      const __oldUpdate = window.update;
+      window.update = async function(lat, lon) {
+        // Reaproveita movimentação do mapa/marker do update original, se existir
+        if (typeof __oldUpdate === 'function') {
+          try { __oldUpdate(lat, lon); } catch (_) {}
+        } else {
+          if (window.map && window.marker) {
+            map.setView([lat, lon], map.getZoom());
+            marker.setLatLng([lat, lon]);
+          }
+        }
+        const addr = await reverseGeocode(lat, lon);
+        if (window.marker) {
+          const line1 = addr ? addr : 'Endereço não encontrado';
+          const line2 = `Lat: ${lat.toFixed(6)}, Lon: ${lon.toFixed(6)}`;
+          marker.bindPopup(`${line1}<br>${line2}`).openPopup();
+        }
+      };
+
+      // Parser de coordenadas no padrão ROTAER: 224836S/0431502W (com/sem segundos/espaços)
+      function dmsToDecimal(deg, min, sec, hemi) {
+        const sign = /[SW]/i.test(hemi) ? -1 : 1;
+        return sign * (Math.abs(deg) + (min || 0) / 60 + (sec || 0) / 3600);
+      }
+      function parseRotaerCoord(text) {
+        if (!text) return null;
+        const cleaned = String(text).replace(/\s+/g, '');
+        const m = cleaned.match(/^(\d{2})(\d{2})(\d{0,2})?([NS])\/(\d{3})(\d{2})(\d{0,2})?([EW])$/i);
+        if (!m) return null;
+        const [, latD, latM, latS = '0', latH, lonD, lonM, lonS = '0', lonH] = m;
+        const lat = dmsToDecimal(parseInt(latD), parseInt(latM), parseInt(latS), latH);
+        const lon = dmsToDecimal(parseInt(lonD), parseInt(lonM), parseInt(lonS), lonH);
+        return { lat, lon };
+      }
+
+      // Funções globais para o Gepeto
+      window.setMapLatLon = (lat, lon) => {
+        if (Number.isFinite(lat) && Number.isFinite(lon)) window.update(lat, lon);
+      };
+      window.setMapFromRotaer = (rotaerString) => {
+        const p = parseRotaerCoord(rotaerString);
+        if (p) window.update(p.lat, p.lon);
+        return p;
+      };
+
+      // Query param: ?rotaer=224836S/0431502W
+      (function() {
+        try {
+          const qp = new URLSearchParams(location.search);
+          const rotaer = qp.get('rotaer');
+          if (rotaer) {
+            const p = parseRotaerCoord(rotaer);
+            if (p) {
+              const latInput = document.getElementById('lat');
+              const lonInput = document.getElementById('lon');
+              if (latInput && lonInput) {
+                latInput.value = p.lat.toFixed(6);
+                lonInput.value = p.lon.toFixed(6);
+              }
+              window.update(p.lat, p.lon);
+            }
+          }
+        } catch(_) {}
+      })();
+
+      // postMessage: { type: 'ROTAER_COORDS', payload: { lat, lon } }
+      //           ou { type: 'ROTAER_STRING', payload: '224836S/0431502W' }
+      window.addEventListener('message', (event) => {
+        const d = event && event.data;
+        if (!d || !d.type) return;
+        if (d.type === 'ROTAER_COORDS' && d.payload) {
+          const { lat, lon } = d.payload;
+          if (Number.isFinite(lat) && Number.isFinite(lon)) window.update(lat, lon);
+        }
+        if (d.type === 'ROTAER_STRING' && typeof d.payload === 'string') {
+          const p = parseRotaerCoord(d.payload);
+          if (p) window.update(p.lat, p.lon);
+        }
+      });
+
+      // Atualiza o ponto inicial com endereço
+      (function rehydrateInitial(){
+        try {
+          const lat = parseFloat(document.getElementById('lat').value);
+          const lon = parseFloat(document.getElementById('lon').value);
+          if (Number.isFinite(lat) && Number.isFinite(lon)) window.update(lat, lon);
+        } catch(_) {}
+      })();
+    </script>
+  </body>
+</html>

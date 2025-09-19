@@ -1,0 +1,54 @@
+spring:
+  application:
+    name: aisweb-service
+
+server:
+  port: 8080
+  servlet:
+    context-path: /api
+
+# CORS Configuration
+cors:
+  allowed-origins: "${CORS_ORIGINS:http://localhost:5173,http://localhost:5180}"
+  allowed-methods: "GET,POST,PUT,DELETE,OPTIONS"
+  allowed-headers: "Content-Type,Authorization,X-CSRF-Token"
+  allow-credentials: true
+
+# Database Configuration
+spring:
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/fpl}
+    username: ${DB_USER:app}
+    password: ${DB_PASS:app}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+# Logging
+logging:
+  level:
+    root: INFO
+    org.springframework.web: INFO
+    br.com.fplbr.pilot: DEBUG
+
+# AISWEB API Configuration
+aisweb:
+  api:
+    key: ${AISWEB_API_KEY:your-api-key}
+    pass: ${AISWEB_API_PASS:your-api-pass}
+    base-url: https://api.aisweb.decea.mil.br/api
+
+# Swagger/OpenAPI Configuration
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    operationsSorter: method
+    tagsSorter: alpha

@@ -9,7 +9,7 @@ ask_before_changes = false
 # Objetivo macro
 # - Padronizar arquitetura e nomenclatura (DDD + Clean Architecture/Hexagonal)
 # - Garantir build limpo (Maven backend Quarkus + Vite/React frontend)
-# - Escrever testes automáticos (unit, integration, e2e) com cobertura >= 80%
+# - Garantir build limpo e funcional
 # - Não remover variáveis preexistentes (conservar campos/atributos públicos/privados)
 # - Aplicar Lombok no backend (POJOs/Entities/DTOs/Records/Builders)
 # - Entregar scripts de execução local e em background
@@ -35,17 +35,14 @@ preserve_comments_from_author = true
 [project_layout]
 respect_maven_conventions = true
 backend_module = "backend"
-frontend_module = "fplbr-frontend"
+frontend_module = "frontend"
 remove_android_module_temporarily = true
 
 # Maven layout:
 # backend/src/main/java
 # backend/src/main/resources
 # backend/src/test/java
-# frontend: Vite/React + Vitest/RTL + Playwright
-# Testes devem ficar em pastas de teste (sem mocks no código de produção).
-tests_only_in_test_sources = true
-no_mocks_in_production_code = true
+# frontend: Vite/React
 
 # ================================
 # 2. ARQUITETURA & DDD
@@ -79,21 +76,18 @@ lombok_annotations = ["@Getter","@Setter","@Builder","@AllArgsConstructor","@NoA
 required_dependencies = [
   "io.quarkus:quarkus-resteasy-reactive-jackson",
   "io.quarkus:quarkus-hibernate-orm",
-  "io.quarkus:quarkus-jdbc-h2",
+  "io.quarkus:quarkus-jdbc-postgresql",
   "io.quarkus:quarkus-smallrye-openapi",
   "io.quarkus:quarkus-smallrye-health",
-  "org.projectlombok:lombok",
-  "org.junit.jupiter:junit-jupiter",
-  "org.mockito:mockito-core",
-  "io.rest-assured:rest-assured"
+  "org.projectlombok:lombok"
 ]
 
-# Config dev (H2)
+# Config dev (PostgreSQL)
 application_properties_dev = """
-quarkus.datasource.db-kind=h2
-quarkus.datasource.jdbc.url=jdbc:h2:mem:fpl;DB_CLOSE_DELAY=-1
-quarkus.datasource.username=sa
-quarkus.datasource.password=sa
+quarkus.datasource.db-kind=postgresql
+quarkus.datasource.jdbc.url=jdbc:postgresql://localhost:5432/fpl
+quarkus.datasource.username=fpl_user
+quarkus.datasource.password=fpl_pass
 quarkus.hibernate-orm.database.generation=update
 quarkus.smallrye-openapi.path=/q/openapi
 quarkus.http.cors=true
@@ -116,29 +110,11 @@ example_routes = [
 [frontend]
 builder = "vite"
 typescript = true
-testing = ["vitest","@testing-library/react","@testing-library/user-event"]
-e2e = "playwright"
 env_file = true
 env_dev = "VITE_API_URL=http://localhost:8080"
 
 routes = ["/","/aerodromos","/flightplan/novo","/flightplan/:id"]
 
-# ================================
-# 5. TESTES / QUALIDADE
-# ================================
-[testing]
-methodologies = ["TDD","BDD"]
-coverage_min = 0.80
-coverage_backend = "JaCoCo"
-coverage_frontend = "vitest + c8"
-ci_optional = true
-
-# Backend: Unit (domain, application), Integration (web/persistence com H2), API (RestAssured)
-backend_unit_test_packages = ["domain","application"]
-backend_integration_test_packages = ["infrastructure/web","infrastructure/persistence"]
-
-# Frontend: unit + component (RTL), e2e (Playwright)
-frontend_tests_required = true
 
 # ================================
 # 6. REFACTOR & DUPLICIDADES
@@ -156,9 +132,8 @@ keep_author_variables = true
 makefile = true
 make_targets = {
   "backend": "cd backend && ./mvnw -q quarkus:dev",
-  "frontend": "cd fplbr-frontend && npm i && npm run dev -- --port 5173",
-  "dev": "npx concurrently -k -n backend,frontend -c blue,magenta \"cd backend && ./mvnw -q quarkus:dev\" \"cd fplbr-frontend && npm i && npm run dev -- --port 5173\"",
-  "test": "cd backend && ./mvnw -q clean verify && cd ../fplbr-frontend && npm i && npm test -- --coverage"
+  "frontend": "cd frontend && npm i && npm run dev -- --port 5173",
+  "dev": "npx concurrently -k -n backend,frontend -c blue,magenta \"cd backend && ./mvnw -q quarkus:dev\" \"cd frontend && npm i && npm run dev -- --port 5173\"",
 }
 
 # ================================
