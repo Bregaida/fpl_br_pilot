@@ -8,6 +8,8 @@ import LoginPage from './pages/Login'
 import CadastroPage from './pages/Cadastro'
 import EsqueciSenhaPage from './pages/EsqueciSenha'
 import TrocaSenhaPage from './pages/TrocaSenha'
+import TermosUsoPage from './pages/TermosUso'
+import PoliticaPrivacidadePage from './pages/PoliticaPrivacidade'
 
 export default function App() {
   const location = useLocation()
@@ -22,6 +24,8 @@ export default function App() {
         <Route path="/cadastro" element={<CadastroPage />} />
         <Route path="/esqueci-senha" element={<EsqueciSenhaPage />} />
         <Route path="/troca-senha" element={<TrocaSenhaPage />} />
+        <Route path="/termos-uso" element={<TermosUsoPage />} />
+        <Route path="/politica-privacidade" element={<PoliticaPrivacidadePage />} />
         <Route
           path="*"
           element={

@@ -32,7 +32,7 @@ const cpfSchema = z.string()
 // Validação de email
 const emailSchema = z.string()
   .min(1, 'Email é obrigatório')
-  .email('Email inválido')
+  .regex(/^[^\s@]+@[^\s@]+\.[^\s@]+$/, 'Email inválido')
 
 // Validação de senha
 const passwordSchema = z.string()
@@ -42,13 +42,20 @@ const passwordSchema = z.string()
   .refine((password: string) => /[A-Z]/.test(password), 'Senha deve ter pelo menos 1 letra maiúscula')
   .refine((password: string) => /[a-z]/.test(password), 'Senha deve ter pelo menos 1 letra minúscula')
 
-// Validação de telefone
+// Validação de telefone brasileiro
 const phoneSchema = z.string()
   .min(1, 'Telefone é obrigatório')
   .refine((phone: string) => {
     const cleanPhone = phone.replace(/\D/g, '')
-    return cleanPhone.length >= 10 && cleanPhone.length <= 11
-  }, 'Telefone deve ter 10 ou 11 dígitos')
+    // Deve ter 10 ou 11 dígitos
+    if (cleanPhone.length !== 10 && cleanPhone.length !== 11) return false
+    // DDD não pode ser 0
+    if (cleanPhone.startsWith('0')) return false
+    // DDD deve estar entre 11 e 99
+    const ddd = parseInt(cleanPhone.substring(0, 2))
+    if (ddd < 11 || ddd > 99) return false
+    return true
+  }, 'Telefone deve ser um número brasileiro válido (DDD entre 11-99)')
 
 // Validação de CEP
 const cepSchema = z.string()
@@ -58,23 +65,32 @@ const cepSchema = z.string()
     return cleanCep.length === 8
   }, 'CEP deve ter 8 dígitos')
 
+// Validação de nome completo
+const fullNameSchema = z.string()
+  .min(1, 'Nome completo é obrigatório')
+  .refine((name: string) => {
+    // Verifica se cada palavra começa com maiúscula
+    const words = name.trim().split(/\s+/)
+    return words.every(word => /^[A-ZÁÀÂÃÉÊÍÓÔÕÚÇ][a-záàâãéêíóôõúç]*$/.test(word))
+  }, 'Cada palavra deve começar com letra maiúscula')
+
 // Schema de cadastro
 export const cadastroSchema = z.object({
-  fullName: z.string().min(1, 'Nome completo é obrigatório'),
+  fullName: fullNameSchema,
   email: emailSchema,
   cpf: cpfSchema,
   telefone: phoneSchema,
   cep: cepSchema,
   address: z.string().min(1, 'Endereço é obrigatório'),
-  addressNumber: z.string().min(1, 'Número é obrigatório'),
+  addressNumber: z.string().optional(), // Número é opcional
   addressComplement: z.string().optional(),
   neighborhood: z.string().min(1, 'Bairro é obrigatório'),
   city: z.string().min(1, 'Cidade é obrigatória'),
   uf: z.string().min(2, 'UF é obrigatória').max(2, 'UF deve ter 2 caracteres'),
   birthDate: z.string().min(1, 'Data de nascimento é obrigatória'),
-  maritalStatus: z.string().min(1, 'Estado civil é obrigatório').refine((val: string) => val !== 'Selecione', 'Selecione um estado civil'),
-  pilotType: z.string().min(1, 'Tipo de piloto é obrigatório').refine((val: string) => val !== 'Selecione', 'Selecione um tipo de piloto'),
-  company: z.string().optional(),
+  maritalStatus: z.string().optional(),
+  pilotType: z.string().min(1, 'Tipo de piloto é obrigatório'),
+  company: z.string().min(1, 'Empresa/Escola é obrigatória'),
   loginAlias: z.string().min(1, 'Login é obrigatório'),
   password: passwordSchema,
   confirmPassword: z.string().min(1, 'Confirmação de senha é obrigatória')
