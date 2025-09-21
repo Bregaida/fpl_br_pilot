@@ -19,7 +19,6 @@ import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 import jakarta.inject.Inject;
 
 import java.net.URI;
-import java.util.List;
 
 @ApplicationScoped
 @Path("/api/v1/flightplans")
@@ -133,6 +132,12 @@ public class FlightPlanResource {
     }
 
     @GET
+    @Operation(summary = "Lista todos os planos de voo", description = "Lista FPLs recebidos (compatibilidade com frontend)")
+    public Response getAllFlightPlans(@QueryParam("limit") @DefaultValue("10") int limit) {
+        return listSubmissions(null, limit);
+    }
+
+    @GET
     @Path("/submissions")
     @Operation(summary = "Lista envios recebidos", description = "Lista FPLs recebidos (tabela FplSubmission)")
     public Response listSubmissions(@QueryParam("ident") String ident, @QueryParam("limit") @DefaultValue("10") int limit) {
@@ -161,7 +166,14 @@ public class FlightPlanResource {
                     "regraDeVooEnum", regra != null ? regra : ""
             );
         }).toList();
-        return Response.ok(out).build();
+        return Response.ok(java.util.Map.of("data", out)).build();
+    }
+
+    @GET
+    @Path("/{id}")
+    @Operation(summary = "Obtém um plano de voo por ID", description = "Retorna o plano de voo com payload original (compatibilidade com frontend)")
+    public Response getFlightPlanById(@PathParam("id") Long id) {
+        return getSubmissionById(id);
     }
 
     @GET

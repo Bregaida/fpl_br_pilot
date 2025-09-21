@@ -91,15 +91,6 @@
             <artifactId>quarkus-smallrye-health</artifactId>
         </dependency>
         
-        <!-- JWT -->
-        <dependency>
-            <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-smallrye-jwt</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-smallrye-jwt-build</artifactId>
-        </dependency>
         
         <!-- Security -->
         <dependency>
@@ -107,6 +98,7 @@
             <artifactId>commons-codec</artifactId>
             <version>1.15</version>
         </dependency>
+        
 
         <!-- MapStruct -->
         <dependency>

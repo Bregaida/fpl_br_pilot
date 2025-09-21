@@ -13,10 +13,13 @@ import org.eclipse.microprofile.openapi.annotations.media.Content;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
+import org.jboss.logging.Logger;
 
 @Path("/api/v1/cep")
 @Tag(name = "Usuário", description = "APIs relacionadas ao usuário")
 public class CepResource {
+    
+    private static final Logger LOG = Logger.getLogger(CepResource.class);
     
     @Inject
     CepService cepService;
@@ -46,6 +49,17 @@ public class CepResource {
         )
     )
     public CepResponseDto buscarCep(@PathParam("cep") String cep) {
-        return cepService.buscarCep(cep);
+        LOG.info("CEP Resource: Buscando CEP: " + cep);
+        try {
+            CepResponseDto result = cepService.buscarCep(cep);
+            LOG.info("CEP Resource: Resultado: " + result);
+            return result;
+        } catch (Exception e) {
+            LOG.error("CEP Resource: Erro ao buscar CEP: " + e.getMessage(), e);
+            return CepResponseDto.builder()
+                .erro(true)
+                .mensagem("Erro interno: " + e.getMessage())
+                .build();
+        }
     }
 }

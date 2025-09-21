@@ -2,11 +2,11 @@ import { z } from 'zod'
 
 // Validação de CPF
 const cpfSchema = z.string()
-  .min(1, 'CPF é obrigatório')
+  .min(1, 'O CPF é obrigatório')
   .refine((cpf: string) => {
     const cleanCpf = cpf.replace(/\D/g, '')
     return cleanCpf.length === 11
-  }, 'CPF deve ter 11 dígitos')
+  }, 'Campo CPF inválido')
   .refine((cpf: string) => {
     const cleanCpf = cpf.replace(/\D/g, '')
     // Validação básica de CPF
@@ -27,12 +27,12 @@ const cpfSchema = z.string()
     remainder = 11 - (sum % 11)
     if (remainder === 10 || remainder === 11) remainder = 0
     return remainder === parseInt(cleanCpf.charAt(10))
-  }, 'CPF inválido')
+  }, 'Campo CPF inválido')
 
 // Validação de email
 const emailSchema = z.string()
-  .min(1, 'Email é obrigatório')
-  .regex(/^[^\s@]+@[^\s@]+\.[^\s@]+$/, 'Email inválido')
+  .min(1, 'O E-mail é obrigatório')
+  .email('Campo E-mail inválido')
 
 // Validação de senha
 const passwordSchema = z.string()
@@ -44,35 +44,77 @@ const passwordSchema = z.string()
 
 // Validação de telefone brasileiro
 const phoneSchema = z.string()
-  .min(1, 'Telefone é obrigatório')
+  .min(1, 'O Telefone é obrigatório')
   .refine((phone: string) => {
     const cleanPhone = phone.replace(/\D/g, '')
     // Deve ter 10 ou 11 dígitos
-    if (cleanPhone.length !== 10 && cleanPhone.length !== 11) return false
+    if (cleanPhone.length < 10 || cleanPhone.length > 11) return false
     // DDD não pode ser 0
     if (cleanPhone.startsWith('0')) return false
     // DDD deve estar entre 11 e 99
     const ddd = parseInt(cleanPhone.substring(0, 2))
     if (ddd < 11 || ddd > 99) return false
     return true
-  }, 'Telefone deve ser um número brasileiro válido (DDD entre 11-99)')
+  }, 'Telefone inválido')
 
 // Validação de CEP
 const cepSchema = z.string()
-  .min(1, 'CEP é obrigatório')
+  .min(1, 'CEP é campo obrigatório')
   .refine((cep: string) => {
     const cleanCep = cep.replace(/\D/g, '')
     return cleanCep.length === 8
   }, 'CEP deve ter 8 dígitos')
 
+// Validação de data de nascimento
+const birthDateSchema = z.string()
+  .min(1, 'A data de nascimento é obrigatória')
+  .refine((date: string) => {
+    // Verifica formato dd/mm/yyyy
+    const dateRegex = /^(\d{2})\/(\d{2})\/(\d{4})$/
+    if (!dateRegex.test(date)) return false
+    
+    const match = dateRegex.exec(date)
+    if (!match) return false
+    const [, day, month, year] = match
+    const birthDate = new Date(parseInt(year), parseInt(month) - 1, parseInt(day))
+    const today = new Date()
+    const age = today.getFullYear() - birthDate.getFullYear()
+    
+    // Verifica se a data é válida
+    if (birthDate.getDate() !== parseInt(day) || 
+        birthDate.getMonth() !== parseInt(month) - 1 || 
+        birthDate.getFullYear() !== parseInt(year)) {
+      return false
+    }
+    
+    // Verifica idade mínima (10 anos) e máxima (1900)
+    return age >= 10 && age <= 124 && parseInt(year) >= 1900
+  }, 'Data inválida')
+
+// Validação de UF
+const ufSchema = z.string()
+  .min(1, 'UF é campo obrigatório')
+  .refine((uf: string) => {
+    const validUFs = [
+      'AC', 'AL', 'AP', 'AM', 'BA', 'CE', 'DF', 'ES', 'GO', 'MA',
+      'MT', 'MS', 'MG', 'PA', 'PB', 'PR', 'PE', 'PI', 'RJ', 'RN',
+      'RS', 'RO', 'RR', 'SC', 'SP', 'SE', 'TO'
+    ]
+    return validUFs.includes(uf.toUpperCase())
+  }, 'UF inválida')
+
 // Validação de nome completo
 const fullNameSchema = z.string()
-  .min(1, 'Nome completo é obrigatório')
+  .min(1, 'O Nome Completo é obrigatório')
   .refine((name: string) => {
-    // Verifica se cada palavra começa com maiúscula
-    const words = name.trim().split(/\s+/)
+    const trimmedName = name.trim()
+    // Deve ter pelo menos 2 palavras (nome e sobrenome)
+    const words = trimmedName.split(/\s+/)
+    if (words.length < 2) return false
+    
+    // Cada palavra deve começar com maiúscula
     return words.every(word => /^[A-ZÁÀÂÃÉÊÍÓÔÕÚÇ][a-záàâãéêíóôõúç]*$/.test(word))
-  }, 'Cada palavra deve começar com letra maiúscula')
+  }, 'Campo inválido, nome incompleto')
 
 // Schema de cadastro
 export const cadastroSchema = z.object({
@@ -81,19 +123,20 @@ export const cadastroSchema = z.object({
   cpf: cpfSchema,
   telefone: phoneSchema,
   cep: cepSchema,
-  address: z.string().min(1, 'Endereço é obrigatório'),
+  address: z.string().min(1, 'Logradouro é campo obrigatório'),
   addressNumber: z.string().optional(), // Número é opcional
   addressComplement: z.string().optional(),
-  neighborhood: z.string().min(1, 'Bairro é obrigatório'),
-  city: z.string().min(1, 'Cidade é obrigatória'),
-  uf: z.string().min(2, 'UF é obrigatória').max(2, 'UF deve ter 2 caracteres'),
-  birthDate: z.string().min(1, 'Data de nascimento é obrigatória'),
+  neighborhood: z.string().min(1, 'Bairro é campo obrigatório'),
+  city: z.string().min(1, 'Cidade é campo obrigatório'),
+  uf: ufSchema,
+  birthDate: birthDateSchema,
   maritalStatus: z.string().optional(),
-  pilotType: z.string().min(1, 'Tipo de piloto é obrigatório'),
+  pilotType: z.string().min(1, 'Tipo de Licença é obrigatório'),
   company: z.string().min(1, 'Empresa/Escola é obrigatória'),
-  loginAlias: z.string().min(1, 'Login é obrigatório'),
   password: passwordSchema,
-  confirmPassword: z.string().min(1, 'Confirmação de senha é obrigatória')
+  confirmPassword: z.string().min(1, 'Confirmação de senha é obrigatória'),
+  enableTOTP: z.boolean().refine((val) => val === true, 'Autenticação de Dois Fatores (TOTP) é campo obrigatório'),
+  acceptTerms: z.boolean().refine((val) => val === true, 'Eu aceito os Termos de Uso e a Política de Privacidade é campo obrigatório')
 }).refine((data: any) => data.password === data.confirmPassword, {
   message: 'Senhas não conferem',
   path: ['confirmPassword']

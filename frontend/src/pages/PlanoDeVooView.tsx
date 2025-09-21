@@ -24,7 +24,7 @@ export default function PlanoDeVooView() {
   const [expandedFirCards, setExpandedFirCards] = React.useState<{[key: string]: boolean}>({})
   const [expandedSuplementoItems, setExpandedSuplementoItems] = React.useState<{[key: string]: boolean}>({})
   const [expandedObservationsSection, setExpandedObservationsSection] = React.useState<boolean>(true)
-  const [expandedCartasCards, setExpandedCartasCards] = React.useState<{[key: string]: boolean}>({})
+  // Removido: expandedCartasCards - não mais necessário pois cards sempre abertos
 
   // Função para copiar para clipboard
   const copyToClipboard = async (text: string) => {
@@ -52,6 +52,19 @@ export default function PlanoDeVooView() {
     window.URL.revokeObjectURL(url)
   }
 
+  // Função para clonar plano de voo
+  const handleClone = () => {
+    if (!data) return
+    
+    // Navegar para a rota de clonagem com os dados completos
+    navigate('/flightplan/clonar', { 
+      state: { 
+        cloneData: data,
+        isClone: true 
+      } 
+    })
+  }
+
   // Função para buscar dados completos do AISWEB
   const fetchAiswebFullData = async (icao: string) => {
     if (!icao || aiswebFullData[icao] || aiswebLoading[icao]) return
@@ -60,8 +73,8 @@ export default function PlanoDeVooView() {
     setAiswebLoading(prev => ({ ...prev, [icao]: true }))
     try {
       const response = await FlightplanAPI.getAiswebFull(icao)
-      console.log(`[DEBUG] Resposta AISWEB para ${icao}:`, response.data)
-      setAiswebFullData(prev => ({ ...prev, [icao]: response.data }))
+      console.log(`[DEBUG] Resposta AISWEB para ${icao}:`, response)
+      setAiswebFullData(prev => ({ ...prev, [icao]: response }))
     } catch (error) {
       console.error(`Erro ao buscar dados completos AISWEB para ${icao}:`, error)
       setAiswebFullData(prev => ({ ...prev, [icao]: null }))
@@ -76,7 +89,7 @@ export default function PlanoDeVooView() {
     console.log(`[DEBUG] Iniciando busca Suplementos FIR para ${icao}`)
     setSuplementosFirLoading(prev => ({ ...prev, [icao]: true }))
     try {
-      const response = await fetch(`/api/aisweb/suplementos/${icao}`)
+      const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:8080'}/api/aisweb/suplementos/${icao}`)
       if (response.ok) {
         const data = await response.json()
         console.log(`[DEBUG] Resposta Suplementos FIR para ${icao}:`, data)
@@ -125,12 +138,7 @@ export default function PlanoDeVooView() {
     }))
   }
 
-  const toggleCartasCard = (cartaId: string) => {
-    setExpandedCartasCards(prev => ({
-      ...prev,
-      [cartaId]: !prev[cartaId]
-    }))
-  }
+  // Removido: toggleCartasCard - não mais necessário pois cards sempre abertos
 
   React.useEffect(() => {
     let mounted = true
@@ -151,7 +159,7 @@ export default function PlanoDeVooView() {
         // Buscar dados do backend com PLN codificado
         const res = await FlightplanAPI.getSubmissionView(id as string)
         if (!mounted) return
-        setData(res.data)
+        setData(res)
       } catch (e: any) {
         setErro(e?.response?.data?.message || 'Não foi possível carregar o FPL')
       } finally {
@@ -181,7 +189,10 @@ export default function PlanoDeVooView() {
       payload.aerodromoDeAlternativaSegundo
     ].filter(Boolean)
     
-    aerodromos.forEach(icao => {
+    // Remove duplicatas usando Set
+    const aerodromosUnicos = [...new Set(aerodromos)]
+    
+    aerodromosUnicos.forEach(icao => {
       if (icao && !aiswebFullData[icao] && !aiswebLoading[icao]) {
         fetchAiswebFullData(icao)
       }
@@ -226,6 +237,12 @@ export default function PlanoDeVooView() {
           <p className="text-slate-600">Preencha exatamente esses dados no seu FPL BR e bom voo comandante ✈️🧑‍✈️</p>
         </div>
         <div className="flex items-center gap-3">
+          <button 
+            onClick={() => handleClone()}
+            className="px-4 py-2 rounded-xl bg-green-600 text-white hover:bg-green-700 transition-colors"
+          >
+            Clonar
+          </button>
           <Link to="/flightplan/novo" className="px-4 py-2 rounded-xl bg-indigo-600 text-white">Novo</Link>
           <Link to="/flightplan/listar" className="px-4 py-2 rounded-xl bg-slate-200">Listar</Link>
         </div>
@@ -921,59 +938,57 @@ export default function PlanoDeVooView() {
                                           }
                                         }
 
-                                        const cartaId = `carta-${carta.id}-${index}`
-                                        const isExpanded = expandedCartasCards[cartaId] !== false
+                                        const cartaId = `carta-${carta.id}-${carta.tipo}-${index}`
+                                        const isExpanded = true // Sempre aberto
 
                                         return (
-                                          <div key={cartaId} className="bg-white p-4 rounded-lg border border-blue-100 shadow-sm hover:shadow-md transition-shadow">
-                                            <div className="flex items-center justify-between mb-3">
-                                              <div className="flex items-center gap-3">
-                                                <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
-                                                  <span className="text-blue-600 text-lg">{getIcon(carta.tipo)}</span>
+                                          <div key={cartaId} className={`bg-white rounded-lg border border-blue-100 shadow-sm hover:shadow-md transition-all duration-300 ${
+                                            isExpanded ? 'p-4' : 'p-2'
+                                          }`}>
+                                            <div className={`flex items-center justify-between ${isExpanded ? 'mb-3' : 'mb-0'}`}>
+                                              <div className={`flex items-center ${isExpanded ? 'gap-3' : 'gap-2'}`}>
+                                                <div className={`${isExpanded ? 'w-8 h-8' : 'w-6 h-6'} bg-blue-100 rounded-lg flex items-center justify-center`}>
+                                                  <span className={`text-blue-600 ${isExpanded ? 'text-lg' : 'text-sm'}`}>{getIcon(carta.tipo)}</span>
                                                 </div>
                                                 <div>
-                                                  <div className="text-sm font-bold text-blue-800">{carta.tipo}</div>
-                                                  <div className="text-xs text-blue-600">{carta.tipoDescr}</div>
+                                                  <div className={`${isExpanded ? 'text-sm' : 'text-xs'} font-bold text-blue-800`}>{carta.tipo}</div>
+                                                  {isExpanded && (
+                                                    <div className="text-xs text-blue-600">{carta.tipoDescr}</div>
+                                                  )}
                                                 </div>
                                               </div>
-                                              <button
-                                                onClick={() => toggleCartasCard(cartaId)}
-                                                className="px-2 py-1 bg-blue-100 hover:bg-blue-200 text-blue-600 rounded text-xs font-medium transition-colors"
-                                              >
-                                                {isExpanded ? '▼' : '▶'}
-                                              </button>
+                                        {/* Botão de toggle removido */}
                                             </div>
                                             
                                             {/* Conteúdo expansível */}
-                                            <div className={`transition-all duration-300 ${
-                                              isExpanded ? 'block' : 'hidden'
-                                            }`}>
-                                              <div className="space-y-2">
-                                                <div>
-                                                  <div className="text-xs text-blue-600 font-medium mb-1">Nome</div>
-                                                  <div className="text-sm font-bold text-blue-800">{carta.nome}</div>
-                                                </div>
-                                                <div>
-                                                  <div className="text-xs text-blue-600 font-medium mb-1">Emenda</div>
-                                                  <div className="text-sm text-blue-700">{carta.amdt}</div>
-                                                </div>
-                                                {carta.use && (
-                                                  <div>
-                                                    <div className="text-xs text-blue-600 font-medium mb-1">Uso</div>
-                                                    <div className="text-sm text-blue-700">{carta.use}</div>
-                                                  </div>
-                                                )}
-                                                {carta.downloadUrl && (
-                                                  <div className="pt-3 border-t border-blue-200">
-                                                    <button
-                                                      onClick={() => window.open(carta.downloadUrl, '_blank')}
-                                                      className="w-full inline-flex items-center justify-center gap-2 px-3 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors text-sm font-medium"
-                                                    >
-                                                      📥 Baixar
-                                                    </button>
-                                                  </div>
-                                                )}
+                                            <div className="space-y-2">
+                                              <div>
+                                                <div className="text-xs text-blue-600 font-medium mb-1">Nome</div>
+                                                <div className="text-sm font-bold text-blue-800">{carta.nome}</div>
                                               </div>
+                                              <div>
+                                                <div className="text-xs text-blue-600 font-medium mb-1">Emenda</div>
+                                                <div className="text-sm text-blue-700">{carta.amdt}</div>
+                                              </div>
+                                              {carta.use && (
+                                                <div>
+                                                  <div className="text-xs text-blue-600 font-medium mb-1">Uso</div>
+                                                  <div className="text-sm text-blue-700">{carta.use}</div>
+                                                </div>
+                                              )}
+                                              {carta.downloadUrl && (
+                                                <div className="pt-3 border-t border-blue-200 flex justify-center">
+                                                  <button
+                                                    onClick={() => window.open(carta.downloadUrl, '_blank')}
+                                                    className="inline-flex items-center gap-2 text-sm text-white font-bold bg-blue-600 hover:bg-blue-700 px-4 py-3 rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
+                                                  >
+                                                    📄 Baixar Carta
+                                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                                                    </svg>
+                                                  </button>
+                                                </div>
+                                              )}
                                             </div>
                                           </div>
                                         )
@@ -1022,62 +1037,57 @@ export default function PlanoDeVooView() {
                                     }
                                   }
 
-                                  const cartaId = `carta-${carta.id}-${index}`
-                                  const isExpanded = expandedCartasCards[cartaId] !== false
+                                  const cartaId = `carta-${carta.id}-${carta.tipo}-${index}`
+                                  const isExpanded = true // Sempre aberto
 
                                   return (
-                                    <div key={cartaId} className="bg-white p-4 rounded-lg border border-blue-100 shadow-sm hover:shadow-md transition-shadow">
-                                      <div className="flex items-center justify-between mb-3">
-                                        <div className="flex items-center gap-3">
-                                          <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
-                                            <span className="text-blue-600 text-lg">{getIcon(carta.tipo)}</span>
+                                    <div key={cartaId} className={`bg-white rounded-lg border border-blue-100 shadow-sm hover:shadow-md transition-all duration-300 ${
+                                      isExpanded ? 'p-4' : 'p-2'
+                                    }`}>
+                                      <div className={`flex items-center justify-between ${isExpanded ? 'mb-3' : 'mb-0'}`}>
+                                        <div className={`flex items-center ${isExpanded ? 'gap-3' : 'gap-2'}`}>
+                                          <div className={`${isExpanded ? 'w-8 h-8' : 'w-6 h-6'} bg-blue-100 rounded-lg flex items-center justify-center`}>
+                                            <span className={`text-blue-600 ${isExpanded ? 'text-lg' : 'text-sm'}`}>{getIcon(carta.tipo)}</span>
                                           </div>
                                           <div>
-                                            <div className="text-sm font-bold text-blue-800">{carta.tipo}</div>
-                                            <div className="text-xs text-blue-600">{carta.tipoDescr}</div>
+                                            <div className={`${isExpanded ? 'text-sm' : 'text-xs'} font-bold text-blue-800`}>{carta.tipo}</div>
+                                            {isExpanded && (
+                                              <div className="text-xs text-blue-600">{carta.tipoDescr}</div>
+                                            )}
                                           </div>
                                         </div>
-                                        <button
-                                          onClick={() => toggleCartasCard(cartaId)}
-                                          className="px-2 py-1 bg-blue-100 hover:bg-blue-200 text-blue-600 rounded text-xs font-medium transition-colors"
-                                        >
-                                          {isExpanded ? '▼' : '▶'}
-                                        </button>
+                                        {/* Botão de toggle removido */}
                                       </div>
                                       
-                                      {/* Conteúdo expansível */}
-                                      <div className={`transition-all duration-300 ${
-                                        isExpanded ? 'block' : 'hidden'
-                                      }`}>
-                                        <div className="space-y-2">
-                                          <div>
-                                            <div className="text-xs text-blue-600 font-medium mb-1">Nome</div>
-                                            <div className="text-sm font-bold text-blue-800">{carta.nome}</div>
-                                          </div>
-                                          <div>
-                                            <div className="text-xs text-blue-600 font-medium mb-1">Emenda</div>
-                                            <div className="text-sm text-blue-700">{carta.amdt}</div>
-                                          </div>
-                                          {carta.use && (
-                                            <div>
-                                              <div className="text-xs text-blue-600 font-medium mb-1">Uso</div>
-                                              <div className="text-sm text-blue-700">{carta.use}</div>
-                                            </div>
-                                          )}
-                                          {carta.downloadUrl && (
-                                            <div className="pt-3 border-t border-blue-200">
-                                              <button
-                                                onClick={() => window.open(carta.downloadUrl, '_blank')}
-                                                className="inline-flex items-center gap-2 text-xs text-blue-600 hover:text-blue-800 font-medium bg-blue-50 hover:bg-blue-100 px-3 py-2 rounded-lg transition-colors"
-                                              >
-                                                📄 Baixar Carta
-                                                <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                                                </svg>
-                                              </button>
-                                            </div>
-                                          )}
+                                      {/* Conteúdo sempre visível */}
+                                      <div className="space-y-2">
+                                        <div>
+                                          <div className="text-xs text-blue-600 font-medium mb-1">Nome</div>
+                                          <div className="text-sm font-bold text-blue-800">{carta.nome}</div>
                                         </div>
+                                        <div>
+                                          <div className="text-xs text-blue-600 font-medium mb-1">Emenda</div>
+                                          <div className="text-sm text-blue-700">{carta.amdt}</div>
+                                        </div>
+                                        {carta.use && (
+                                          <div>
+                                            <div className="text-xs text-blue-600 font-medium mb-1">Uso</div>
+                                            <div className="text-sm text-blue-700">{carta.use}</div>
+                                          </div>
+                                        )}
+                                        {carta.downloadUrl && (
+                                          <div className="pt-3 border-t border-blue-200 flex justify-center">
+                                            <button
+                                              onClick={() => window.open(carta.downloadUrl, '_blank')}
+                                              className="inline-flex items-center gap-2 text-sm text-white font-bold bg-blue-600 hover:bg-blue-700 px-4 py-3 rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
+                                            >
+                                              📄 Baixar Carta
+                                              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                                              </svg>
+                                            </button>
+                                          </div>
+                                        )}
                                       </div>
                                     </div>
                                   )
@@ -1879,7 +1889,7 @@ export default function PlanoDeVooView() {
                                       {/* Conteúdo Expandido/Collapsado */}
                                       {isExpanded ? (
                                         <div className="space-y-3">
-                                          <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                                          <div className="bg-gradient-to-br from-gray-50 to-gray-100 p-5 rounded-xl border border-gray-200">
                                             <div className="text-sm text-gray-700 leading-relaxed">
                                               {notam.message || 'Mensagem não disponível'}
                                             </div>
@@ -1920,13 +1930,15 @@ export default function PlanoDeVooView() {
                                       ) : (
                                         /* Visualização Compacta */
                                         <div className="space-y-2">
-                                          <div className="text-sm text-gray-700 leading-relaxed" style={{
-                                            display: '-webkit-box',
-                                            WebkitLineClamp: 2,
-                                            WebkitBoxOrient: 'vertical',
-                                            overflow: 'hidden'
-                                          }}>
-                                            {notam.message?.substring(0, 150)}...
+                                          <div className="bg-gradient-to-br from-gray-50 to-gray-100 p-5 rounded-xl border border-gray-200">
+                                            <div className="text-sm text-gray-700 leading-relaxed" style={{
+                                              display: '-webkit-box',
+                                              WebkitLineClamp: 2,
+                                              WebkitBoxOrient: 'vertical',
+                                              overflow: 'hidden'
+                                            }}>
+                                              {notam.message?.substring(0, 150)}...
+                                            </div>
                                           </div>
                                           <div className="flex items-center justify-between text-xs text-gray-500">
                                             <span>{notam.icaoCode || 'N/A'}</span>
@@ -2393,24 +2405,13 @@ export default function PlanoDeVooView() {
                                                 </div>
                                               </div>
                                               
-                                              {/* Status */}
-                                              {item.status && (
-                                                <div className="mb-3">
-                                                  <span className={`px-2 py-1 rounded text-xs font-medium ${
-                                                    item.status === 'em vigor' ? 'bg-green-100 text-green-800' :
-                                                    item.status === 'vencido' ? 'bg-red-100 text-red-800' :
-                                                    'bg-gray-100 text-gray-800'
-                                                  }`}>
-                                                    {item.status}
-                                                  </span>
-                                                </div>
-                                              )}
                                               
                                               {/* Conteúdo expansível */}
                                               <div className={`transition-all duration-300 ${
                                                 expandedSuplementoItems[`${fir.code}-${item.id}`] ? 'block' : 'hidden'
                                               }`}>
-                                                {/* Título do Suplemento */}
+                                                
+                                                {/* Título do Suplemento - apenas quando aberto */}
                                                 {item.titulo && (
                                                   <div className="mb-3">
                                                     <div className="text-xs text-gray-500 mb-1">Título:</div>
@@ -2420,11 +2421,25 @@ export default function PlanoDeVooView() {
                                                   </div>
                                                 )}
                                                 
+                                                {/* Status - apenas quando aberto */}
+                                                {item.status && (
+                                                  <div className="mb-3">
+                                                    <span className={`px-2 py-1 rounded text-xs font-medium ${
+                                                      item.status?.toLowerCase() === 'em vigor' ? 'bg-green-100 text-green-800' :
+                                                      item.status?.toLowerCase() === 'ativo' ? 'bg-green-100 text-green-800' :
+                                                      item.status?.toLowerCase() === 'vencido' ? 'bg-red-100 text-red-800' :
+                                                      'bg-red-100 text-red-800'
+                                                    }`}>
+                                                      {item.status}
+                                                    </span>
+                                                  </div>
+                                                )}
+                                                
                                                 {/* Texto do Suplemento */}
                                                 {item.texto && (
                                                   <div className="mb-3">
                                                     <div className="text-xs text-gray-500 mb-1">Descrição:</div>
-                                                    <div className="text-sm text-gray-700 bg-white p-2 rounded border">
+                                                    <div className="text-sm text-gray-700 bg-gradient-to-br from-gray-50 to-gray-100 p-5 rounded-xl border border-gray-200">
                                                       {item.texto}
                                                     </div>
                                                   </div>
@@ -2517,6 +2532,39 @@ export default function PlanoDeVooView() {
                                                   </div>
                                                 </div>
                                               </div>
+                                              
+                                              {/* Visualização Compacta - quando fechado */}
+                                              {!expandedSuplementoItems[`${fir.code}-${item.id}`] && (
+                                                <div className="space-y-3">
+                                                  {/* Status acima da descrição */}
+                                                  {item.status && (
+                                                    <div className="flex justify-start">
+                                                      <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                                                        item.status?.toLowerCase() === 'em vigor' ? 'bg-green-100 text-green-800' :
+                                                        item.status?.toLowerCase() === 'ativo' ? 'bg-green-100 text-green-800' :
+                                                        item.status?.toLowerCase() === 'vencido' ? 'bg-red-100 text-red-800' :
+                                                        'bg-red-100 text-red-800'
+                                                      }`}>
+                                                        {item.status}
+                                                      </span>
+                                                    </div>
+                                                  )}
+                                                  
+                                                  {/* Descrição com fundo cinza */}
+                                                  {item.texto && (
+                                                    <div className="bg-gradient-to-br from-gray-50 to-gray-100 p-5 rounded-xl border border-gray-200">
+                                                      <div className="text-sm text-gray-700 leading-relaxed" style={{
+                                                        display: '-webkit-box',
+                                                        WebkitLineClamp: 3,
+                                                        WebkitBoxOrient: 'vertical',
+                                                        overflow: 'hidden'
+                                                      }}>
+                                                        {item.texto}
+                                                      </div>
+                                                    </div>
+                                                  )}
+                                                </div>
+                                              )}
                                             </div>
                                           ))}
                                           </div>
@@ -2577,7 +2625,7 @@ export default function PlanoDeVooView() {
                                   {/* Descrição */}
                                   <div className="text-sm text-gray-700 mb-3">
                                     <div className="font-medium text-blue-700 mb-1">Descrição:</div>
-                                    <div className="bg-white p-2 rounded border">
+                                    <div className="bg-gradient-to-br from-gray-50 to-gray-100 p-5 rounded-xl border border-gray-200">
                                       {item.descricao || item.observacao || 'N/A'}
                                     </div>
                                   </div>

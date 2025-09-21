@@ -6,7 +6,7 @@ import { PlanoDeVooDTO } from '../types/PlanoDeVooDTO'
 import { nowUtcISO, todayDdmmaaUtc, parseHHmmToMinutes, isFutureAtLeastMinutes } from '../utils/time'
 import { getSunInfo, isNoturnoPorJanela } from '../services/SunService'
 // import { vooNoturnoAutorizado } from '../services/AerodromoService' // Removido - usando apenas AISWEB
-import { api } from '../services/api'
+import { apiClient } from '../services/api'
 import { useNavigate } from 'react-router-dom'
 
 const EQUIP_OPCOES = ['S','R','G','O','D','N','V','I']
@@ -105,7 +105,7 @@ export default function PlanoDeVooForm() {
   }
 
   function buildIsoFromDofAndHora(): string | null {
-    const dof = data.outrasInformacoes.dof
+    const dof = data.outrasInformacoes?.dof
     const m = /^(\d{2})(\d{2})(\d{2})$/.exec(dof || '')
     const t = /^(\d{2}):(\d{2})$/.exec(horaLocal || '')
     if (!m || !t) return null
@@ -136,7 +136,7 @@ export default function PlanoDeVooForm() {
     
     console.log('Debug horário:')
     console.log('- Horário original:', horaLocal)
-    console.log('- DOF original:', data.outrasInformacoes.dof)
+    console.log('- DOF original:', data.outrasInformacoes?.dof)
     console.log('- Data calculada (local):', d.toString())
     console.log('- Data UTC:', utcTime.toString())
     console.log('- ISO String:', utcTime.toISOString())
@@ -180,10 +180,10 @@ export default function PlanoDeVooForm() {
     if (!data.nivelDeVoo) e.nivelDeVoo = 'Informe o nível de voo (ex.: VFR, A045, F055)'
 
     if (!data.tempoDeVooPrevisto || isNaN(parseHHmmToMinutes(data.tempoDeVooPrevisto))) e.tempoDeVooPrevisto = 'Informe EET (HHmm)'
-    if (!data.informacaoSuplementar.autonomia || isNaN(parseHHmmToMinutes(data.informacaoSuplementar.autonomia))) e.autonomia = 'Informe autonomia'
-    if (!data.informacaoSuplementar.pob || data.informacaoSuplementar.pob < 1 || data.informacaoSuplementar.pob > 999) e.pob = 'Informe pessoas a bordo (1-999)'
+    if (!data.informacaoSuplementar?.autonomia || isNaN(parseHHmmToMinutes(data.informacaoSuplementar?.autonomia))) e.autonomia = 'Informe autonomia'
+    if (!data.informacaoSuplementar?.pob || data.informacaoSuplementar?.pob < 1 || data.informacaoSuplementar?.pob > 999) e.pob = 'Informe pessoas a bordo (1-999)'
     const eetMin = parseHHmmToMinutes(data.tempoDeVooPrevisto)
-    const autMin = parseHHmmToMinutes(data.informacaoSuplementar.autonomia)
+    const autMin = parseHHmmToMinutes(data.informacaoSuplementar?.autonomia)
     if (!isNaN(eetMin) && !isNaN(autMin) && eetMin > autMin) e.tempoDeVooPrevisto = 'EET não pode exceder a autonomia informada'
 
     // Hora partida conforme modo
@@ -191,7 +191,7 @@ export default function PlanoDeVooForm() {
     console.log('🕐 Validating departure time...')
     console.log('- Mode:', data.modo, 'Min ahead:', minAhead)
     console.log('- horaLocal:', horaLocal)
-    console.log('- DOF:', data.outrasInformacoes.dof)
+    console.log('- DOF:', data.outrasInformacoes?.dof)
     
     const iso = buildIsoFromDofAndHora()
     console.log('- ISO generated:', iso)
@@ -208,21 +208,21 @@ export default function PlanoDeVooForm() {
     }
 
     // OutrasInformações
-    if (!data.outrasInformacoes.opr) e.opr = 'OPR/ é obrigatório'
-    if (!/^[A-Z]{4}$/.test(data.outrasInformacoes.from)) e.from = 'FROM/ deve ser ICAO 4 letras'
-    if (!/^\d{6}$/.test(data.outrasInformacoes.dof)) e.dof = 'DOF/ deve ser ddmmaa'
-    if (data.modo === 'PVC' && (!data.outrasInformacoes.per || data.outrasInformacoes.per.length === 0)) e.per = 'PER/ é obrigatório no PVC'
-    const rmkVal = (data.outrasInformacoes.rmk || '').trim()
+    if (!data.outrasInformacoes?.opr) e.opr = 'OPR/ é obrigatório'
+    if (!/^[A-Z]{4}$/.test(data.outrasInformacoes?.from)) e.from = 'FROM/ deve ser ICAO 4 letras'
+    if (!/^\d{6}$/.test(data.outrasInformacoes?.dof)) e.dof = 'DOF/ deve ser ddmmaa'
+    if (data.modo === 'PVC' && (!data.outrasInformacoes?.per || data.outrasInformacoes?.per.length === 0)) e.per = 'PER/ é obrigatório no PVC'
+    const rmkVal = (data.outrasInformacoes?.rmk || '').trim()
     if (!rmkVal) e.rmk = 'RMK/ é obrigatório'
     else if (/\bREA\b/i.test(data.rota) && !/\bREA\b/.test(rmkVal)) e.rmk = 'RMK/ deve conter REA e corredores quando rota tiver REA'
 
     // Informação Suplementar
-    if (!data.informacaoSuplementar.corEMarcaAeronave) e.corEMarcaAeronave = 'Cor e Marca da Aeronave é obrigatório'
-    if (!data.informacaoSuplementar.pilotoEmComando) e.pilotoEmComando = 'Piloto em Comando é obrigatório'
-    if (!data.informacaoSuplementar.anacPrimeiroPiloto) e.anacPrimeiroPiloto = 'Cód. ANAC 1º Piloto é obrigatório'
-    if (!/^\d{10,11}$/.test(data.informacaoSuplementar.telefone)) e.telefone = 'Informe um telefone válido (somente números)'
-    if (!data.informacaoSuplementar.radioEmergencia || (data.informacaoSuplementar.radioEmergencia.length === 0)) e.radioEmergencia = 'Selecione ao menos um equipamento de rádio de emergência'
-    if (data.informacaoSuplementar.n && !(data.informacaoSuplementar.observacoes && data.informacaoSuplementar.observacoes.trim().length>0)) e.observacoes = 'Observações tornam-se obrigatórias quando N = sim'
+    if (!data.informacaoSuplementar?.corEMarcaAeronave) e.corEMarcaAeronave = 'Cor e Marca da Aeronave é obrigatório'
+    if (!data.informacaoSuplementar?.pilotoEmComando) e.pilotoEmComando = 'Piloto em Comando é obrigatório'
+    if (!data.informacaoSuplementar?.anacPrimeiroPiloto) e.anacPrimeiroPiloto = 'Cód. ANAC 1º Piloto é obrigatório'
+    if (!/^\d{10,11}$/.test(data.informacaoSuplementar?.telefone)) e.telefone = 'Informe um telefone válido (somente números)'
+    if (!data.informacaoSuplementar?.radioEmergencia || (data.informacaoSuplementar?.radioEmergencia.length === 0)) e.radioEmergencia = 'Selecione ao menos um equipamento de rádio de emergência'
+    if (data.informacaoSuplementar?.n && !(data.informacaoSuplementar?.observacoes && data.informacaoSuplementar?.observacoes.trim().length>0)) e.observacoes = 'Observações tornam-se obrigatórias quando N = sim'
 
     setErrors(e)
     return Object.keys(e).length === 0
@@ -231,18 +231,18 @@ export default function PlanoDeVooForm() {
   async function verificarNoturno() {
     setAlertaNoturno('')
     try {
-      const sun = await getSunInfo(data.aerodromoDeAlternativa, data.outrasInformacoes.dof)
+      const sun = await getSunInfo(data.aerodromoDeAlternativa, data.outrasInformacoes?.dof)
       const noturno = isNoturnoPorJanela(data.horaPartida, data.tempoDeVooPrevisto, sun)
       if (noturno) {
         // Verificação de voo noturno removida - usando apenas dados AISWEB em tempo real
-        setAlertaNoturno('Voo noturno detectado - verifique condições no AISWEB')
+        setAlertaNoturno('Voo noturno detectado - verifique condições na Administração do Aeródromo')
       }
     } catch {
       // manter silencioso (dados provisórios)
     }
   }
 
-  React.useEffect(() => { verificarNoturno() }, [data.aerodromoDeAlternativa, data.horaPartida, data.tempoDeVooPrevisto, data.outrasInformacoes.dof])
+  React.useEffect(() => { verificarNoturno() }, [data.aerodromoDeAlternativa, data.horaPartida, data.tempoDeVooPrevisto, data.outrasInformacoes?.dof])
 
   // Função para transformar FplForm em PlanoDeVooDTO
   function transformToPlanoDeVooDTO(formData: any) {
@@ -345,7 +345,7 @@ export default function PlanoDeVooForm() {
     console.log('Form submitted, validating...')
     console.log('Current form data:', data)
     console.log('Current horaLocal:', horaLocal)
-    console.log('Current DOF:', data.outrasInformacoes.dof)
+    console.log('Current DOF:', data.outrasInformacoes?.dof)
     
     const isValid = validate()
     console.log('Validation result:', isValid)
@@ -368,7 +368,7 @@ export default function PlanoDeVooForm() {
         data.horaPartida = new Date().toISOString()
       }
       // Garantir DOF em ddMMaa no envio
-      const dofVal = data.outrasInformacoes.dof || ''
+      const dofVal = data.outrasInformacoes?.dof || ''
       if (dofVal.includes('-')) {
         setOutras('dof', ymdToDdmmaa(dofVal))
       }
@@ -376,8 +376,8 @@ export default function PlanoDeVooForm() {
       console.log('Dados do formulário antes da transformação:', data)
       const transformedData = transformToPlanoDeVooDTO(data)
       console.log('Dados transformados para envio:', transformedData)
-      const res = await api.post('/api/v1/flightplans', transformedData)
-      const id = res?.data?.id
+      const res = await apiClient.post('/api/v1/flightplans', transformedData) as { id: string }
+      const id = res?.id
       if (id) {
         navigate(`/flightplan/${id}`)
       } else {
@@ -609,129 +609,129 @@ export default function PlanoDeVooForm() {
             {outrasSelecionadas.includes('STS') && (
               <div key="STS" className="grid gap-1">
                 <label className="font-medium">STS/</label>
-                <input className="input" value={data.outrasInformacoes.sts || ''} onChange={e => setOutras('sts', e.target.value)} placeholder="ex.: ALTRV" />
+                <input className="input" value={data.outrasInformacoes?.sts || ''} onChange={e => setOutras('sts', e.target.value)} placeholder="ex.: ALTRV" />
               </div>
             )}
             {outrasSelecionadas.includes('PBN') && (
               <div key="PBN" className="grid gap-1">
                 <label className="font-medium">PBN/</label>
-                <input className="input" value={data.outrasInformacoes.pbn || ''} onChange={e => setOutras('pbn', e.target.value)} placeholder="ex.: A1B1C1D1L1O1S1T1" />
+                <input className="input" value={data.outrasInformacoes?.pbn || ''} onChange={e => setOutras('pbn', e.target.value)} placeholder="ex.: A1B1C1D1L1O1S1T1" />
               </div>
             )}
             {outrasSelecionadas.includes('NAV') && (
               <div key="NAV" className="grid gap-1">
                 <label className="font-medium">NAV/</label>
-                <input className="input" value={data.outrasInformacoes.nav || ''} onChange={e => setOutras('nav', e.target.value)} placeholder="ex.: GNSS" />
+                <input className="input" value={data.outrasInformacoes?.nav || ''} onChange={e => setOutras('nav', e.target.value)} placeholder="ex.: GNSS" />
               </div>
             )}
             {outrasSelecionadas.includes('COM') && (
               <div key="COM" className="grid gap-1">
                 <label className="font-medium">COM/</label>
-                <input className="input" value={data.outrasInformacoes.com || ''} onChange={e => setOutras('com', e.target.value)} placeholder="ex.: VHF" />
+                <input className="input" value={data.outrasInformacoes?.com || ''} onChange={e => setOutras('com', e.target.value)} placeholder="ex.: VHF" />
               </div>
             )}
             {outrasSelecionadas.includes('DAT') && (
               <div key="DAT" className="grid gap-1">
                 <label className="font-medium">DAT/</label>
-                <input className="input" value={data.outrasInformacoes.dat || ''} onChange={e => setOutras('dat', e.target.value)} placeholder="ex.: CPDLC" />
+                <input className="input" value={data.outrasInformacoes?.dat || ''} onChange={e => setOutras('dat', e.target.value)} placeholder="ex.: CPDLC" />
               </div>
             )}
             {outrasSelecionadas.includes('SUR') && (
               <div key="SUR" className="grid gap-1">
                 <label className="font-medium">SUR/</label>
-                <input className="input" value={data.outrasInformacoes.sur || ''} onChange={e => setOutras('sur', e.target.value)} placeholder="ex.: 400B" />
+                <input className="input" value={data.outrasInformacoes?.sur || ''} onChange={e => setOutras('sur', e.target.value)} placeholder="ex.: 400B" />
               </div>
             )}
             {outrasSelecionadas.includes('DEP') && (
               <div key="DEP" className="grid gap-1">
                 <label className="font-medium">DEP/</label>
-                <input className="input" value={data.outrasInformacoes.dep || ''} onChange={e => setOutras('dep', e.target.value)} placeholder="ex.: SBMT" />
+                <input className="input" value={data.outrasInformacoes?.dep || ''} onChange={e => setOutras('dep', e.target.value)} placeholder="ex.: SBMT" />
               </div>
             )}
             {outrasSelecionadas.includes('DEST') && (
               <div key="DEST" className="grid gap-1">
                 <label className="font-medium">DEST/</label>
-                <input className="input" value={data.outrasInformacoes.dest || ''} onChange={e => setOutras('dest', e.target.value)} placeholder="ex.: SBMT" />
+                <input className="input" value={data.outrasInformacoes?.dest || ''} onChange={e => setOutras('dest', e.target.value)} placeholder="ex.: SBMT" />
               </div>
             )}
             {outrasSelecionadas.includes('REG') && (
               <div key="REG" className="grid gap-1">
                 <label className="font-medium">REG/</label>
-                <input className="input" value={data.outrasInformacoes.reg || ''} onChange={e => setOutras('reg', e.target.value)} placeholder="ex.: PT-OSP" />
+                <input className="input" value={data.outrasInformacoes?.reg || ''} onChange={e => setOutras('reg', e.target.value)} placeholder="ex.: PT-OSP" />
               </div>
             )}
             {outrasSelecionadas.includes('EET') && (
               <div key="EET" className="grid gap-1">
                 <label className="font-medium">EET/ (FIR + tempo)</label>
-                <input className="input" value={data.outrasInformacoes.eet || ''} onChange={e => setOutras('eet', e.target.value)} placeholder="ex.: SBC0005 SBBS0150" />
+                <input className="input" value={data.outrasInformacoes?.eet || ''} onChange={e => setOutras('eet', e.target.value)} placeholder="ex.: SBC0005 SBBS0150" />
               </div>
             )}
             {outrasSelecionadas.includes('SEL') && (
               <div key="SEL" className="grid gap-1">
                 <label className="font-medium">SEL/</label>
-                <input className="input" value={data.outrasInformacoes.sel || ''} onChange={e => setOutras('sel', e.target.value)} placeholder="ex.: SELCAL" />
+                <input className="input" value={data.outrasInformacoes?.sel || ''} onChange={e => setOutras('sel', e.target.value)} placeholder="ex.: SELCAL" />
               </div>
             )}
             {outrasSelecionadas.includes('TYP') && (
               <div key="TYP" className="grid gap-1">
                 <label className="font-medium">TYP/</label>
-                <input className="input" value={data.outrasInformacoes.typ || ''} onChange={e => setOutras('typ', e.target.value)} placeholder="ex.: BL8" />
+                <input className="input" value={data.outrasInformacoes?.typ || ''} onChange={e => setOutras('typ', e.target.value)} placeholder="ex.: BL8" />
               </div>
             )}
             {outrasSelecionadas.includes('CODE') && (
               <div key="CODE" className="grid gap-1">
                 <label className="font-medium">CODE/</label>
-                <input className="input" value={data.outrasInformacoes.code || ''} onChange={e => setOutras('code', e.target.value)} placeholder="ex.: 1234" />
+                <input className="input" value={data.outrasInformacoes?.code || ''} onChange={e => setOutras('code', e.target.value)} placeholder="ex.: 1234" />
               </div>
             )}
             {outrasSelecionadas.includes('DLE') && (
               <div key="DLE" className="grid gap-1">
                 <label className="font-medium">DLE/</label>
-                <input className="input" value={data.outrasInformacoes.dle || ''} onChange={e => setOutras('dle', e.target.value)} placeholder="ex.: SBMT0030" />
+                <input className="input" value={data.outrasInformacoes?.dle || ''} onChange={e => setOutras('dle', e.target.value)} placeholder="ex.: SBMT0030" />
               </div>
             )}
             {outrasSelecionadas.includes('OPR') && (
               <div key="OPR" className="grid gap-1">
                 <label className="font-medium">OPR/*</label>
-                <input className="input" value={data.outrasInformacoes.opr} onChange={e => setOutras('opr', e.target.value)} placeholder="ex.: Eduardo Bregaida" />
+                <input className="input" value={data.outrasInformacoes?.opr} onChange={e => setOutras('opr', e.target.value)} placeholder="ex.: Eduardo Bregaida" />
                 {errors.opr && <p className="text-red-600 text-sm">{errors.opr}</p>}
               </div>
             )}
             {outrasSelecionadas.includes('ORGN') && (
               <div key="ORGN" className="grid gap-1">
                 <label className="font-medium">ORGN/</label>
-                <input className="input" value={data.outrasInformacoes.orgn || ''} onChange={e => setOutras('orgn', e.target.value)} placeholder="ex.: SBMT" />
+                <input className="input" value={data.outrasInformacoes?.orgn || ''} onChange={e => setOutras('orgn', e.target.value)} placeholder="ex.: SBMT" />
               </div>
             )}
             {outrasSelecionadas.includes('FROM') && (
               <div key="FROM" className="grid gap-1">
                 <label className="font-medium">FROM/*</label>
-                <input className="input" value={data.outrasInformacoes.from} onInput={uppercaseField} onChange={e => setOutras('from', e.target.value.toUpperCase())} placeholder="ex.: SBMT" />
+                <input className="input" value={data.outrasInformacoes?.from} onInput={uppercaseField} onChange={e => setOutras('from', e.target.value.toUpperCase())} placeholder="ex.: SBMT" />
                 {errors.from && <p className="text-red-600 text-sm">{errors.from}</p>}
               </div>
             )}
             {outrasSelecionadas.includes('ALTN') && (
               <div key="ALTN" className="grid gap-1">
                 <label className="font-medium">ALTN/</label>
-                <input className="input" value={data.outrasInformacoes.altn || ''} onChange={e => setOutras('altn', e.target.value)} placeholder="ex.: SBJD" />
+                <input className="input" value={data.outrasInformacoes?.altn || ''} onChange={e => setOutras('altn', e.target.value)} placeholder="ex.: SBJD" />
               </div>
             )}
             {outrasSelecionadas.includes('RALT') && (
               <div key="RALT" className="grid gap-1">
                 <label className="font-medium">RALT/</label>
-                <input className="input" value={data.outrasInformacoes.ralt || ''} onChange={e => setOutras('ralt', e.target.value)} placeholder="ex.: SBJD" />
+                <input className="input" value={data.outrasInformacoes?.ralt || ''} onChange={e => setOutras('ralt', e.target.value)} placeholder="ex.: SBJD" />
               </div>
             )}
             {outrasSelecionadas.includes('TALT') && (
               <div key="TALT" className="grid gap-1">
                 <label className="font-medium">TALT/</label>
-                <input className="input" value={data.outrasInformacoes.talt || ''} onChange={e => setOutras('talt', e.target.value)} placeholder="ex.: SBJD" />
+                <input className="input" value={data.outrasInformacoes?.talt || ''} onChange={e => setOutras('talt', e.target.value)} placeholder="ex.: SBJD" />
               </div>
             )}
             {outrasSelecionadas.includes('RIF') && (
               <div key="RIF" className="grid gap-1">
                 <label className="font-medium">RIF/</label>
-                <input className="input" value={data.outrasInformacoes.rif || ''} onChange={e => setOutras('rif', e.target.value)} placeholder="ex.: SBMT SBJD" />
+                <input className="input" value={data.outrasInformacoes?.rif || ''} onChange={e => setOutras('rif', e.target.value)} placeholder="ex.: SBMT SBJD" />
               </div>
             )}
           </div>
@@ -740,7 +740,7 @@ export default function PlanoDeVooForm() {
             {outrasSelecionadas.includes('PER') && (
               <div key="PER" className="grid gap-1">
                 <label className="font-medium">PER/ (PVC)</label>
-                <select className="input" value={data.outrasInformacoes.per?.[0] || ''} onChange={e => setOutras('per', e.target.value ? [e.target.value] : [])}>
+                <select className="input" value={data.outrasInformacoes?.per?.[0] || ''} onChange={e => setOutras('per', e.target.value ? [e.target.value] : [])}>
                   <option value="">Selecione uma categoria</option>
                   <option value="A">A - Categoria A (&lt;91kt)</option>
                   <option value="B">B - Categoria B (91-121kt)</option>
@@ -755,7 +755,7 @@ export default function PlanoDeVooForm() {
             {outrasSelecionadas.includes('RMK') && (
               <div className="grid gap-1">
                 <label className="font-medium">RMK/*</label>
-                <input className="input" value={data.outrasInformacoes.rmk || ''} onChange={e => setOutras('rmk', e.target.value)} placeholder="ex.: REA DELTA ECHO LIMA ALT MAX REA" />
+                <input className="input" value={data.outrasInformacoes?.rmk || ''} onChange={e => setOutras('rmk', e.target.value)} placeholder="ex.: REA DELTA ECHO LIMA ALT MAX REA" />
                 {errors.rmk && <p className="text-red-600 text-sm">{errors.rmk}</p>}
               </div>
             )}
@@ -766,7 +766,7 @@ export default function PlanoDeVooForm() {
                   type="date"
                   className="input"
                   min={ymdToday()}
-                  value={ddmmaaToYmd(data.outrasInformacoes.dof)}
+                  value={ddmmaaToYmd(data.outrasInformacoes?.dof)}
                   onChange={e => setOutras('dof', ymdToDdmmaa(e.target.value))}
                 />
                 {errors.dof && <p className="text-red-600 text-sm">{errors.dof}</p>}
@@ -781,28 +781,28 @@ export default function PlanoDeVooForm() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="grid gap-1">
               <label className="font-medium">Autonomia*</label>
-              <input className="input" value={data.informacaoSuplementar.autonomia} onChange={e => setInfoSup('autonomia', e.target.value)} placeholder="ex.: 0100" />
+              <input className="input" value={data.informacaoSuplementar?.autonomia || ''} onChange={e => setInfoSup('autonomia', e.target.value)} placeholder="ex.: 0100" />
               {errors.autonomia && <p className="text-red-600 text-sm">{errors.autonomia}</p>}
             </div>
             <div className="grid gap-1">
               <label className="font-medium">Pessoas a bordo*</label>
-              <input type="number" min={1} max={999} className="input" value={data.informacaoSuplementar.pob || ''} onChange={e => setInfoSup('pob', e.target.value === '' ? 1 : Math.max(1, Math.min(999, parseInt(e.target.value, 10))))} placeholder="ex.: 2" />
+              <input type="number" min={1} max={999} className="input" value={data.informacaoSuplementar?.pob || ''} onChange={e => setInfoSup('pob', e.target.value === '' ? 1 : Math.max(1, Math.min(999, parseInt(e.target.value, 10))))} placeholder="ex.: 2" />
               {errors.pob && <p className="text-red-600 text-sm">{errors.pob}</p>}
             </div>
-            <CheckboxGroup name="radioEmg" label={<><span>Equipamento Rádio Emergência*</span></>} options={[{value:'U',label:'U',tooltip:'UHF'},{value:'V',label:'V',tooltip:'VHF'},{value:'E',label:'E',tooltip:'ELT'}]} values={data.informacaoSuplementar.radioEmergencia || []} onChange={vals => setInfoSup('radioEmergencia', vals)} />
+            <CheckboxGroup name="radioEmg" label={<><span>Equipamento Rádio Emergência*</span></>} options={[{value:'U',label:'U',tooltip:'UHF'},{value:'V',label:'V',tooltip:'VHF'},{value:'E',label:'E',tooltip:'ELT'}]} values={data.informacaoSuplementar?.radioEmergencia || []} onChange={vals => setInfoSup('radioEmergencia', vals)} />
             <div className="grid gap-1">
               <label className="font-medium">Equipamento de Sobrevivência*</label>
               <label className="inline-flex items-center gap-2">
-                <input type="checkbox" className="accent-indigo-600" checked={(data.informacaoSuplementar.sobrevivencia||[]).length>0} onChange={e => setInfoSup('sobrevivencia', e.target.checked ? ['S'] : [])} />
+                <input type="checkbox" className="accent-indigo-600" checked={(data.informacaoSuplementar?.sobrevivencia||[]).length>0} onChange={e => setInfoSup('sobrevivencia', e.target.checked ? ['S'] : [])} />
               </label>
-              {(data.informacaoSuplementar.sobrevivencia||[]).length>0 && (
+              {(data.informacaoSuplementar?.sobrevivencia||[]).length>0 && (
                 <CheckboxGroup name="sobrevExtra" label={<><span>Opções</span></>} options={[
                   {value:'S',label:'S',tooltip:'Equipamentos de sobrevivência'},
                   {value:'P',label:'P',tooltip:'Polar'},
                   {value:'D',label:'D',tooltip:'Deserto'},
                   {value:'M',label:'M',tooltip:'Marítimo'},
                   {value:'J',label:'J',tooltip:'Selva'}
-                ]} values={data.informacaoSuplementar.sobrevivencia || []} onChange={vals => setInfoSup('sobrevivencia', vals)} />
+                ]} values={data.informacaoSuplementar?.sobrevivencia || []} onChange={vals => setInfoSup('sobrevivencia', vals)} />
               )}
             </div>
           </div>
@@ -811,47 +811,47 @@ export default function PlanoDeVooForm() {
             <div className="grid gap-1">
               <label className="font-medium">Coletes*</label>
               <label className="inline-flex items-center gap-2">
-                <input type="checkbox" className="accent-indigo-600" checked={(data.informacaoSuplementar.coletes||[]).includes('J')} onChange={e => {
-                  const on = e.target.checked; const rest = (data.informacaoSuplementar.coletes||[]).filter(x=>x!=='J'); setInfoSup('coletes', on ? ['J', ...rest] : rest)
+                <input type="checkbox" className="accent-indigo-600" checked={(data.informacaoSuplementar?.coletes||[]).includes('J')} onChange={e => {
+                  const on = e.target.checked; const rest = (data.informacaoSuplementar?.coletes||[]).filter(x=>x!=='J'); setInfoSup('coletes', on ? ['J', ...rest] : rest)
                 }} />
               </label>
-              {(data.informacaoSuplementar.coletes||[]).includes('J') && (
-                <CheckboxGroup name="coletesExtras" label={<><span>Opções</span></>} options={[{value:'L',label:'L',tooltip:'Luz'},{value:'F',label:'F',tooltip:'Fluorescente'},{value:'U',label:'U',tooltip:'UHF'},{value:'V',label:'V',tooltip:'VHF'}]} values={(data.informacaoSuplementar.coletes||[]).filter(v=>v!=='J')} onChange={vals => setInfoSup('coletes', ['J', ...vals])} />
+              {(data.informacaoSuplementar?.coletes||[]).includes('J') && (
+                <CheckboxGroup name="coletesExtras" label={<><span>Opções</span></>} options={[{value:'L',label:'L',tooltip:'Luz'},{value:'F',label:'F',tooltip:'Fluorescente'},{value:'U',label:'U',tooltip:'UHF'},{value:'V',label:'V',tooltip:'VHF'}]} values={(data.informacaoSuplementar?.coletes||[]).filter(v=>v!=='J')} onChange={vals => setInfoSup('coletes', ['J', ...vals])} />
               )}
             </div>
             <div className="grid gap-1">
               <label className="font-medium">Botes*<sup title="Informar número, capacidade, abrigo (C) e cor se Sim" className="text-slate-500 ml-1">¹</sup></label>
               <label className="inline-flex items-center gap-2">
-                <input type="checkbox" className="accent-indigo-600" checked={!!data.informacaoSuplementar.botes?.possui} onChange={e => setInfoSup('botes', { ...(data.informacaoSuplementar.botes||{possui:false}), possui: e.target.checked })} />
+                <input type="checkbox" className="accent-indigo-600" checked={!!data.informacaoSuplementar?.botes?.possui} onChange={e => setInfoSup('botes', { ...(data.informacaoSuplementar?.botes||{possui:false}), possui: e.target.checked })} />
               </label>
             </div>
           </div>
-          {data.informacaoSuplementar.botes?.possui && (
+          {data.informacaoSuplementar?.botes?.possui && (
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
               <div className="grid gap-1">
                 <label className="font-medium">Botes — Número</label>
-                <input type="number" min={1} className="input" value={data.informacaoSuplementar.botes?.numero ?? ''} onChange={e => {
+                <input type="number" min={1} className="input" value={data.informacaoSuplementar?.botes?.numero ?? ''} onChange={e => {
                   const val = e.target.value === '' ? undefined : Math.max(1, parseInt(e.target.value, 10));
-                  setInfoSup('botes', { ...(data.informacaoSuplementar.botes||{possui:true}), numero: val as any })
+                  setInfoSup('botes', { ...(data.informacaoSuplementar?.botes||{possui:true}), numero: val as any })
                 }} placeholder="ex.: 1"/>
               </div>
               <div className="grid gap-1">
                 <label className="font-medium">Botes — Capacidade</label>
-                <input type="number" min={1} className="input" value={data.informacaoSuplementar.botes?.capacidade ?? ''} onChange={e => {
+                <input type="number" min={1} className="input" value={data.informacaoSuplementar?.botes?.capacidade ?? ''} onChange={e => {
                   const val = e.target.value === '' ? undefined : Math.max(1, parseInt(e.target.value, 10));
-                  setInfoSup('botes', { ...(data.informacaoSuplementar.botes||{possui:true}), capacidade: val as any })
+                  setInfoSup('botes', { ...(data.informacaoSuplementar?.botes||{possui:true}), capacidade: val as any })
                 }} placeholder="ex.: 1"/>
               </div>
               <div className="grid gap-1">
                 <label className="font-medium">Botes — Abrigo (C)</label>
-                <select className="input" value={data.informacaoSuplementar.botes?.c ? 'true' : 'false'} onChange={e => setInfoSup('botes', { ...(data.informacaoSuplementar.botes||{possui:true}), c: e.target.value === 'true' })}>
+                <select className="input" value={data.informacaoSuplementar?.botes?.c ? 'true' : 'false'} onChange={e => setInfoSup('botes', { ...(data.informacaoSuplementar?.botes||{possui:true}), c: e.target.value === 'true' })}>
                   <option value="false">Não</option>
                   <option value="true">Sim</option>
                 </select>
               </div>
               <div className="grid gap-1">
                 <label className="font-medium">Botes — Cor</label>
-                <input className="input" value={data.informacaoSuplementar.botes?.cor || ''} onChange={e => setInfoSup('botes', { ...(data.informacaoSuplementar.botes||{possui:true}), cor: e.target.value })} placeholder="ex.: LARANJA" />
+                <input className="input" value={data.informacaoSuplementar?.botes?.cor || ''} onChange={e => setInfoSup('botes', { ...(data.informacaoSuplementar?.botes||{possui:true}), cor: e.target.value })} placeholder="ex.: LARANJA" />
               </div>
             </div>
           )}
@@ -859,20 +859,20 @@ export default function PlanoDeVooForm() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="grid gap-1">
               <label className="font-medium">Cor e Marca da Aeronave*</label>
-              <input className="input" value={data.informacaoSuplementar.corEMarcaAeronave} onChange={e => setInfoSup('corEMarcaAeronave', e.target.value)} placeholder="ex.: BRANCO E VERMELHO COM ESTRELAS BRANCAS"/>
+              <input className="input" value={data.informacaoSuplementar?.corEMarcaAeronave} onChange={e => setInfoSup('corEMarcaAeronave', e.target.value)} placeholder="ex.: BRANCO E VERMELHO COM ESTRELAS BRANCAS"/>
               {errors.corEMarcaAeronave && <p className="text-red-600 text-sm">{errors.corEMarcaAeronave}</p>}
             </div>
             <div className="grid gap-1">
               <label className="font-medium">N<sup title="Se selecionado, Observações tornam-se obrigatórias" className="text-slate-500 ml-1">¹</sup></label>
               <div className="flex items-center gap-6">
                 <label className="inline-flex items-center gap-2">
-                  <input type="checkbox" className="accent-indigo-600" checked={!!data.informacaoSuplementar.n} onChange={e => setInfoSup('n', e.target.checked)} />
+                  <input type="checkbox" className="accent-indigo-600" checked={!!data.informacaoSuplementar?.n} onChange={e => setInfoSup('n', e.target.checked)} />
                 </label>
               </div>
             </div>
             <div className="grid gap-1">
               <label className="font-medium">Observações</label>
-              <input className="input" value={data.informacaoSuplementar.observacoes || ''} onChange={e => setInfoSup('observacoes', e.target.value)} />
+              <input className="input" value={data.informacaoSuplementar?.observacoes || ''} onChange={e => setInfoSup('observacoes', e.target.value)} />
               {errors.observacoes && <p className="text-red-600 text-sm">{errors.observacoes}</p>}
             </div>
           </div>
@@ -880,17 +880,17 @@ export default function PlanoDeVooForm() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="grid gap-1">
               <label className="font-medium">Piloto em Comando*</label>
-              <input className="input" value={data.informacaoSuplementar.pilotoEmComando} onChange={e => setInfoSup('pilotoEmComando', e.target.value)} placeholder="ex.: Bregaida" />
+              <input className="input" value={data.informacaoSuplementar?.pilotoEmComando} onChange={e => setInfoSup('pilotoEmComando', e.target.value)} placeholder="ex.: Bregaida" />
               {errors.pilotoEmComando && <p className="text-red-600 text-sm">{errors.pilotoEmComando}</p>}
             </div>
             <div className="grid gap-1">
               <label className="font-medium">Cód. ANAC 1º Piloto*</label>
-              <input className="input" value={data.informacaoSuplementar.anacPrimeiroPiloto} onChange={e => setInfoSup('anacPrimeiroPiloto', e.target.value)} placeholder="ex.: 177762" />
+              <input className="input" value={data.informacaoSuplementar?.anacPrimeiroPiloto} onChange={e => setInfoSup('anacPrimeiroPiloto', e.target.value)} placeholder="ex.: 177762" />
               {errors.anacPrimeiroPiloto && <p className="text-red-600 text-sm">{errors.anacPrimeiroPiloto}</p>}
             </div>
             <div className="grid gap-1">
               <label className="font-medium">Cód. ANAC 2º Piloto</label>
-              <input className="input" value={data.informacaoSuplementar.anacSegundoPiloto || ''} onChange={e => setInfoSup('anacSegundoPiloto', e.target.value)} />
+              <input className="input" value={data.informacaoSuplementar?.anacSegundoPiloto || ''} onChange={e => setInfoSup('anacSegundoPiloto', e.target.value)} />
               {errors.anacSegundoPiloto && <p className="text-red-600 text-sm">{errors.anacSegundoPiloto}</p>}
             </div>
           </div>
@@ -898,7 +898,7 @@ export default function PlanoDeVooForm() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="grid gap-1">
               <label className="font-medium">Telefone*</label>
-              <input className="input" value={data.informacaoSuplementar.telefone} onChange={e => setInfoSup('telefone', e.target.value.replace(/\D/g, ''))} placeholder="ex.: 11985586633" />
+              <input className="input" value={data.informacaoSuplementar?.telefone} onChange={e => setInfoSup('telefone', e.target.value.replace(/\D/g, ''))} placeholder="ex.: 11985586633" />
               {errors.telefone && <p className="text-red-600 text-sm">{errors.telefone}</p>}
             </div>
             <div />

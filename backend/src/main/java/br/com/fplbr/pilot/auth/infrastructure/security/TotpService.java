@@ -5,7 +5,7 @@ import jakarta.inject.Inject;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.security.SecureRandom;
-import java.util.Base64;
+import org.apache.commons.codec.binary.Base32;
 
 @ApplicationScoped
 public class TotpService {
@@ -18,7 +18,8 @@ public class TotpService {
         SecureRandom random = new SecureRandom();
         byte[] secret = new byte[20];
         random.nextBytes(secret);
-        return Base64.getEncoder().encodeToString(secret).replace("=", "");
+        Base32 base32 = new Base32();
+        return base32.encodeAsString(secret).replace("=", "");
     }
 
     public String buildOtpAuthUrl(String secretBase32, String issuer, String labelEmail) {

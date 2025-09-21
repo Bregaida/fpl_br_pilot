@@ -1,6 +1,7 @@
 ﻿import { Routes, Route, Link, useLocation } from 'react-router-dom'
 import Home from './pages/Home'
 import PlanoDeVooForm from './pages/PlanoDeVooForm'
+import PlanoDeVooClone from './pages/PlanoDeVooClone'
 import PlanoDeVooView from './pages/PlanoDeVooView'
 import { FlightPlanList } from './pages/FlightPlanList'
 import { Layout } from './components/Layout'
@@ -18,6 +19,7 @@ export default function App() {
       <Routes location={location}>
         <Route path="/" element={<Home />} />
         <Route path="/flightplan/novo" element={<PlanoDeVooForm />} />
+        <Route path="/flightplan/clonar" element={<PlanoDeVooClone />} />
         <Route path="/flightplan/:id" element={<PlanoDeVooView />} />
         <Route path="/flightplan/listar" element={<FlightPlanList />} />
         <Route path="/login" element={<LoginPage />} />

@@ -62,28 +62,170 @@ export function Navbar() {
         {isMenuOpen && (
           <div className="hidden md:block border-t border-gray-100 bg-white/95 backdrop-blur-md">
             <div className="max-w-7xl mx-auto px-4 py-4">
-              <nav className="flex gap-4">
-                <NavLink
-                  to="/flightplan/novo"
-                  className="btn btn-primary"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  <PlaneIcon />
-                  Novo Plano de Voo
-                </NavLink>
-                <NavLink
-                  to="/flightplan/listar"
-                  className="btn btn-ghost"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  <FlightPlanIcon />
-                  Meus Planos
-                </NavLink>
-        </nav>
-      </div>
+              <nav className="flex flex-wrap gap-4">
+                {/* Aplicação Principal */}
+                <div className="flex flex-wrap gap-2">
+                  <NavLink
+                    to="/"
+                    className="btn btn-ghost"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    <HomeIcon />
+                    Hangar
+                  </NavLink>
+                  <NavLink
+                    to="/flightplan/novo"
+                    className="btn btn-primary"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    <PlaneIcon />
+                    Novo FPL
+                  </NavLink>
+                  <NavLink
+                    to="/flightplan/listar"
+                    className="btn btn-ghost"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    <FlightPlanIcon />
+                    Meus Planos
+                  </NavLink>
+                </div>
+                
+                {/* Autenticação */}
+                <div className="flex flex-wrap gap-2 border-l border-gray-200 pl-4">
+                  <NavLink
+                    to="/login"
+                    className="btn btn-ghost text-sm"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    Login
+                  </NavLink>
+                  <NavLink
+                    to="/cadastro"
+                    className="btn btn-ghost text-sm"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    Cadastro
+                  </NavLink>
+                  <NavLink
+                    to="/esqueci-senha"
+                    className="btn btn-ghost text-sm"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    Esqueci Senha
+                  </NavLink>
+                  <NavLink
+                    to="/troca-senha"
+                    className="btn btn-ghost text-sm"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    Troca Senha
+                  </NavLink>
+                </div>
+                
+                {/* Legal/Info */}
+                <div className="flex flex-wrap gap-2 border-l border-gray-200 pl-4">
+                  <NavLink
+                    to="/termos-uso"
+                    className="btn btn-ghost text-sm"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    Termos
+                  </NavLink>
+                  <NavLink
+                    to="/politica-privacidade"
+                    className="btn btn-ghost text-sm"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    Privacidade
+                  </NavLink>
+                </div>
+              </nav>
+            </div>
           </div>
         )}
     </header>
+
+      {/* Menu mobile expandido */}
+      {isMenuOpen && (
+        <div className="md:hidden border-t border-gray-100 bg-white/95 backdrop-blur-md">
+          <div className="max-w-7xl mx-auto px-4 py-4">
+            <nav className="grid grid-cols-2 gap-2">
+              {/* Aplicação Principal */}
+              <NavLink
+                to="/"
+                className="btn btn-ghost text-sm"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                <HomeIcon />
+                Hangar
+              </NavLink>
+              <NavLink
+                to="/flightplan/novo"
+                className="btn btn-primary text-sm"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                <PlaneIcon />
+                Novo FPL
+              </NavLink>
+              <NavLink
+                to="/flightplan/listar"
+                className="btn btn-ghost text-sm"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                <FlightPlanIcon />
+                Meus Planos
+              </NavLink>
+              
+              {/* Autenticação */}
+              <NavLink
+                to="/login"
+                className="btn btn-ghost text-sm"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Login
+              </NavLink>
+              <NavLink
+                to="/cadastro"
+                className="btn btn-ghost text-sm"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Cadastro
+              </NavLink>
+              <NavLink
+                to="/esqueci-senha"
+                className="btn btn-ghost text-sm"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Esqueci Senha
+              </NavLink>
+              <NavLink
+                to="/troca-senha"
+                className="btn btn-ghost text-sm"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Troca Senha
+              </NavLink>
+              
+              {/* Legal/Info */}
+              <NavLink
+                to="/termos-uso"
+                className="btn btn-ghost text-sm"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Termos
+              </NavLink>
+              <NavLink
+                to="/politica-privacidade"
+                className="btn btn-ghost text-sm"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Privacidade
+              </NavLink>
+            </nav>
+          </div>
+        </div>
+      )}
 
       {/* Navegação mobile - botões na parte inferior */}
       <nav className="fixed bottom-0 left-0 right-0 z-40 md:hidden bg-white/95 backdrop-blur-md border-t border-gray-100 shadow-soft-lg">

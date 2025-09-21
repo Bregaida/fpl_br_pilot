@@ -13,7 +13,7 @@ interface Props {
 
 export default function CheckboxGroup({ name, label, options, values, onChange, error }: Props) {
   function toggle(val: string) {
-    const set = new Set(values)
+    const set = new Set(values || [])
     if (set.has(val)) set.delete(val); else set.add(val)
     onChange(Array.from(set))
   }
@@ -27,7 +27,7 @@ export default function CheckboxGroup({ name, label, options, values, onChange, 
               type="checkbox"
               name={`${name}[]`}
               value={opt.value}
-              checked={values.includes(opt.value)}
+              checked={values?.includes(opt.value) || false}
               onChange={() => toggle(opt.value)}
               className="accent-indigo-600"
             />

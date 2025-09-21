@@ -17,8 +17,8 @@ public class CorsFilter implements ContainerResponseFilter {
         // Get the origin from the request
         String origin = requestContext.getHeaderString("Origin");
         
-        // Allow both development ports
-        if (origin != null && (origin.equals("http://localhost:5173") || origin.equals("http://localhost:5180"))) {
+        // Allow both development ports and any localhost port
+        if (origin != null && origin.startsWith("http://localhost:")) {
             responseContext.getHeaders().add("Access-Control-Allow-Origin", origin);
         } else {
             // Fallback to 5173 if no valid origin

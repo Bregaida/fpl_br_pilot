@@ -20,7 +20,7 @@ public class AuthService {
     @Inject PasswordHasher hasher;
     @Inject TotpService totpService;
     @Inject CryptoService crypto;
-    @Inject JwtService jwtService;
+    // JwtService removido temporariamente
     @Inject PendingRegistrationStore pending;
 
     private static final DateTimeFormatter BIRTH_FMT = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -148,21 +148,39 @@ public class AuthService {
         u.setFailedLoginAttempts(0);
         u.setLastLoginAt(OffsetDateTime.now());
         u.setUpdatedAt(OffsetDateTime.now());
-        String token = jwtService.issueAccessToken(u.getId().toString(), Set.of("user"));
-        return Map.of("ok", true, "jwt", token, "userId", u.getId().toString());
+        // JWT removido temporariamente
+        return Map.of("ok", true, "userId", u.getId().toString());
     }
 
     @Transactional
     public Map<String, Object> loginTotpOnly(String login, int code) {
         var opt = users.findByEmailOrCpfOrAlias(login);
         UserEntity u = opt.orElseThrow(() -> new IllegalArgumentException("Usuário não encontrado"));
-        if (!u.isTwoFactorEnabled()) throw new IllegalStateException("2FA não habilitado");
+        if (!u.isTwoFactorEnabled()) {
+            throw new IllegalStateException("2FA não habilitado. Complete o cadastro primeiro para habilitar 2FA.");
+        }
         String secret = totpService.decryptSecret(u.getTotpSecretEncrypted());
         Long lastCounter = u.getTotpLastUsedCounter();
         long last = lastCounter == null ? -1L : lastCounter;
         if (!totpService.verify(secret, code, last)) throw new IllegalArgumentException("TOTP inválido");
-        String token = jwtService.issueResetToken(u.getId().toString());
-        return Map.of("ok", true, "resetJwt", token);
+        // JWT removido temporariamente
+        return Map.of("ok", true, "userId", u.getId().toString());
+    }
+
+    public Map<String, Object> checkDuplicates(String email, String cpf) {
+        if (email != null && !email.trim().isEmpty()) {
+            if (UserEntity.find("lower(email)", email.toLowerCase()).firstResultOptional().isPresent()) {
+                return Map.of("error", "E-mail já cadastrado");
+            }
+        }
+        
+        if (cpf != null && !cpf.trim().isEmpty()) {
+            if (UserEntity.find("cpf", cpf).firstResultOptional().isPresent()) {
+                return Map.of("error", "CPF já cadastrado");
+            }
+        }
+        
+        return Map.of("ok", true);
     }
 
     @Transactional

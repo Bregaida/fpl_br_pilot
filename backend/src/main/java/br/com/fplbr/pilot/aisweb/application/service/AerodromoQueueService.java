@@ -72,8 +72,9 @@ public class AerodromoQueueService {
     
     /**
      * Processa lotes de aeródromos da fila a cada 5 segundos
+     * DESABILITADO TEMPORARIAMENTE - Redis não disponível
      */
-    @Scheduled(every = "5s")
+    // @Scheduled(every = "5s")
     public void processarLoteDaFila() {
         init();
         

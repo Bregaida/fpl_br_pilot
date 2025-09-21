@@ -17,6 +17,31 @@ export function FlightPlanList() {
   const [rows, setRows] = React.useState<SubmissionRow[]>([])
   const [loading, setLoading] = React.useState(true)
 
+  // Função para clonar plano de voo
+  const handleClone = async (id: number) => {
+    try {
+      // Buscar os dados do plano de voo usando a API correta
+      const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:8080'}/api/v1/flightplans/${id}`)
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
+      const data = await response.json()
+      
+      if (data && data.payload) {
+        // Navegar para a rota de clonagem com os dados preenchidos
+        navigate('/flightplan/clonar', { 
+          state: { 
+            cloneData: data,
+            isClone: true 
+          } 
+        })
+      }
+    } catch (error) {
+      console.error('Erro ao buscar dados para clonagem:', error)
+      alert('Erro ao carregar dados do plano de voo')
+    }
+  }
+
   React.useEffect(() => {
     ;(async () => {
       try {
@@ -72,7 +97,10 @@ export function FlightPlanList() {
                 <td className="py-3 px-4">{mapRegraVoo(r.regraDeVooEnum)}</td>
                 <td className="py-3 px-4">{r.modo || '-'}</td>
                 <td className="py-3 px-4">
-                  <button className="px-3 py-1 rounded-lg bg-indigo-600 text-white" onClick={() => navigate(`/flightplan/${r.id}`)}>Detalhes</button>
+                  <div className="flex gap-2">
+                    <button className="px-3 py-1 rounded-lg bg-indigo-600 text-white" onClick={() => navigate(`/flightplan/${r.id}`)}>Detalhes</button>
+                    <button className="px-3 py-1 rounded-lg bg-green-600 text-white" onClick={() => handleClone(r.id)}>Clonar</button>
+                  </div>
                 </td>
               </tr>
             ))}

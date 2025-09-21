@@ -53,8 +53,9 @@ export default function LoginPage() {
       const code = parseInt(totp || '0', 10)
       const { data } = await AuthAPI.loginTotpOnly(watch('login'), code)
       if (data?.ok) setMsg('Sessão temporária gerada. Vá para Troca de Senha.')
-    } catch { 
-      setMsg('TOTP inválido') 
+    } catch (error: any) { 
+      const errorMsg = error?.response?.data?.error || error?.message || 'TOTP inválido'
+      setMsg(errorMsg)
     }
   }
 
