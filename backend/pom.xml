@@ -10,16 +10,17 @@
     <properties>
         <compiler-plugin.version>3.11.0</compiler-plugin.version>
         <maven.compiler.parameters>true</maven.compiler.parameters>
-        <maven.compiler.source>21</maven.compiler.source>
-        <maven.compiler.target>21</maven.compiler.target>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <quarkus.platform.artifact-id>quarkus-bom</quarkus.platform.artifact-id>
         <quarkus.platform.group-id>io.quarkus.platform</quarkus.platform.group-id>
-        <quarkus.platform.version>3.6.0</quarkus.platform.version>
+        <quarkus.platform.version>2.16.12.Final</quarkus.platform.version>
         <surefire-plugin.version>3.2.2</surefire-plugin.version>
         <mapstruct.version>1.5.5.Final</mapstruct.version>
         <lombok.version>1.18.30</lombok.version>
+        <maven.compiler.release>17</maven.compiler.release>
     </properties>
 
     <dependencyManagement>
@@ -74,6 +75,7 @@
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-jdbc-postgresql</artifactId>
         </dependency>
+        
         <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-hibernate-validator</artifactId>
@@ -125,12 +127,14 @@
             <artifactId>quarkus-scheduler</artifactId>
         </dependency>
         
+        
+        
     </dependencies>
 
     <build>
         <plugins>
             <plugin>
-                <groupId>${quarkus.platform.group-id}</groupId>
+                <groupId>io.quarkus</groupId>
                 <artifactId>quarkus-maven-plugin</artifactId>
                 <version>${quarkus.platform.version}</version>
                 <extensions>true</extensions>
@@ -143,6 +147,11 @@
                         </goals>
                     </execution>
                 </executions>
+                <configuration>
+                    <systemProperties>
+                        <net.bytebuddy.experimental>true</net.bytebuddy.experimental>
+                    </systemProperties>
+                </configuration>
             </plugin>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -154,6 +163,7 @@
                         <arg>-Amapstruct.unmappedTargetPolicy=IGNORE</arg>
                         <arg>-Xlint:all</arg>
                     </compilerArgs>
+                    <fork>true</fork>
                     <annotationProcessorPaths>
                         <!-- MapStruct -->
                         <path>

@@ -1,6 +1,6 @@
 package br.com.fplbr.pilot.aisweb.application.exception;
 
-import jakarta.ws.rs.core.Response;
+import javax.ws.rs.core.Response;
 
 /**
  * Exception thrown when a rate limit is exceeded.

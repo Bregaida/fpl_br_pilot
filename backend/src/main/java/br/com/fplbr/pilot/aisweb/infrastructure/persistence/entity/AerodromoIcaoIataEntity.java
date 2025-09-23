@@ -1,6 +1,6 @@
 package br.com.fplbr.pilot.aisweb.infrastructure.persistence.entity;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 /**

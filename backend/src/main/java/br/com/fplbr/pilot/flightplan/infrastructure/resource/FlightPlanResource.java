@@ -3,20 +3,20 @@ package br.com.fplbr.pilot.flightplan.infrastructure.resource;
 import br.com.fplbr.pilot.flightplan.application.dto.PlanoDeVooDTO;
 import br.com.fplbr.pilot.flightplan.application.dto.PlanoDeVooViewDTO;
 import br.com.fplbr.pilot.flightplan.application.service.FplEncoderService;
-import jakarta.persistence.EntityManager;
+import javax.persistence.EntityManager;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.validation.Valid;
-import jakarta.transaction.Transactional;
-import jakarta.ws.rs.*;
-import jakarta.ws.rs.core.MediaType;
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.ws.rs.core.Response;
+import javax.validation.Valid;
+import javax.transaction.Transactional;
+import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
+import javax.enterprise.context.ApplicationScoped;
+import javax.ws.rs.core.Response;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.media.Content;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
-import jakarta.inject.Inject;
+import javax.inject.Inject;
 
 import java.net.URI;
 
@@ -126,7 +126,7 @@ public class FlightPlanResource {
                 "errors", java.util.List.of(java.util.Map.of("field", field, "message", message))
         );
         return Response.status(Response.Status.BAD_REQUEST)
-                .type(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
+                .type(javax.ws.rs.core.MediaType.APPLICATION_JSON)
                 .entity(body)
                 .build();
     }

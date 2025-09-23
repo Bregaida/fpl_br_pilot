@@ -1,6 +1,6 @@
 package br.com.fplbr.pilot.auth.application.service;
 
-import jakarta.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.ApplicationScoped;
 
 import java.time.OffsetDateTime;
 import java.util.Map;

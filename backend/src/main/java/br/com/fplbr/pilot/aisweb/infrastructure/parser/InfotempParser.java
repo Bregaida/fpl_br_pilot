@@ -3,7 +3,7 @@ package br.com.fplbr.pilot.aisweb.infrastructure.parser;
 import br.com.fplbr.pilot.aisweb.application.dto.*;
 import br.com.fplbr.pilot.aisweb.infrastructure.util.TsUtils;
 import br.com.fplbr.pilot.aisweb.infrastructure.util.XmlUtils;
-import jakarta.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.ApplicationScoped;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;

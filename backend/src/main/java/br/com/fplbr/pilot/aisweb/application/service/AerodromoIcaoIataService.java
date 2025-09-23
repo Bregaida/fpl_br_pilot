@@ -5,10 +5,9 @@ import br.com.fplbr.pilot.aisweb.domain.enums.AerodromoIcaoIataEnum;
 import br.com.fplbr.pilot.aisweb.infrastructure.persistence.entity.AerodromoIcaoIataEntity;
 import br.com.fplbr.pilot.aisweb.infrastructure.persistence.repository.AerodromoIcaoIataRepository;
 import br.com.fplbr.pilot.aisweb.infrastructure.util.XmlUtils;
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
-import jakarta.transaction.Transactional;
-import org.eclipse.microprofile.config.inject.ConfigProperty;
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
+import javax.transaction.Transactional;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
@@ -33,11 +32,8 @@ public class AerodromoIcaoIataService {
     @Inject
     AerodromoIcaoIataRepository repository;
     
-    @ConfigProperty(name = "aisweb.api.key")
-    String apiKey;
-    
-    @ConfigProperty(name = "aisweb.api.pass")
-    String apiPass;
+    @Inject
+    SecureCredentialService credentialService;
     
     private static final XPath XPATH = XPathFactory.newInstance().newXPath();
     
@@ -135,6 +131,8 @@ public class AerodromoIcaoIataService {
     public String consultarApiAisweb() throws Exception {
         try {
             // Primeiro, fazer uma chamada para obter o total de registros
+            String apiKey = credentialService.getAiswebApiKey();
+            String apiPass = credentialService.getAiswebApiPass();
             String totalUrl = String.format(
                 "https://aisweb.decea.mil.br/api/?apiKey=%s&apiPass=%s&area=rotaer&rowstart=0&rowend=1",
                 apiKey, apiPass

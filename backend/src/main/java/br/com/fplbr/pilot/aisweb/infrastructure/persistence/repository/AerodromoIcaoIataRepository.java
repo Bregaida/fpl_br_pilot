@@ -2,7 +2,7 @@ package br.com.fplbr.pilot.aisweb.infrastructure.persistence.repository;
 
 import br.com.fplbr.pilot.aisweb.infrastructure.persistence.entity.AerodromoIcaoIataEntity;
 import io.quarkus.hibernate.orm.panache.PanacheRepository;
-import jakarta.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.ApplicationScoped;
 
 /**
  * Repositório para operações de banco de dados da entidade AerodromoIcaoIata

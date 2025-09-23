@@ -5,10 +5,9 @@ import br.com.fplbr.pilot.aisweb.application.dto.SuplementosDto;
 import br.com.fplbr.pilot.aisweb.application.dto.SuplementosMetaDto;
 import br.com.fplbr.pilot.aisweb.application.dto.SuplementosItemDto;
 import br.com.fplbr.pilot.aisweb.infrastructure.parser.SuplementosParser;
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
-import jakarta.ws.rs.core.Response;
-import org.eclipse.microprofile.config.inject.ConfigProperty;
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
+import javax.ws.rs.core.Response;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 
 /**
@@ -21,11 +20,8 @@ public class SuplementosService {
     @RestClient
     AiswebClient aiswebClient;
 
-    @ConfigProperty(name = "aisweb.api.key")
-    String apiKey;
-
-    @ConfigProperty(name = "aisweb.api.pass")
-    String apiPass;
+    @Inject
+    SecureCredentialService credentialService;
 
     @Inject
     SuplementosParser suplementosParser;
@@ -38,6 +34,8 @@ public class SuplementosService {
      */
     public SuplementosDto buscar(String icao) {
         try {
+            String apiKey = credentialService.getAiswebApiKey();
+            String apiPass = credentialService.getAiswebApiPass();
             Response response = aiswebClient.getSuplementosData(apiKey, apiPass, "suplementos", icao);
             
             if (response.getStatus() != 200) {

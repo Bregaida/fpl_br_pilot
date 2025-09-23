@@ -49,6 +49,11 @@ export default function LoginPage() {
   }
 
   async function onTotpOnly() {
+    setNeedTotp(true)
+    setMsg('Digite o código do seu Authenticator')
+  }
+  
+  async function onTotpOnlySubmit() {
     try {
       const code = parseInt(totp || '0', 10)
       const { data } = await AuthAPI.loginTotpOnly(watch('login'), code)
@@ -64,17 +69,31 @@ export default function LoginPage() {
       <FormProvider {...methods}>
         <form onSubmit={handleSubmit(onSubmit)} className="grid gap-3">
           <FormField name="login" label="Email ou CPF" placeholder="Digite seu email ou CPF" required />
-          <FormField name="password" label="Senha" type="password" placeholder="Digite sua senha" required />
+          {!needTotp && <FormField name="password" label="Senha" type="password" placeholder="Digite sua senha" required />}
           {needTotp && <TotpInput value={totp} onChange={setTotp} />}
-          <button type="submit" className="px-4 py-2 rounded bg-indigo-600 text-white">
-            Entrar
-          </button>
+          {!needTotp && (
+            <button type="submit" className="px-4 py-2 rounded bg-indigo-600 text-white">
+              Entrar
+            </button>
+          )}
+          {needTotp && (
+            <button type="button" onClick={onTotpOnlySubmit} className="px-4 py-2 rounded bg-indigo-600 text-white">
+              Entrar com Authenticator
+            </button>
+          )}
         </form>
       </FormProvider>
       <div className="flex items-center gap-4 text-sm">
-        <button className="underline" onClick={onTotpOnly}>
-          Entrar com Authenticator (sem senha)
-        </button>
+        {!needTotp && (
+          <button className="underline" onClick={onTotpOnly}>
+            Entrar com Authenticator (sem senha)
+          </button>
+        )}
+        {needTotp && (
+          <button className="underline" onClick={() => setNeedTotp(false)}>
+            Voltar ao login normal
+          </button>
+        )}
         <Link className="underline" to="/esqueci-senha">
           Esqueci minha senha
         </Link>

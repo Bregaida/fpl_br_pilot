@@ -1,7 +1,7 @@
 package br.com.fplbr.pilot.aisweb.application.client;
 
-import jakarta.ws.rs.core.Response;
-import jakarta.ws.rs.ext.Provider;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.ext.Provider;
 import org.jboss.logging.Logger;
 import org.eclipse.microprofile.rest.client.ext.ResponseExceptionMapper;
 

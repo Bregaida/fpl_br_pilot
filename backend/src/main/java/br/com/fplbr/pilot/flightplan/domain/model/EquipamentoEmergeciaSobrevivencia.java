@@ -3,7 +3,7 @@ package br.com.fplbr.pilot.flightplan.domain.model;
 import br.com.fplbr.pilot.flightplan.domain.model.Coletes19JSubEnum;
 import br.com.fplbr.pilot.flightplan.domain.model.EmergenciaRadio19Enum;
 import br.com.fplbr.pilot.flightplan.domain.model.Sobrevivencia19SSubEnum;
-import jakarta.persistence.Embeddable;
+import javax.persistence.Embeddable;
 
 import java.util.*;
 import java.util.stream.Collectors;

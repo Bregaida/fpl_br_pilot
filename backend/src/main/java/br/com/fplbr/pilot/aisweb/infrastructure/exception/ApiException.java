@@ -1,4 +1,4 @@
-package br.com.aisweb.exception;
+package br.com.fplbr.pilot.aisweb.infrastructure.exception;
 
 /**
  * Exceção customizada para erros da API AISWEB.

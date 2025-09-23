@@ -1,29 +1,29 @@
+# Configuração de finais de linha
 * text=auto eol=lf
 
-# Código
-*.java  text eol=lf
-*.ts    text eol=lf
-*.tsx   text eol=lf
-*.js    text eol=lf
-*.jsx   text eol=lf
-*.json  text eol=lf
-*.yml   text eol=lf
-*.yaml  text eol=lf
-*.xml   text eol=lf
-*.md    text eol=lf
-*.css   text eol=lf
-*.scss  text eol=lf
-*.html  text eol=lf
-*.env   text eol=lf
+# Scripts Windows mantêm CRLF
+*.bat text eol=crlf
+*.ps1 text eol=crlf
 
-# Scripts Windows
-*.bat   text eol=crlf
-*.cmd   text eol=crlf
-*.ps1   text eol=crlf
+# Arquivos específicos
+*.java text eol=lf
+*.xml text eol=lf
+*.properties text eol=lf
+*.sql text eol=lf
+*.md text eol=lf
+*.json text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
 
 # Binários
-*.png   binary
-*.jpg   binary
-*.jpeg  binary
-*.pdf   binary
-*.ico   binary
+*.jar binary
+*.war binary
+*.ear binary
+*.class binary
+*.so binary
+*.dll binary
+*.exe binary
+*.zip binary
+*.tar.gz binary
+*.rar binary
+*.7z binary

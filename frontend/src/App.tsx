@@ -7,6 +7,7 @@ import { FlightPlanList } from './pages/FlightPlanList'
 import { Layout } from './components/Layout'
 import LoginPage from './pages/Login'
 import CadastroPage from './pages/Cadastro'
+import CadastroPilotoPage from './pages/CadastroPiloto'
 import EsqueciSenhaPage from './pages/EsqueciSenha'
 import TrocaSenhaPage from './pages/TrocaSenha'
 import TermosUsoPage from './pages/TermosUso'
@@ -24,6 +25,7 @@ export default function App() {
         <Route path="/flightplan/listar" element={<FlightPlanList />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/cadastro" element={<CadastroPage />} />
+        <Route path="/cadastro-piloto" element={<CadastroPilotoPage />} />
         <Route path="/esqueci-senha" element={<EsqueciSenhaPage />} />
         <Route path="/troca-senha" element={<TrocaSenhaPage />} />
         <Route path="/termos-uso" element={<TermosUsoPage />} />

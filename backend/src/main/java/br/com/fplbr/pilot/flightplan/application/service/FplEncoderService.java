@@ -1,7 +1,7 @@
 package br.com.fplbr.pilot.flightplan.application.service;
 
 import br.com.fplbr.pilot.flightplan.application.dto.PlanoDeVooDTO;
-import jakarta.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.ApplicationScoped;
 import org.jboss.logging.Logger;
 
 import java.time.OffsetDateTime;

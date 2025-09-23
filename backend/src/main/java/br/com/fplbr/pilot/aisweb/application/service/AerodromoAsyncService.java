@@ -2,8 +2,8 @@ package br.com.fplbr.pilot.aisweb.application.service;
 
 import br.com.fplbr.pilot.aisweb.application.dto.AerodromoIcaoIataDto;
 import br.com.fplbr.pilot.aisweb.infrastructure.persistence.entity.AerodromoIcaoIataEntity;
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 
 import java.util.List;
 import java.util.logging.Logger;

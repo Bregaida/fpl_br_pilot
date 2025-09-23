@@ -3,10 +3,9 @@ package br.com.fplbr.pilot.aisweb.application.service;
 import br.com.fplbr.pilot.aisweb.application.client.AiswebClient;
 import br.com.fplbr.pilot.aisweb.application.dto.PubAixmDto;
 import br.com.fplbr.pilot.aisweb.infrastructure.parser.PubAixmParser;
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
-import jakarta.ws.rs.core.Response;
-import org.eclipse.microprofile.config.inject.ConfigProperty;
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
+import javax.ws.rs.core.Response;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 
 /**
@@ -19,11 +18,8 @@ public class PubAixmService {
     @RestClient
     AiswebClient aiswebClient;
 
-    @ConfigProperty(name = "aisweb.api.key")
-    String apiKey;
-
-    @ConfigProperty(name = "aisweb.api.pass")
-    String apiPass;
+    @Inject
+    SecureCredentialService credentialService;
 
     @Inject
     PubAixmParser pubAixmParser;
@@ -35,6 +31,8 @@ public class PubAixmService {
      */
     public PubAixmDto listar() {
         try {
+            String apiKey = credentialService.getAiswebApiKey();
+            String apiPass = credentialService.getAiswebApiPass();
             Response response = aiswebClient.getPubAixmData(apiKey, apiPass, "pub", "AIXM");
             
             if (response.getStatus() != 200) {

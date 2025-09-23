@@ -3,9 +3,9 @@ import { useForm, FormProvider } from 'react-hook-form'
 import { AuthAPI, CepAPI } from '../services/auth'
 import QrCode from '../components/QrCode'
 import TotpInput from '../components/TotpInput'
-import PasswordField from '../components/PasswordField'
 import TermosModal from '../components/TermosModal'
 import PrivacidadeModal from '../components/PrivacidadeModal'
+import PasswordField from '../components/PasswordField'
 import { useDuplicateCheck } from '../hooks/useDuplicateCheck'
 import { CadastroFormData } from '../schemas/validation'
 
@@ -14,16 +14,98 @@ export default function CadastroPage() {
   const [otpauth, setOtpauth] = React.useState<string>('')
   const [secretMasked, setSecretMasked] = React.useState<string>('')
   const [totp, setTotp] = React.useState<string>('')
+  const [totpSessionId, setTotpSessionId] = React.useState<string>('')
   const [msg, setMsg] = React.useState<string>('')
   const [msgType, setMsgType] = React.useState<'success' | 'error'>('error')
-  const [loadingCep, setLoadingCep] = React.useState<boolean>(false)
   const [showTermos, setShowTermos] = React.useState<boolean>(false)
   const [showPrivacidade, setShowPrivacidade] = React.useState<boolean>(false)
-  const [enableTOTP, setEnableTOTP] = React.useState<boolean>(true)
-  const [totpSessionId, setTotpSessionId] = React.useState<string>('')
-  
   // Hook para verificar duplicatas
-  const { emailError, cpfError, checkEmail, checkCpf, clearEmailError, clearCpfError } = useDuplicateCheck()
+  const { emailError, cpfError, clearCpfError } = useDuplicateCheck()
+
+  // Função temporária para popular o formulário com dados válidos
+  const populaFormCadastroTemp = () => {
+    // Gerar timestamp único para evitar duplicatas
+    const timestamp = Date.now()
+    const randomNum = Math.floor(Math.random() * 10000)
+    
+    // Gerar CPF válido (apenas para teste)
+    const cpfBase = Math.floor(Math.random() * 900000000) + 100000000
+    const cpf = cpfBase.toString().padStart(11, '0')
+    
+    // Gerar email único
+    const email = `teste.${timestamp}@email.com`
+    
+    // Gerar nome aleatório
+    const nomes = ['João', 'Maria', 'Pedro', 'Ana', 'Carlos', 'Lucia', 'Rafael', 'Camila', 'Lucas', 'Fernanda']
+    const sobrenomes = ['Silva', 'Santos', 'Oliveira', 'Costa', 'Pereira', 'Rodrigues', 'Almeida', 'Lima', 'Gomes', 'Ribeiro']
+    const nomeAleatorio = nomes[Math.floor(Math.random() * nomes.length)]
+    const sobrenomeAleatorio = sobrenomes[Math.floor(Math.random() * sobrenomes.length)]
+    const nomeCompleto = `${nomeAleatorio} ${sobrenomeAleatorio}`
+    
+    // Gerar telefone aleatório
+    const ddd = Math.floor(Math.random() * 90) + 10
+    const telefone = Math.floor(Math.random() * 900000000) + 100000000
+    
+    // Gerar CEP aleatório
+    const cep = Math.floor(Math.random() * 90000000) + 10000000
+    
+    // Gerar endereço aleatório
+    const ruas = ['Rua das Flores', 'Avenida Central', 'Rua do Comércio', 'Alameda das Palmeiras', 'Rua da Liberdade']
+    const bairros = ['Centro', 'Vila Nova', 'Jardim das Flores', 'Bela Vista', 'Copacabana']
+    const cidades = ['São Paulo', 'Rio de Janeiro', 'Belo Horizonte', 'Salvador', 'Brasília']
+    const ufs = ['SP', 'RJ', 'MG', 'BA', 'DF']
+    
+    const ruaAleatoria = ruas[Math.floor(Math.random() * ruas.length)]
+    const bairroAleatorio = bairros[Math.floor(Math.random() * bairros.length)]
+    const cidadeAleatoria = cidades[Math.floor(Math.random() * cidades.length)]
+    const ufAleatoria = ufs[Math.floor(Math.random() * ufs.length)]
+    
+    // Gerar data de nascimento aleatória (entre 18 e 65 anos)
+    const anoAtual = new Date().getFullYear()
+    const anoNascimento = anoAtual - Math.floor(Math.random() * 47) - 18
+    const mesNascimento = Math.floor(Math.random() * 12) + 1
+    const diaNascimento = Math.floor(Math.random() * 28) + 1
+    const dataNascimento = `${diaNascimento.toString().padStart(2, '0')}/${mesNascimento.toString().padStart(2, '0')}/${anoNascimento}`
+    
+    // Gerar estado civil aleatório
+    const estadosCivis = ['solteiro', 'casado', 'divorciado', 'viuvo']
+    const estadoCivilAleatorio = estadosCivis[Math.floor(Math.random() * estadosCivis.length)]
+    
+    // Gerar tipo de piloto aleatório
+    const tiposPiloto = ['PA', 'PP', 'CPL', 'ATPL']
+    const tipoPilotoAleatorio = tiposPiloto[Math.floor(Math.random() * tiposPiloto.length)]
+    
+    // Gerar empresa aleatória
+    const empresas = ['Empresa Aérea ABC', 'Aeroclube Central', 'Escola de Aviação XYZ', 'Companhia Aérea Nacional', 'Centro de Treinamento']
+    const empresaAleatoria = empresas[Math.floor(Math.random() * empresas.length)]
+    
+    // Gerar login único
+    const loginAlias = `piloto.${timestamp}`
+    
+    methods.setValue('fullName', nomeCompleto)
+    methods.setValue('email', email)
+    methods.setValue('cpf', cpf)
+    methods.setValue('telefone', `${ddd}${telefone}`)
+    methods.setValue('cep', cep.toString())
+    methods.setValue('address', ruaAleatoria)
+    methods.setValue('addressNumber', (Math.floor(Math.random() * 9999) + 1).toString())
+    methods.setValue('addressComplement', Math.random() > 0.5 ? `Apto ${Math.floor(Math.random() * 200) + 1}` : '')
+    methods.setValue('neighborhood', bairroAleatorio)
+    methods.setValue('city', cidadeAleatoria)
+    methods.setValue('uf', ufAleatoria)
+    methods.setValue('birthDate', dataNascimento)
+    methods.setValue('maritalStatus', estadoCivilAleatorio)
+    methods.setValue('pilotType', tipoPilotoAleatorio)
+    methods.setValue('company', empresaAleatoria)
+    methods.setValue('loginAlias', loginAlias)
+    methods.setValue('password', 'MinhaSenh@123')
+    methods.setValue('confirmPassword', 'MinhaSenh@123')
+    methods.setValue('enableTOTP', true)
+    methods.setValue('acceptTerms', true)
+    
+    // Disparar validação para atualizar os campos
+    methods.trigger()
+  }
 
   const methods = useForm<CadastroFormData>({
     mode: 'onSubmit',
@@ -47,12 +129,27 @@ export default function CadastroPage() {
       loginAlias: '',
       password: '',
       confirmPassword: '',
-      enableTOTP: true,
+      enableTOTP: false,
       acceptTerms: false
     }
   })
 
   const { handleSubmit, setValue, watch } = methods
+  
+  // Watch para detectar mudanças no campo cidade
+  const cityValue = watch('city')
+  const emailValue = watch('email')
+  React.useEffect(() => {
+    if (cityValue) {
+      console.log('Campo cidade alterado para:', cityValue)
+    }
+  }, [cityValue])
+  
+  React.useEffect(() => {
+    if (emailValue) {
+      console.log('Campo email alterado para:', emailValue)
+    }
+  }, [emailValue])
 
   // Funções de máscara
   const formatCPF = (value: string) => {
@@ -78,6 +175,17 @@ export default function CadastroPage() {
     if (numbers.length <= 2) return numbers
     if (numbers.length <= 4) return `${numbers.slice(0, 2)}/${numbers.slice(2)}`
     return `${numbers.slice(0, 2)}/${numbers.slice(2, 4)}/${numbers.slice(4, 8)}`
+  }
+
+  const convertDateToBackendFormat = (dateString: string) => {
+    // Converte dd/mm/yyyy para yyyy-MM-dd
+    if (!dateString || dateString.length !== 10) return dateString
+    
+    const parts = dateString.split('/')
+    if (parts.length !== 3) return dateString
+    
+    const [day, month, year] = parts
+    return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
   }
 
   // Funções de validação individual para cada campo
@@ -175,7 +283,7 @@ export default function CadastroPage() {
   }
 
   const validateTOTP = (value: boolean) => {
-    if (!value) return 'Autenticação de Dois Fatores (TOTP) é obrigatória'
+    // TOTP é opcional, não precisa validar
     return ''
   }
 
@@ -184,90 +292,68 @@ export default function CadastroPage() {
     return ''
   }
 
-  // Função para validação individual de campos
-  const handleFieldBlur = async (fieldName: string, value: string | boolean) => {
-    let error = ''
-    
-    switch (fieldName) {
-      case 'fullName':
-        error = validateFullName(value as string)
-        break
-      case 'email':
-        error = validateEmail(value as string)
-        if (!error) {
-          await checkEmail(value as string)
-        }
-        break
-      case 'cpf':
-        error = validateCPF(value as string)
-        if (!error) {
-          await checkCpf(value as string)
-        }
-        break
-      case 'telefone':
-        error = validatePhone(value as string)
-        break
-      case 'cep':
-        error = validateCEP(value as string)
-        break
-      case 'birthDate':
-        error = validateBirthDate(value as string)
-        break
-      case 'uf':
-        error = validateUF(value as string)
-        break
-      case 'pilotType':
-        error = validatePilotType(value as string)
-        break
-      case 'company':
-        error = validateCompany(value as string)
-        break
-      case 'address':
-        error = validateAddress(value as string)
-        break
-      case 'neighborhood':
-        error = validateNeighborhood(value as string)
-        break
-      case 'city':
-        error = validateCity(value as string)
-        break
-      case 'password':
-        error = validatePassword(value as string)
-        break
-      case 'confirmPassword':
-        error = validateConfirmPassword(value as string)
-        break
-      case 'enableTOTP':
-        error = validateTOTP(value as boolean)
-        break
-      case 'acceptTerms':
-        error = validateTerms(value as boolean)
-        break
-    }
-    
-    if (error) {
-      methods.setError(fieldName, { message: error })
-    } else {
-      methods.clearErrors(fieldName)
-    }
-  }
 
   // Função para busca de CEP
   const handleCepChange = async (cep: string) => {
     if (cep.replace(/\D/g, '').length === 8) {
-      setLoadingCep(true)
       try {
+        console.log('Buscando CEP:', cep)
+        console.log('Valor atual da cidade antes da busca:', methods.getValues('city'))
         const response = await CepAPI.getCep(cep)
-        if (response) {
-          setValue('address', response.logradouro || '')
-          setValue('neighborhood', response.bairro || '')
-          setValue('city', response.localidade || '')
-          setValue('uf', response.uf || '')
+        console.log('Resposta da API CEP:', response)
+        
+        // A API retorna os dados diretamente, não em response.data
+        if (response && !response.erro) {
+          console.log('Dados do CEP:', response)
+          
+          console.log('Antes do setValue - cidade atual:', methods.getValues('city'))
+          
+          // Usar setTimeout para evitar conflitos de setValue
+          setTimeout(() => {
+            setValue('address', response.logradouro || '')
+            setValue('neighborhood', response.bairro || '')
+            setValue('city', response.cidade || '')
+            setValue('uf', response.uf || '')
+            console.log('Após setValue - cidade definida:', response.cidade)
+            console.log('Após setValue - cidade no form:', methods.getValues('city'))
+          }, 100)
+          
+          // Log adicional para debug
+          console.log('Valores definidos:', {
+            address: response.logradouro,
+            neighborhood: response.bairro,
+            city: response.cidade,
+            uf: response.uf
+          })
+          
+          // Verificar se os valores foram realmente definidos
+          setTimeout(() => {
+            console.log('Valores após setValue:', {
+              address: methods.getValues('address'),
+              neighborhood: methods.getValues('neighborhood'),
+              city: methods.getValues('city'),
+              uf: methods.getValues('uf')
+            })
+          }, 100)
+          
+          console.log('Campos preenchidos:', {
+            logradouro: response.logradouro,
+            bairro: response.bairro,
+            cidade: response.cidade,
+            uf: response.uf
+          })
+          
+          setMsg('CEP encontrado e campos preenchidos!')
+          setMsgType('success')
+        } else {
+          console.log('CEP não encontrado ou erro:', response)
+          setMsg('CEP não encontrado')
+          setMsgType('error')
         }
       } catch (error) {
         console.error('Erro ao buscar CEP:', error)
-      } finally {
-        setLoadingCep(false)
+        setMsg('Erro ao buscar CEP. Verifique se o CEP está correto.')
+        setMsgType('error')
       }
     }
   }
@@ -363,16 +449,39 @@ export default function CadastroPage() {
 
       // Se chegou até aqui, todos os campos são válidos
       console.log('Enviando dados para registro:', data)
-      const response = await AuthAPI.register(data)
+      
+      // Converter data de dd/mm/yyyy para yyyy-MM-dd
+      const dataToSend = {
+        ...data,
+        birthDate: data.birthDate ? convertDateToBackendFormat(data.birthDate) : data.birthDate
+      }
+      
+      console.log('Dados convertidos para backend:', dataToSend)
+      const response = await AuthAPI.register(dataToSend)
       console.log('Resposta do registro:', response)
       
       // Verificar se a resposta tem a estrutura esperada
-      if (response && response.data) {
-        setOtpauth(response.data.otpauthUrl || '')
-        setSecretMasked(response.data.secretMasked || '')
-        setTotpSessionId(response.data.totpSessionId || '')
-        console.log('Alterando step para totp')
-        setStep('totp')
+      if (response) {
+        // Se TOTP está habilitado, ir para configuração
+        if (data.enableTOTP) {
+          console.log('Resposta completa do registro:', response)
+          console.log('otpauthUrl:', response.otpauthUrl)
+          console.log('secretMasked:', response.secretMasked)
+          console.log('userId:', response.userId)
+          
+          setOtpauth(response.otpauthUrl || '')
+          setSecretMasked(response.secretMasked || '')
+          setTotpSessionId(response.userId || '') // Usando userId como sessionId temporariamente
+          console.log('Alterando step para totp')
+          console.log('enableTOTP:', data.enableTOTP)
+          console.log('Step atual antes da mudança:', step)
+          setStep('totp')
+          console.log('Step alterado para totp')
+        } else {
+          // Se TOTP não está habilitado, ir direto para finalização
+          console.log('TOTP desabilitado, indo direto para done')
+          setStep('done')
+        }
       } else {
         console.error('Resposta inválida:', response)
         setMsg('Erro na resposta do servidor')
@@ -387,11 +496,13 @@ export default function CadastroPage() {
   // Função de verificação TOTP
   const onVerify = async () => {
     try {
-      await AuthAPI.verifyTOTP({ code: totp, sessionId: totpSessionId })
+      // Usar o endpoint correto que espera email + code
+      await AuthAPI.verify2fa(methods.getValues('email'), parseInt(totp))
       setMsg('TOTP verificado com sucesso!')
       setMsgType('success')
       setStep('done')
     } catch (error: any) {
+      console.error('Erro na verificação TOTP:', error)
       setMsg(error?.response?.data?.reason || 'Erro na verificação 2FA')
       setMsgType('error')
     }
@@ -512,6 +623,23 @@ export default function CadastroPage() {
               {/* Formulário */}
               <FormProvider {...methods}>
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+                  {/* Botão Temporário - REMOVER EM PRODUÇÃO */}
+                  <div className="mb-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <h5 className="text-sm font-medium text-yellow-800">🧪 Modo de Teste</h5>
+                        <p className="text-xs text-yellow-600">Botão temporário para popular o formulário com dados válidos</p>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={populaFormCadastroTemp}
+                        className="px-4 py-2 bg-yellow-500 text-white text-sm font-medium rounded-lg hover:bg-yellow-600 transition-colors"
+                      >
+                        Popular Formulário
+                      </button>
+                    </div>
+                  </div>
+
                   {/* Dados Pessoais */}
                   <div className="space-y-4">
                     <h4 className="text-lg font-semibold text-gray-800 border-b border-gray-200 pb-2">
@@ -527,6 +655,7 @@ export default function CadastroPage() {
                           {...methods.register('fullName')}
                           id="fullName"
                           type="text"
+                          autoComplete="name"
                           placeholder="Ex: Eduardo Bregaida"
                           className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
                         />
@@ -543,6 +672,7 @@ export default function CadastroPage() {
                           {...methods.register('email')}
                           id="email"
                           type="email"
+                          autoComplete="email"
                           placeholder="Ex: eduardo.bregaida@email.com.br"
                           className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent ${
                             methods.formState.errors.email || emailError ? 'border-red-500' : 'border-gray-300'
@@ -620,7 +750,8 @@ export default function CadastroPage() {
                         <input
                           {...methods.register('telefone')}
                           id="telefone"
-                          type="text"
+                          type="tel"
+                          autoComplete="tel"
                           placeholder="(11) 99999-9999"
                           onChange={(e) => {
                             const formatted = formatPhone(e.target.value)
@@ -748,6 +879,40 @@ export default function CadastroPage() {
 
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div className="space-y-2">
+                          <label htmlFor="addressNumber" className="block text-sm font-medium text-gray-700">
+                            Número
+                          </label>
+                          <input
+                            {...methods.register('addressNumber')}
+                            id="addressNumber"
+                            type="text"
+                            placeholder="123"
+                            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                          />
+                          {methods.formState.errors.addressNumber && (
+                            <p className="text-sm text-red-600">{methods.formState.errors.addressNumber.message}</p>
+                          )}
+                        </div>
+
+                        <div className="space-y-2">
+                          <label htmlFor="addressComplement" className="block text-sm font-medium text-gray-700">
+                            Complemento
+                          </label>
+                          <input
+                            {...methods.register('addressComplement')}
+                            id="addressComplement"
+                            type="text"
+                            placeholder="Apto 101, Bloco A, etc."
+                            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                          />
+                          {methods.formState.errors.addressComplement && (
+                            <p className="text-sm text-red-600">{methods.formState.errors.addressComplement.message}</p>
+                          )}
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="space-y-2">
                           <label htmlFor="city" className="block text-sm font-medium text-gray-700">
                             Cidade <span className="text-red-500">*</span>
                           </label>
@@ -816,52 +981,29 @@ export default function CadastroPage() {
                     </h4>
                     
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                        <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-                          Senha <span className="text-red-500">*</span>
-                        </label>
-                        <input
-                          {...methods.register('password')}
-                          id="password"
-                          type="password"
-                          placeholder="Mínimo 8 caracteres"
-                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
-                        />
-                        {methods.formState.errors.password && (
-                          <p className="text-sm text-red-600">{methods.formState.errors.password.message}</p>
-                        )}
-                      </div>
+                      <PasswordField 
+                        name="password"
+                        placeholder="Mínimo 8 caracteres"
+                        showValidation={true}
+                      />
 
-                      <div className="space-y-2">
-                        <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">
-                          Confirmar Senha <span className="text-red-500">*</span>
-                        </label>
-                        <input
-                          {...methods.register('confirmPassword')}
-                          id="confirmPassword"
-                          type="password"
-                          placeholder="Confirme sua senha"
-                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
-                        />
-                        {methods.formState.errors.confirmPassword && (
-                          <p className="text-sm text-red-600">{methods.formState.errors.confirmPassword.message}</p>
-                        )}
-                      </div>
+                      <PasswordField 
+                        name="confirmPassword"
+                        placeholder="Confirme sua senha"
+                        showValidation={false}
+                      />
                     </div>
 
                     <div className="space-y-4">
-                      <div className="flex items-center space-x-3 p-4 bg-red-50 rounded-xl border border-red-200">
+                      <div className="flex items-center space-x-3 p-4 bg-aviation-red-50 rounded-xl border border-aviation-red-200">
                         <input
                           {...methods.register('enableTOTP')}
                           id="enableTOTP"
                           type="checkbox"
-                          checked={true}
-                          disabled={true}
-                          readOnly={true}
-                          className="w-5 h-5 text-red-500 bg-gray-100 border-gray-300 rounded focus:ring-red-500 focus:ring-2"
+                          className="w-5 h-5 text-aviation-red-500 bg-aviation-white border-aviation-gray-300 rounded focus:ring-aviation-red-500 focus:ring-2"
                         />
-                        <label htmlFor="enableTOTP" className="text-sm font-medium text-gray-700">
-                          Autenticador (TOTP) obrigatório
+                        <label htmlFor="enableTOTP" className="text-sm font-medium text-aviation-navy-700">
+                          Ativar Autenticador (TOTP) - Recomendado para maior segurança
                         </label>
                       </div>
 
@@ -938,10 +1080,16 @@ export default function CadastroPage() {
             </div>
             
             <div className="space-y-6">
-              <QrCode otpauthUrl={otpauth} />
+              {otpauth ? (
+                <QrCode otpauthUrl={otpauth} />
+              ) : (
+                <div className="p-4 bg-yellow-50 rounded-xl border border-yellow-200">
+                  <p className="text-sm text-yellow-800">Carregando QR Code...</p>
+                </div>
+              )}
               <div className="p-4 bg-gray-50 rounded-xl">
                 <p className="text-sm text-gray-600 mb-2">Código secreto:</p>
-                <code className="text-sm font-mono text-gray-800 break-all">{secretMasked}</code>
+                <code className="text-sm font-mono text-gray-800 break-all">{secretMasked || 'Carregando...'}</code>
               </div>
               <TotpInput value={totp} onChange={setTotp} />
               <button 

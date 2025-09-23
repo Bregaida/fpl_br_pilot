@@ -2,9 +2,9 @@ package br.com.fplbr.pilot.auth.application.service;
 
 import br.com.fplbr.pilot.auth.infrastructure.persistence.*;
 import br.com.fplbr.pilot.auth.infrastructure.security.*;
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
-import jakarta.transaction.Transactional;
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
+import javax.transaction.Transactional;
 
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
@@ -116,6 +116,13 @@ public class AuthService {
         u.persist();
         
         pending.remove(email);
+    }
+    
+    // Método para debug - retorna código TOTP atual
+    public String getCurrentTOTPCode(String email) {
+        PendingRegistrationStore.PendingData p = pending.get(email);
+        if (p == null) throw new IllegalStateException("Cadastro pendente não encontrado/expirado");
+        return totpService.getCurrentCode(p.secretBase32);
     }
 
     @Transactional

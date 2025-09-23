@@ -55,3 +55,15 @@ reports/
 *.pid
 docker/*.env
 NUL
+scripts/example-secure-setup.ps1
+scripts/fix-remaining-services.ps1
+scripts/setup-aisweb-credentials.ps1
+scripts/setup-credentials.ps1
+scripts/update-service.ps1
+scripts/update-services-security.ps1
+RELATÓRIO_FINAL.md
+SECURITY_README.md
+SECURITY.md
+backend/fix-imports.ps1
+Makefile
+RELATÓRIO_FINAL.md

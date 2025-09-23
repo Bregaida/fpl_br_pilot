@@ -73,6 +73,7 @@ export default function PasswordField({
           id={name}
           type={showPassword ? 'text' : 'password'}
           placeholder={placeholder}
+          autoComplete={name === 'password' ? 'new-password' : 'new-password'}
           className={`w-full ${icon ? 'pl-10' : 'pl-4'} pr-12 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-aviation-red-500 focus:border-transparent transition-all duration-300 ${
             hasError ? 'border-red-500 focus:border-red-500' : ''
           }`}

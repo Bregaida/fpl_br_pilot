@@ -1,6 +1,6 @@
 package br.com.fplbr.pilot.flightplan.domain.model;
 
-import jakarta.persistence.Embeddable;
+import javax.persistence.Embeddable;
 
 import java.time.LocalDateTime;
 

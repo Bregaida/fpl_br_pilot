@@ -2,8 +2,8 @@ package br.com.fplbr.pilot.flightplan.domain.model;
 
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import br.com.fplbr.pilot.flightplan.application.validator.ValidFlightPlan;
-import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
+import javax.persistence.*;
+import javax.validation.constraints.*;
 import java.util.Objects;
 
 import java.time.LocalDate;

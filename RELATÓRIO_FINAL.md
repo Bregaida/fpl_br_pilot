@@ -49,6 +49,7 @@
 ### Criptografia
 - **Senhas**: Argon2id com parâmetros seguros (2, 65536, 1)
 - **TOTP Secrets**: AES-GCM 256 bits com IV aleatório
+- **Credenciais**: AES-256-GCM com IV 12 bytes e tag 128 bits
 - **JWT**: RSA 2048 bits para assinatura
 - **Backup Codes**: Hash Argon2 para códigos de backup
 
@@ -80,21 +81,39 @@
 - TTL de 1 hora
 - Controle de consumo
 
+### Tabela `credentials`
+- Credenciais criptografadas com AES-256-GCM
+- Colunas: service (VARCHAR), iv (BYTEA), ciphertext (BYTEA)
+- Índices para performance
+- Auditoria (created_at, updated_at)
+
 ## 🚀 Como Executar
 
 ### Desenvolvimento Local
 ```bash
-# 1. Gerar chaves RSA (se necessário)
-cd backend/dev-keys
-# Usar OpenSSL ou gerar manualmente
+# 1. Gerar chave mestra de criptografia
+# PowerShell:
+[Convert]::ToBase64String([System.Security.Cryptography.RandomNumberGenerator]::GetBytes(32))
+# Unix:
+head -c 32 /dev/urandom | base64
 
-# 2. Subir banco
+# 2. Configurar variável de ambiente
+# Windows:
+set MASTER_ENCRYPTION_KEY=<BASE64_DE_32_BYTES>
+# Unix:
+export MASTER_ENCRYPTION_KEY="<BASE64_DE_32_BYTES>"
+
+# 3. Subir banco
 docker-compose up -d db
 
-# 3. Backend
+# 4. Backend
 cd backend && ./mvnw quarkus:dev
 
-# 4. Frontend
+# 5. Configurar credenciais (após backend estar rodando)
+# PowerShell:
+Invoke-RestMethod -Uri "http://localhost:8080/api/v1/admin/credentials/aisweb" -Method Post -Body '{"apiKey":"AISWEB_API_KEY_REMOVIDA","apiPass":"AISWEB_API_PASS_REMOVIDA"}' -ContentType 'application/json'
+
+# 6. Frontend
 cd frontend && npm run dev
 ```
 
@@ -160,18 +179,21 @@ curl http://localhost:8080/q/health
 2. **Validação CPF**: Testes com CPFs reais e inválidos
 3. **Rate Limiting**: Implementar Redis distribuído
 4. **Logs Estruturados**: JSON com níveis apropriados
+5. **Rotação de Chaves**: Estratégia para rotação da MASTER_ENCRYPTION_KEY
 
 ### Média Prioridade
-5. **Monitoramento**: Métricas de performance e erro
-6. **Backup Strategy**: Recuperação de segredos TOTP
-7. **CI/CD**: Pipeline de deploy automatizado
-8. **Documentação**: Swagger com exemplos completos
+6. **Monitoramento**: Métricas de performance e erro
+7. **Backup Strategy**: Recuperação de segredos TOTP
+8. **CI/CD**: Pipeline de deploy automatizado
+9. **Documentação**: Swagger com exemplos completos
+10. **Auditoria de Credenciais**: Log de acesso e modificações
 
 ### Baixa Prioridade
-9. **Notificações**: Email para mudanças sensíveis
-10. **Auditoria**: Log detalhado de ações
-11. **2FA Admin**: TOTP obrigatório para administradores
-12. **API Versioning**: Estratégia de versionamento
+11. **Notificações**: Email para mudanças sensíveis
+12. **Auditoria**: Log detalhado de ações
+13. **2FA Admin**: TOTP obrigatório para administradores
+14. **API Versioning**: Estratégia de versionamento
+15. **HSM Integration**: Hardware Security Module para chaves
 
 ## 📈 Métricas de Qualidade
 

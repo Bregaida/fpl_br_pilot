@@ -3,11 +3,10 @@ package br.com.fplbr.pilot.aisweb.application.service;
 import br.com.fplbr.pilot.aisweb.application.client.AiswebClient;
 import br.com.fplbr.pilot.aisweb.application.dto.RotaerDto;
 import br.com.fplbr.pilot.aisweb.infrastructure.parser.RotaerParser;
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
-import jakarta.ws.rs.WebApplicationException;
-import jakarta.ws.rs.core.Response;
-import org.eclipse.microprofile.config.inject.ConfigProperty;
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Response;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.jboss.logging.Logger;
 
@@ -23,11 +22,8 @@ public class RotaerService {
     @RestClient
     AiswebClient aiswebClient;
 
-    @ConfigProperty(name = "aisweb.api.key")
-    String apiKey;
-
-    @ConfigProperty(name = "aisweb.api.pass")
-    String apiPass;
+    @Inject
+    SecureCredentialService credentialService;
 
     @Inject
     RotaerParser rotaerParser;
@@ -41,6 +37,8 @@ public class RotaerService {
     public RotaerDto buscar(String icao) {
         try {
             LOG.infof("Buscando dados ROTAER para o aeródromo: %s", icao);
+            String apiKey = credentialService.getAiswebApiKey();
+            String apiPass = credentialService.getAiswebApiPass();
             Response response = aiswebClient.getRotaerData(apiKey, apiPass, "rotaer", icao);
             
             if (response.getStatus() == Response.Status.OK.getStatusCode()) {

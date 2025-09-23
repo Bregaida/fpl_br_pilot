@@ -2,7 +2,7 @@ package br.com.fplbr.pilot.flightplan.repository;
 
 import br.com.fplbr.pilot.flightplan.domain.model.FlightPlan;
 import io.quarkus.hibernate.orm.panache.PanacheRepository;
-import jakarta.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.ApplicationScoped;
 
 @ApplicationScoped
 public class FlightPlanRepository implements PanacheRepository<FlightPlan> {

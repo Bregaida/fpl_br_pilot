@@ -3,7 +3,7 @@ package br.com.fplbr.pilot.auth.infrastructure.security;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.jboss.logging.Logger;
 
-import jakarta.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.ApplicationScoped;
 import java.time.Duration;
 import java.util.HashSet;
 import java.util.Set;

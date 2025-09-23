@@ -22,6 +22,12 @@ const FlightPlanIcon = () => (
   </svg>
 )
 
+const PilotIcon = () => (
+  <svg className="nav-button-icon" fill="currentColor" viewBox="0 0 24 24">
+    <path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+  </svg>
+)
+
 
 export function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -88,6 +94,14 @@ export function Navbar() {
                   >
                     <FlightPlanIcon />
                     Meus Planos
+                  </NavLink>
+                  <NavLink
+                    to="/cadastro-piloto"
+                    className="btn btn-ghost"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    <PilotIcon />
+                    Cadastro Piloto
                   </NavLink>
                 </div>
                 
@@ -176,6 +190,14 @@ export function Navbar() {
                 <FlightPlanIcon />
                 Meus Planos
               </NavLink>
+              <NavLink
+                to="/cadastro-piloto"
+                className="btn btn-ghost text-sm"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                <PilotIcon />
+                Cadastro Piloto
+              </NavLink>
               
               {/* Autenticação */}
               <NavLink
@@ -230,7 +252,7 @@ export function Navbar() {
       {/* Navegação mobile - botões na parte inferior */}
       <nav className="fixed bottom-0 left-0 right-0 z-40 md:hidden bg-white/95 backdrop-blur-md border-t border-gray-100 shadow-soft-lg">
         <div className="max-w-7xl mx-auto px-4 py-2">
-          <div className="grid grid-cols-3 gap-2">
+          <div className="grid grid-cols-4 gap-1">
             {/* Home */}
             <NavLink
               to="/"
@@ -256,6 +278,15 @@ export function Navbar() {
             >
               <FlightPlanIcon />
               <span className="nav-button-text">Logbook</span>
+            </NavLink>
+
+            {/* Cadastro Piloto */}
+            <NavLink
+              to="/cadastro-piloto"
+              className={`nav-button ${isActive('/cadastro-piloto') ? 'active' : ''}`}
+            >
+              <PilotIcon />
+              <span className="nav-button-text">Piloto</span>
             </NavLink>
           </div>
         </div>

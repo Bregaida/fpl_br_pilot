@@ -1,6 +1,6 @@
 package br.com.fplbr.pilot.flightplan.infrastructure.persistence;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
 import java.time.OffsetDateTime;
 
 @Entity

@@ -2,10 +2,10 @@ package br.com.fplbr.pilot.auth.infrastructure.resource;
 
 import br.com.fplbr.pilot.auth.application.service.AuthService;
 import br.com.fplbr.pilot.auth.infrastructure.security.TotpService;
-import jakarta.inject.Inject;
-import jakarta.ws.rs.*;
-import jakarta.ws.rs.core.MediaType;
-import jakarta.ws.rs.core.Response;
+import javax.inject.Inject;
+import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 import org.jboss.logging.Logger;
@@ -80,7 +80,21 @@ public class AuthResource {
         String email = (String) body.get("email");
         int code = ((Number) body.get("code")).intValue();
         authService.verifyAndCreate(email, code);
-        return Response.noContent().build();
+        return Response.ok(Map.of("ok", true, "message", "TOTP verificado com sucesso")).build();
+    }
+    
+    @GET
+    @Path("/2fa/debug/{email}")
+    public Response getCurrentCode(@PathParam("email") String email) {
+        try {
+            // Para debug - retorna o código atual
+            String currentCode = authService.getCurrentTOTPCode(email);
+            return Response.ok(Map.of("currentCode", currentCode)).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity(Map.of("error", e.getMessage()))
+                    .build();
+        }
     }
 
     @POST

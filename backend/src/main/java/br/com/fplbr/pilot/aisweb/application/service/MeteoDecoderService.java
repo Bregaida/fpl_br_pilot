@@ -1,6 +1,6 @@
 package br.com.fplbr.pilot.aisweb.application.service;
 
-import jakarta.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.ApplicationScoped;
 import org.jboss.logging.Logger;
 
 import java.util.*;
@@ -22,8 +22,8 @@ public class MeteoDecoderService {
     
     static {
         // Códigos de tempo
-        WEATHER_CODES.put("BR", "Neblina");
-        WEATHER_CODES.put("FG", "Nevoeiro");
+        WEATHER_CODES.put("BR", "Nevoeiro");
+        WEATHER_CODES.put("FG", "Nevoeiro denso");
         WEATHER_CODES.put("FU", "Fumaça");
         WEATHER_CODES.put("HZ", "Névoa");
         WEATHER_CODES.put("DU", "Poeira generalizada");
@@ -45,6 +45,14 @@ public class MeteoDecoderService {
         WEATHER_CODES.put("GS", "Pequeno granizo");
         WEATHER_CODES.put("UP", "Precipitação desconhecida");
         WEATHER_CODES.put("VA", "Cinzas vulcânicas");
+        
+        // Códigos combinados
+        WEATHER_CODES.put("TSRA", "Tempestade com chuva");
+        WEATHER_CODES.put("TSGR", "Tempestade com granizo");
+        WEATHER_CODES.put("TSSN", "Tempestade com neve");
+        WEATHER_CODES.put("SHRA", "Chuva de pancadas");
+        WEATHER_CODES.put("SHSN", "Neve de pancadas");
+        WEATHER_CODES.put("SHGR", "Granizo de pancadas");
         
         // Códigos de nuvens
         CLOUD_CODES.put("FEW", "Poucas nuvens");
@@ -161,16 +169,21 @@ public class MeteoDecoderService {
             }
             
             // 7. Tempo presente
+            boolean hasWeather = false;
             while (index < parts.length) {
                 String part = parts[index];
                 if (part.matches("[+-]?[A-Z]{2,3}")) {
+                    if (!hasWeather) {
+                        decoded.append("🌦️ Tempo presente: ");
+                        hasWeather = true;
+                    }
                     decoded.append(decodeWeather(part)).append(" ");
                     index++;
                 } else {
                     break;
                 }
             }
-            if (decoded.toString().contains("Tempo presente:")) {
+            if (hasWeather) {
                 decoded.append("\n");
             }
             
@@ -394,7 +407,7 @@ public class MeteoDecoderService {
         }
         
         if (!variation.isEmpty() && variation.length() >= 6) {
-            result.append(" variável de ").append(variation.substring(0, 3)).append("° a ").append(variation.substring(3, 6)).append("°");
+            result.append(" variável de ").append(variation.substring(0, 3)).append("° a ").append(variation.substring(4, 7)).append("°");
         }
         
         return result.toString();
@@ -429,7 +442,7 @@ public class MeteoDecoderService {
     }
     
     private String decodeWeather(String weather) {
-        StringBuilder result = new StringBuilder("🌦️ Tempo presente: ");
+        StringBuilder result = new StringBuilder();
         
         String intensity = "";
         String type = weather;
@@ -517,7 +530,7 @@ public class MeteoDecoderService {
             int temperature = tempStr.startsWith("M") ? -Integer.parseInt(tempStr.substring(1)) : Integer.parseInt(tempStr);
             int dewpoint = dewStr.startsWith("M") ? -Integer.parseInt(dewStr.substring(1)) : Integer.parseInt(dewStr);
             
-            return "🌡️ Temperatura: " + temperature + "°C, Ponto de orvalho: " + dewpoint + "°C";
+            return "🌡️ Temperatura do ar: " + temperature + "°C, Ponto de orvalho: " + dewpoint + "°C";
         } catch (NumberFormatException e) {
             return "🌡️ Temperatura: " + temp;
         }
@@ -525,20 +538,20 @@ public class MeteoDecoderService {
     
     private String decodePressure(String pressure) {
         if (pressure == null || pressure.length() < 5) {
-            return "📊 Pressão: Dados incompletos";
+            return "📊 QNH: Dados incompletos";
         }
         
         String type = pressure.substring(0, 1);
         String value = pressure.substring(1);
         
         if ("Q".equals(type)) {
-            return "📊 Pressão: " + value + " hPa";
+            return "📊 QNH: " + value + " hPa";
         } else if ("A".equals(type) && value.length() >= 4) {
             String inches = value.substring(0, 2) + "." + value.substring(2);
-            return "📊 Pressão: " + inches + " inHg";
+            return "📊 QNH: " + inches + " inHg";
         }
         
-        return "📊 Pressão: " + pressure;
+        return "📊 QNH: " + pressure;
     }
     
     private String decodeTemperatureForecast(String temp) {

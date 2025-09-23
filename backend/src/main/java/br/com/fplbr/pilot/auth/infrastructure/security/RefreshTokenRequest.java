@@ -1,6 +1,6 @@
 package br.com.fplbr.pilot.core.security;
 
-import jakarta.validation.constraints.NotBlank;
+import javax.validation.constraints.NotBlank;
 
 public class RefreshTokenRequest {
     @NotBlank(message = "Refresh token is required")

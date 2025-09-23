@@ -1,6 +1,6 @@
 package br.com.fplbr.pilot.aisweb.application.annotation;
 
-import jakarta.interceptor.InterceptorBinding;
+import javax.interceptor.InterceptorBinding;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;

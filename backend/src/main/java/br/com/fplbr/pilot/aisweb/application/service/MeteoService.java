@@ -7,11 +7,10 @@ import br.com.fplbr.pilot.aisweb.application.dto.TafDto;
 import br.com.fplbr.pilot.aisweb.application.dto.SunDto;
 import br.com.fplbr.pilot.aisweb.infrastructure.parser.MetTafParser;
 import br.com.fplbr.pilot.aisweb.infrastructure.parser.SunParser;
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
-import jakarta.ws.rs.WebApplicationException;
-import jakarta.ws.rs.core.Response;
-import org.eclipse.microprofile.config.inject.ConfigProperty;
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Response;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.jboss.logging.Logger;
 
@@ -26,11 +25,8 @@ public class MeteoService {
     @RestClient
     AiswebClient aiswebClient;
 
-    @ConfigProperty(name = "aisweb.api.key")
-    String apiKey;
-
-    @ConfigProperty(name = "aisweb.api.pass")
-    String apiPass;
+    @Inject
+    SecureCredentialService credentialService;
 
     @Inject
     MetTafParser metTafParser;
@@ -86,6 +82,8 @@ public class MeteoService {
      */
     private SunDto buscarDadosSol(String icao) {
         try {
+            String apiKey = credentialService.getAiswebApiKey();
+            String apiPass = credentialService.getAiswebApiPass();
             Response response = aiswebClient.getSunData(apiKey, apiPass, "sol", icao);
 
             if (response.getStatus() == Response.Status.OK.getStatusCode()) {
@@ -110,6 +108,8 @@ public class MeteoService {
      */
     private MetarDto buscarMetar(String icao) {
         try {
+            String apiKey = credentialService.getAiswebApiKey();
+            String apiPass = credentialService.getAiswebApiPass();
             Response response = aiswebClient.getMetarData(apiKey, apiPass, "met", icao);
 
             if (response.getStatus() == Response.Status.OK.getStatusCode()) {
@@ -134,6 +134,8 @@ public class MeteoService {
      */
     private TafDto buscarTaf(String icao) {
         try {
+            String apiKey = credentialService.getAiswebApiKey();
+            String apiPass = credentialService.getAiswebApiPass();
             Response response = aiswebClient.getMetarData(apiKey, apiPass, "met", icao);
 
             if (response.getStatus() == Response.Status.OK.getStatusCode()) {

@@ -1,8 +1,8 @@
 package br.com.fplbr.pilot.flightplan.application.validator;
 
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.validation.ConstraintValidator;
-import jakarta.validation.ConstraintValidatorContext;
+import javax.enterprise.context.ApplicationScoped;
+import javax.validation.ConstraintValidator;
+import javax.validation.ConstraintValidatorContext;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 

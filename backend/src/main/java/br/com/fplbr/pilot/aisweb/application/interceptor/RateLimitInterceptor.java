@@ -2,13 +2,13 @@ package br.com.fplbr.pilot.aisweb.application.interceptor;
 
 import br.com.fplbr.pilot.aisweb.application.annotation.RateLimited;
 import br.com.fplbr.pilot.aisweb.application.exception.RateLimitExceededException;
-import jakarta.annotation.Priority;
-import jakarta.inject.Inject;
-import jakarta.interceptor.AroundInvoke;
-import jakarta.interceptor.Interceptor;
-import jakarta.interceptor.InvocationContext;
-import jakarta.ws.rs.core.Context;
-import jakarta.ws.rs.core.SecurityContext;
+import javax.annotation.Priority;
+import javax.inject.Inject;
+import javax.interceptor.AroundInvoke;
+import javax.interceptor.Interceptor;
+import javax.interceptor.InvocationContext;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.SecurityContext;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.jboss.logging.Logger;
 

@@ -1,7 +1,7 @@
 package br.com.fplbr.pilot.auth.infrastructure.persistence;
 
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
-import jakarta.persistence.*;
+import javax.persistence.*;
 import java.time.OffsetDateTime;
 import java.time.LocalDate;
 import java.util.UUID;

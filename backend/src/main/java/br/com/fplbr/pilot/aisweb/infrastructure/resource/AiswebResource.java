@@ -2,10 +2,10 @@ package br.com.fplbr.pilot.aisweb.infrastructure.resource;
 
 import br.com.fplbr.pilot.aisweb.application.dto.*;
 import br.com.fplbr.pilot.aisweb.application.service.*;
-import jakarta.inject.Inject;
-import jakarta.ws.rs.*;
-import jakarta.ws.rs.core.MediaType;
-import jakarta.ws.rs.core.Response;
+import javax.inject.Inject;
+import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import org.jboss.logging.Logger;
 
 import java.util.Map;
@@ -45,6 +45,9 @@ public class AiswebResource {
 
     @Inject
     AiswebFullService aiswebFullService;
+
+    @Inject
+    SunService sunService;
 
     @GET
     @Path("/test-logs")
@@ -198,6 +201,40 @@ public class AiswebResource {
     @Path("/notam/{icao}")
     public NotamDto buscarNotam(@PathParam("icao") String icao) {
         return notamService.buscar(icao);
+    }
+
+    /**
+     * Endpoint para buscar dados de sol de um aeródromo.
+     *
+     * @param icao Código ICAO do aeródromo
+     * @return Dados de sol do aeródromo
+     */
+    @GET
+    @Path("/sun/{icao}")
+    public Response buscarSun(@PathParam("icao") String icao) {
+        try {
+            if (icao == null || icao.trim().length() != 4) {
+                return Response.status(Response.Status.BAD_REQUEST)
+                    .entity("Código ICAO inválido. Deve conter 4 caracteres.")
+                    .build();
+            }
+
+            SunDto sun = sunService.buscar(icao.toUpperCase());
+            if (sun == null) {
+                return Response.status(Response.Status.NOT_FOUND)
+                    .entity("Dados de sol não encontrados para o aeródromo: " + icao)
+                    .build();
+            }
+
+            return Response.ok(sun).build();
+
+        } catch (WebApplicationException e) {
+            throw e;
+        } catch (Exception e) {
+            String errorMsg = String.format("Erro ao processar requisição SUN para %s: %s",
+                icao, e.getMessage());
+            throw new WebApplicationException(errorMsg, Response.Status.INTERNAL_SERVER_ERROR);
+        }
     }
 
     /**

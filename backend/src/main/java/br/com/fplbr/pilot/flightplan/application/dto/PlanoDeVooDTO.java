@@ -1,7 +1,7 @@
 package br.com.fplbr.pilot.flightplan.application.dto;
 
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.*;
+import javax.validation.Valid;
+import javax.validation.constraints.*;
 
 import java.time.OffsetDateTime;
 import java.util.List;

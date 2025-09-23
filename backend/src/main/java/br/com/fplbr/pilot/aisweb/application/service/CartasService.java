@@ -3,11 +3,10 @@ package br.com.fplbr.pilot.aisweb.application.service;
 import br.com.fplbr.pilot.aisweb.application.client.AiswebClient;
 import br.com.fplbr.pilot.aisweb.application.dto.CartasDto;
 import br.com.fplbr.pilot.aisweb.infrastructure.parser.CartasParser;
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
-import jakarta.ws.rs.WebApplicationException;
-import jakarta.ws.rs.core.Response;
-import org.eclipse.microprofile.config.inject.ConfigProperty;
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Response;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.jboss.logging.Logger;
 
@@ -24,11 +23,8 @@ public class CartasService {
     @RestClient
     AiswebClient aiswebClient;
 
-    @ConfigProperty(name = "aisweb.api.key")
-    String apiKey;
-
-    @ConfigProperty(name = "aisweb.api.pass")
-    String apiPass;
+    @Inject
+    SecureCredentialService credentialService;
 
     @Inject
     CartasParser cartasParser;
@@ -60,6 +56,8 @@ public class CartasService {
         
         try {
             LOG.debugf("Solicitando dados de cartas para %s da API AISWEB", icao);
+            String apiKey = credentialService.getAiswebApiKey();
+            String apiPass = credentialService.getAiswebApiPass();
             Response response = aiswebClient.getCartasData(apiKey, apiPass, "cartas", icao);
             
             if (response.getStatus() != Response.Status.OK.getStatusCode()) {
