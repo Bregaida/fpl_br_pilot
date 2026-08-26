@@ -20,8 +20,12 @@ public class EncryptionService {
     private static final int GCM_IV_LENGTH = 12; // 96 bits
     private static final int GCM_TAG_LENGTH = 16; // 128 bits
     
-    // Chave mestra - configurada via application.properties
-    @ConfigProperty(name = "MASTER_ENCRYPTION_KEY")
+    // Chave mestra do AES-GCM. Nao ha valor embutido: vem do ambiente, via a
+    // variavel MASTER_ENCRYPTION_KEY, e deve ser Base64 de 32 bytes.
+    // O defaultValue vazio existe para a aplicacao subir sem a variavel e
+    // falhar com mensagem clara no primeiro uso, em vez de cifrar com uma
+    // chave conhecida ou quebrar a injecao no boot.
+    @ConfigProperty(name = "MASTER_ENCRYPTION_KEY", defaultValue = "")
     String masterKey;
     
     public EncryptionResult encrypt(byte[] plaintext) {

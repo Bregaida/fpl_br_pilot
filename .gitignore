@@ -67,3 +67,8 @@ SECURITY.md
 backend/fix-imports.ps1
 Makefile
 RELATÓRIO_FINAL.md
+
+# Artefato de compilacao: nunca versionar.
+# Um .class carrega as constantes do fonte, entao segredo dentro dele fica
+# legivel e nao aparece em busca de codigo nem em grep no fonte.
+*.class

@@ -111,7 +111,9 @@ cd backend && ./mvnw quarkus:dev
 
 # 5. Configurar credenciais (após backend estar rodando)
 # PowerShell:
-Invoke-RestMethod -Uri "http://localhost:8080/api/v1/admin/credentials/aisweb" -Method Post -Body '{"apiKey":"AISWEB_API_KEY_REMOVIDA","apiPass":"AISWEB_API_PASS_REMOVIDA"}' -ContentType 'application/json'
+# As credenciais vem do ambiente; nao as escreva neste arquivo.
+$body = @{ apiKey = $env:AISWEB_API_KEY; apiPass = $env:AISWEB_API_PASS } | ConvertTo-Json
+Invoke-RestMethod -Uri "http://localhost:8080/api/v1/admin/credentials/aisweb" -Method Post -Body $body -ContentType 'application/json'
 
 # 6. Frontend
 cd frontend && npm run dev
